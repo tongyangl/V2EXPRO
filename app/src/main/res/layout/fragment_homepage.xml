@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <HorizontalScrollView
+        android:id="@+id/horizontalScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:background="#1C1C1C">
+
+        <RadioGroup
+            android:id="@+id/Home_radioGroup"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/Home_Radio_all"
+                android:layout_width="70dp"
+                android:layout_height="match_parent"
+                android:button="@null"
+                android:gravity="center"
+                android:text="全部"
+                android:textColor="@color/home_radio_text" />
+
+            <RadioButton
+                android:id="@+id/Home_Radio_hot"
+                android:layout_width="70dp"
+                android:layout_height="match_parent"
+                android:button="@null"
+                android:gravity="center"
+                android:text="最热"
+                android:textColor="@color/home_radio_text" />
+
+            <RadioButton
+                android:id="@+id/Home_Radio_technology"
+                android:layout_width="70dp"
+                android:layout_height="match_parent"
+                android:button="@null"
+                android:gravity="center"
+                android:text="技术"
+                android:textColor="@color/home_radio_text" />
+
+            <RadioButton
+                android:id="@+id/Home_Radio_Apple"
+                android:layout_width="70dp"
+                android:layout_height="match_parent"
+                android:button="@null"
+                android:gravity="center"
+                android:text="Apple"
+                android:textColor="@color/home_radio_text" />
+
+            <RadioButton
+                android:id="@+id/Home_Radio_job"
+                android:layout_width="70dp"
+                android:layout_height="match_parent"
+                android:button="@null"
+                android:gravity="center"
+                android:text="酷工作"
+                android:textColor="@color/home_radio_text" />
+
+            <RadioButton
+                android:id="@+id/Home_Radio_transaction"
+                android:layout_width="70dp"
+                android:layout_height="match_parent"
+                android:button="@null"
+                android:gravity="center"
+                android:text="交易"
+                android:textColor="@color/home_radio_text" />
+
+            <RadioButton
+                android:id="@+id/Home_Radio_city"
+                android:layout_width="70dp"
+                android:layout_height="match_parent"
+                android:button="@null"
+                android:gravity="center"
+                android:text="城市"
+                android:textColor="@color/home_radio_text" />
+
+            <RadioButton
+                android:id="@+id/Home_Radio_QANDA"
+                android:layout_width="70dp"
+                android:layout_height="match_parent"
+                android:button="@null"
+                android:gravity="center"
+                android:text="问与答"
+                android:textColor="@color/home_radio_text" />
+
+            <RadioButton
+                android:id="@+id/Home_Radio_r2"
+                android:layout_width="70dp"
+                android:layout_height="match_parent"
+                android:button="@null"
+                android:gravity="center"
+                android:text="r2"
+                android:textColor="@color/home_radio_text" />
+            <RadioButton
+                android:id="@+id/Home_Radio_play"
+                android:layout_width="70dp"
+                android:layout_height="match_parent"
+                android:button="@null"
+                android:gravity="center"
+                android:text="好玩"
+                android:textColor="@color/home_radio_text" />
+
+
+        </RadioGroup>
+
+    </HorizontalScrollView>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/Home_viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+    </android.support.v4.view.ViewPager>
+
+</LinearLayout>
