@@ -50,8 +50,8 @@ public class ListViewAdaptar extends BaseAdapter {
             view = inflater.inflate(R.layout.list_home, null);
         }
         TextView textView = (TextView) view.findViewById(R.id.username);
-        int width = (int) Static.dp2px(context,60);
-        textView.setHeight(width);
+      /*  *//*int width = (int) Static.dp2px(context,60);*//*
+        textView.setHeight(width);*/
         textView.setText(list.get(i).get("i"));
         return view;
     }

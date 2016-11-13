@@ -50,6 +50,7 @@ public class allFragment extends Fragment {
             map.put("i",i+"");
             list.add(map);
         }
+
         inflater=getActivity().getLayoutInflater();
         ListViewAdaptar adaptar=new ListViewAdaptar(list,getContext(),inflater);
         listView.setAdapter(adaptar);
@@ -57,10 +58,8 @@ public class allFragment extends Fragment {
         ptr.setPtrHandler(new PtrHandler() {
             @Override
             public boolean checkCanDoRefresh(PtrFrameLayout frame, View content, View header) {
-
                  return PtrDefaultHandler.checkContentCanBePulledDown(frame, content, header);
             }
-
             @Override
             public void onRefreshBegin(PtrFrameLayout frame) {
                frame.postDelayed(new Runnable() {
