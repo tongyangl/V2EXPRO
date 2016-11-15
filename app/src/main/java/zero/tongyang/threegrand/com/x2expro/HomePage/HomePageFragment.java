@@ -106,6 +106,7 @@ public class HomePageFragment extends Fragment {
         fragmentList.add(playFragment);
         FragmentManager fragmentManager = getFragmentManager();
         HomeViewPager.setCurrentItem(0);
+        HomeViewPager.setOffscreenPageLimit(10);
         HomeRadioGroup.check(R.id.Home_Radio_all);
         MyFragmentPagerAdaptar myFragmentPagerAdaptar = new MyFragmentPagerAdaptar(fragmentManager, fragmentList);
         HomeViewPager.setAdapter(myFragmentPagerAdaptar);
