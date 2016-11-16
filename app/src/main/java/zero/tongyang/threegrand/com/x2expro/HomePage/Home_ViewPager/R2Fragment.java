@@ -19,6 +19,7 @@ import butterknife.ButterKnife;
 import in.srain.cube.views.ptr.PtrDefaultHandler;
 import in.srain.cube.views.ptr.PtrFrameLayout;
 import in.srain.cube.views.ptr.PtrHandler;
+import zero.tongyang.threegrand.com.x2expro.HomePage.Home_ViewPager.Some.JsoupAsyncTask;
 import zero.tongyang.threegrand.com.x2expro.R;
 import zero.tongyang.threegrand.com.x2expro.Static;
 
@@ -48,7 +49,7 @@ public class R2Fragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         inflater = getActivity().getLayoutInflater();
         list = new ArrayList<>();
-        JsoupAsyncTask jsoupAsyncTask = new JsoupAsyncTask(listView, inflater, list, getContext());
+        JsoupAsyncTask jsoupAsyncTask = new JsoupAsyncTask(listView, inflater, list, getContext(),getActivity());
         jsoupAsyncTask.execute("?tab=r2");
         listView.setDivider(new ColorDrawable(Color.argb(255, 242, 242, 242)));
         listView.setDividerHeight((int) Static.dp2px(getContext(), 10f));
@@ -64,7 +65,7 @@ public class R2Fragment extends Fragment {
             @Override
             public void onRefreshBegin(PtrFrameLayout frame) {
 
-                JsoupAsyncTask jsoupAsyncTask = new JsoupAsyncTask(listView, inflater, list, getContext());
+                JsoupAsyncTask jsoupAsyncTask = new JsoupAsyncTask(listView, inflater, list, getContext(),getActivity());
                 jsoupAsyncTask.execute("?tab=r2");
                 frame.postDelayed(new Runnable() {
                     @Override

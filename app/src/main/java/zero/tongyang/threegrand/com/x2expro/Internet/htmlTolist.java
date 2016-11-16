@@ -37,12 +37,13 @@ public class htmlTolist {
                     String lastreplice = "";
                     String username = "";
                     String title = tr.get(j).select("span[class=item_title]").select("a").text();
+                    String repliceurl = tr.get(j).select("span[class=item_title]").select("a").attr("href");
 
                     String nodetitle = tr.get(j).select("span[class=small fade]").select("a[class=node]").text();
 
                     Element t = tr.get(j).select("span[class=small fade]").first();
                     String ti = t.ownText();
-                    String time=ti.substring(3,ti.length());
+                    String time = ti.substring(3, ti.length());
 
                     Elements elements1 = tr.get(j).select("span[class=small fade]").select("strong");
                     if (elements1.size() == 2) {
@@ -54,16 +55,16 @@ public class htmlTolist {
                             username = elements1.get(0).select("a").text();
                             lastreplice = null;
                         }
-                    }else if (elements1.size()==1){
+                    } else if (elements1.size() == 1) {
                         username = elements1.get(0).select("a").text();
                         lastreplice = null;
 
                     }
-
+                    map.put("repliceurl",  repliceurl.substring(1,repliceurl.length()));
+                    Log.d("===",repliceurl.substring(1,repliceurl.length()));
                     map.put("title", title);
                     map.put("nodetitle", nodetitle);
                     map.put("time", time);
-                    map.put("title", title);
                     map.put("username", username);
                     map.put("lastreplice", lastreplice);
 

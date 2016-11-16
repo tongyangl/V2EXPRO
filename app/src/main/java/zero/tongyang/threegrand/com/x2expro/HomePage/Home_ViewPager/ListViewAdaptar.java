@@ -1,7 +1,6 @@
 package zero.tongyang.threegrand.com.x2expro.HomePage.Home_ViewPager;
 
 import android.content.Context;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,13 +11,11 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import java.net.URL;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import zero.tongyang.threegrand.com.x2expro.HomePage.Home_ViewPager.Some.AsyncImageLoader;
 import zero.tongyang.threegrand.com.x2expro.R;
-import zero.tongyang.threegrand.com.x2expro.Static;
 
 /**
  * Created by tongyang on 16-11-12.
@@ -85,7 +82,6 @@ public class ListViewAdaptar extends BaseAdapter {
         viewholder.lastreplice.setText(list.get(i).get("lastreplice"));
         viewholder.imageView.setTag(list.get(i).get("img"));
 
-        Log.d("====", list.get(i).get("img").trim());
         Drawable cachedImage = asyncImageLoader.loadDrawable(list.get(i).get("img").trim(), new AsyncImageLoader.ImageCallback() {
             public void imageLoaded(Drawable imageDrawable, String imageUrl) {
                 ImageView imageViewByTag = (ImageView) listView.findViewWithTag(imageUrl);

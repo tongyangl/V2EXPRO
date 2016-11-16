@@ -69,6 +69,7 @@
                 android:textSize="12sp" />
 
             <TextView
+                android:textSize="10sp"
                 android:id="@+id/time"
                 android:layout_width="wrap_content"
                 android:layout_height="20dp"
@@ -77,6 +78,7 @@
                 android:textColor="#B5B5B5" />
 
             <TextView
+                android:textSize="10sp"
                 android:id="@+id/lastreplice"
                 android:layout_width="wrap_content"
                 android:layout_height="20dp"
