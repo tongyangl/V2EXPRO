@@ -52,18 +52,23 @@ public class AddView {
         linear1.addView(layout, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
     }
 
-    public void addImageView(String url) {
+    public void addImageView(final String url) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                ImageView imageView = new ImageView(context);
+                try {
+                    URL url1 = new URL(url);
+                    imageView.setImageBitmap(BitmapFactory.decodeStream(url1.openStream()));
+                    linear.addView(imageView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
 
-        ImageView imageView = new ImageView(context);
-        try {
-            URL url1 = new URL(url);
-            imageView.setImageBitmap(BitmapFactory.decodeStream(url1.openStream()));
-            linear.addView(imageView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
 
     }

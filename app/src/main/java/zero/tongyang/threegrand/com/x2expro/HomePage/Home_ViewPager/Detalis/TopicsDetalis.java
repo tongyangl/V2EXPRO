@@ -94,36 +94,32 @@ public class TopicsDetalis extends Activity {
             Document doc = Jsoup.parse(s);
             String a = doc.html().replace("<br>", "\n");
             doc = Jsoup.parse(a);
+
             String e = doc.select("small[class=gray]").first().text();
             time.setText(e.substring(username.length() + 1, e.length()));
             Element element = doc.select("div[class=topic_content]").first();
 
             if (element.select("div[class=markdown_body]").hasText()) {
-                Elements elements = element.select("div[class=markdown_body]").select("p");
 
-                for (int i = 0; i < elements.size(); i++) {
-                    if (elements.get(i).hasAttr("alt src")) {
-                        addView.addImageView(elements.get(i).attr("alt src"));
+                Elements elements = element.getAllElements();
 
-                        if (elements.get(i).hasText()) {
-                            addView.addTextView(elements.get(i).text());
+                for (Element element1 : elements) {
+                    if (element1.tagName().equals("img")) {
 
-                        }
-                    } else if (elements.get(i).hasAttr("src")) {
-
-                        addView.addImageView(elements.get(i).attr("src"));
-                        Log.d("iiii", elements.get(i).attr("src"));
-                        if (elements.get(i).hasText()) {
-                            addView.addTextView(elements.get(i).text());
-
-                        }
+                         addView.addImageView(element1.attr("src"));
 
                     } else {
 
-                        addView.addTextView(elements.get(i).text());
+                        switch (element1.tagName()){
+
+
+                        }
+                        addView.addTextView(element1.ownText());
+
                     }
 
                 }
+
             } else {
 
                 topicContent.setText(element.text());
@@ -138,7 +134,6 @@ public class TopicsDetalis extends Activity {
             }
 
         }
-
 
         @Override
         protected String doInBackground(String... strings) {

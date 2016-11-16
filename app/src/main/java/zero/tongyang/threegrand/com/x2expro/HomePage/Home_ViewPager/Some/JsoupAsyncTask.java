@@ -12,6 +12,7 @@ import android.widget.ListView;
 import java.util.List;
 import java.util.Map;
 
+import zero.tongyang.threegrand.com.x2expro.HomePage.Home_ViewPager.Detalis.TopicsDetalis;
 import zero.tongyang.threegrand.com.x2expro.HomePage.Home_ViewPager.ListViewAdaptar;
 import zero.tongyang.threegrand.com.x2expro.Internet.GetTopics;
 import zero.tongyang.threegrand.com.x2expro.Internet.htmlTolist;
@@ -52,8 +53,6 @@ public class JsoupAsyncTask extends AsyncTask<String, Void, String> {
                 intent.putExtra("img", list.get(i).get("img"));
                 intent.putExtra("username", list.get(i).get("username"));
                 intent.putExtra("nodetitle", list.get(i).get("nodetitle"));
-
-
                 activity.startActivity(intent);
 
             }
