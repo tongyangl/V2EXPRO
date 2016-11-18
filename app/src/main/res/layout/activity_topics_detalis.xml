@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#ffff">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
@@ -47,7 +48,8 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/shadow_view">
+        android:layout_below="@+id/shadow_view"
+        android:fillViewport="true">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -120,54 +122,68 @@
                 android:textColor="#000000"
                 android:textSize="14sp"
                 android:textStyle="bold" />
+         <com.ldoublem.loadingviewlib.LVNews
+             android:id="@+id/load"
+             android:background="#4876FF"
+             android:layout_centerHorizontal="true"
+             android:layout_below="@+id/topictitle"
+             android:layout_width="50dp"
+             android:layout_height="50dp" />
 
+           <RelativeLayout
+                android:id="@+id/relat"
+               android:visibility="gone"
+               android:layout_below="@+id/topictitle"
+               android:layout_width="match_parent"
+               android:layout_height="match_parent">
+               <LinearLayout
+                   android:id="@+id/linear"
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:layout_marginLeft="10dp"
+                   android:layout_marginRight="10dp"
+                   android:layout_marginTop="5dp"
+                   android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/topic_content"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/topictitle"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="15dp"
-                android:gravity="center_vertical"
-                android:textColor="#000000" />
+               </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/linear"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/topic_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginTop="5dp"
-                android:orientation="vertical">
+               <View
+                   android:id="@+id/view1"
+                   android:layout_width="match_parent"
+                   android:layout_height="1px"
+                   android:layout_below="@+id/linear"
+                   android:background="#BFBFBF">
 
-            </LinearLayout>
-         <View
-             android:id="@+id/view1"
-             android:layout_below="@+id/linear"
-             android:background="#BFBFBF"
-             android:layout_width="match_parent"
-             android:layout_height="1px">
+               </View>
 
-         </View>
-            <LinearLayout
+               <LinearLayout
+                   android:id="@+id/linear1"
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:layout_below="@+id/view1"
+                   android:orientation="vertical">
 
-                android:id="@+id/linear1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/view1"
-                android:orientation="vertical">
+               </LinearLayout>
 
-            </LinearLayout>
+               <LinearLayout
+                   android:id="@+id/linear2"
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:layout_below="@+id/linear1"
+                   android:orientation="horizontal">
 
-            <ListView
-                android:id="@+id/lv"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/linear1">
+               </LinearLayout>
 
-            </ListView>
+               <zero.tongyang.threegrand.com.x2expro.MyStyle.MyListView
+                   android:id="@+id/lv"
+                   android:layout_width="match_parent"
+                   android:layout_height="match_parent"
+                   android:layout_below="@+id/linear2">
+
+               </zero.tongyang.threegrand.com.x2expro.MyStyle.MyListView>
+
+           </RelativeLayout>
         </RelativeLayout>
+
     </ScrollView>
 </RelativeLayout>

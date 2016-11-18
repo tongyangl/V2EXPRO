@@ -1,11 +1,16 @@
 package zero.tongyang.threegrand.com.x2expro.HomePage.Home_ViewPager.Detalis;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Rect;
+import android.os.AsyncTask;
 import android.util.Log;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -22,13 +27,17 @@ public class AddView {
     private Context context;
     private LinearLayout linear1;
     private LinearLayout linear;
+    private LinearLayout linear2;
+    private String tag;
 
-
-    public AddView(Context context, LinearLayout linear1, LinearLayout linear) {
+    public AddView(Context context, LinearLayout linear1, LinearLayout linear, LinearLayout linear2) {
         this.context = context;
         this.linear1 = linear1;
         this.linear = linear;
+        this.linear2 = linear2;
     }
+
+    private ImageView imageView;
 
     public void addLinear(String title, String text) {
         Log.d("---==", title + text);
@@ -52,36 +61,69 @@ public class AddView {
         linear1.addView(layout, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
     }
 
-    public void addImageView(final String url) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                ImageView imageView = new ImageView(context);
-                try {
-                    URL url1 = new URL(url);
-                    imageView.setImageBitmap(BitmapFactory.decodeStream(url1.openStream()));
-                    linear.addView(imageView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+    public void addImageView(String url) {
+        Log.d("imgimgimg", url);
+        imageView = new ImageView(context);
+         imageView.setTag(url);
+        tag = url;
+        linear.addView(imageView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        addimgView addimgView = new addimgView();
+        addimgView.execute(url);
+    }
 
+    public void addbottomview(String s) {
+
+        TextView textView = new TextView(context);
+        textView.setGravity(Gravity.CENTER);
+        textView.setText(s);
+        textView.setTextColor(Color.GRAY);
+        linear2.addView(textView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+    }
+
+    class addimgView extends AsyncTask<String, Void, Bitmap> {
+        @Override
+        protected void onPostExecute(Bitmap bitmap) {
+            super.onPostExecute(bitmap);
+            WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+            Display display = windowManager.getDefaultDisplay();
+            int heigth = display.getHeight();
+            int imgheight = imageView.getHeight();
+            if (imgheight > heigth) {
+                imageView.setImageBitmap(bitmap);
+
+            } else {
+                imageView.setImageBitmap(bitmap);
+            }
+        }
+
+        @Override
+        protected Bitmap doInBackground(String... strings) {
+            try {
+                URL url = new URL(strings[0]);
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inSampleSize = 4;
+                options.inJustDecodeBounds = false;
+                Rect rect = new Rect(0, 0, 0, 0);
+                return BitmapFactory.decodeStream(url.openStream(), rect, options);
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
 
 
     }
 
-
-    public void addTextView(String s) {
+    public void addTextView(String s, int size) {
         TextView textView = new TextView(context);
         textView.setGravity(Gravity.CENTER_VERTICAL);
         textView.setTextColor(Color.BLACK);
         textView.setText(s);
-        textView.setTextSize(12);
+        textView.setTextSize(size);
         linear.addView(textView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-
-
     }
 }

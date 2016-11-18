@@ -50,8 +50,10 @@ public class JsoupAsyncTask extends AsyncTask<String, Void, String> {
                 Intent intent = new Intent(context, TopicsDetalis.class);
                 intent.putExtra("topicstitle", list.get(i).get("title"));
                 intent.putExtra("repliceurl", list.get(i).get("repliceurl"));
+
                 intent.putExtra("img", list.get(i).get("img"));
                 intent.putExtra("username", list.get(i).get("username"));
+
                 intent.putExtra("nodetitle", list.get(i).get("nodetitle"));
                 activity.startActivity(intent);
 
