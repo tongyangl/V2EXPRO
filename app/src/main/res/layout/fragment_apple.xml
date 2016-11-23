@@ -1,7 +1,134 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    android:orientation="vertical"
     android:layout_height="match_parent">
+    <HorizontalScrollView
+
+        android:layout_marginTop="5dp"
+        android:id="@+id/horizontalScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:background="#00000000"
+
+        android:scrollbars="none">
+
+        <RadioGroup
+            android:layout_gravity="center_vertical"
+            android:id="@+id/Home_radioGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <RadioButton
+                android:layout_marginRight="15dp"
+                android:layout_marginLeft="15dp"
+                android:paddingRight="5dp"
+                android:paddingLeft="5dp"
+                android:id="@+id/Home_Radio_APPLE"
+                android:layout_width="wrap_content"
+                android:layout_height="25dp"
+                android:button="@null"
+                android:gravity="center"
+                android:background="@drawable/toradiocheck"
+                android:text="APPLE"
+                android:textColor="@color/home_radio_text" />
+
+            <RadioButton
+                android:layout_marginRight="15dp"
+                android:layout_marginLeft="15dp"
+                android:paddingRight="5dp"
+                android:paddingLeft="5dp"
+                android:id="@+id/Home_Radio_macOS"
+                android:layout_width="wrap_content"
+                android:layout_height="25dp"
+                android:button="@null"
+                android:gravity="center"
+                android:background="@drawable/toradiocheck"
+                android:text="macOS"
+                android:textColor="@color/home_radio_text" />
+            <RadioButton
+                android:layout_marginRight="15dp"
+                android:layout_marginLeft="15dp"
+                android:paddingRight="5dp"
+                android:paddingLeft="5dp"
+                android:id="@+id/Home_Radio_iPhone"
+                android:layout_width="wrap_content"
+                android:layout_height="25dp"
+                android:button="@null"
+                android:gravity="center"
+                android:background="@drawable/toradiocheck"
+                android:text="iPhone"
+                android:textColor="@color/home_radio_text" />
+            <RadioButton
+                android:layout_marginRight="15dp"
+                android:layout_marginLeft="15dp"
+                android:paddingRight="5dp"
+                android:paddingLeft="5dp"
+                android:id="@+id/Home_Radio_iPad"
+                android:layout_width="wrap_content"
+                android:layout_height="25dp"
+                android:button="@null"
+                android:gravity="center"
+                android:background="@drawable/toradiocheck"
+                android:text="iPad"
+                android:textColor="@color/home_radio_text" />
+            <RadioButton
+                android:layout_marginRight="15dp"
+                android:layout_marginLeft="15dp"
+                android:paddingRight="5dp"
+                android:paddingLeft="5dp"
+                android:id="@+id/Home_Radio_MBP"
+                android:layout_width="wrap_content"
+                android:layout_height="25dp"
+                android:button="@null"
+                android:gravity="center"
+                android:background="@drawable/toradiocheck"
+                android:text="MBP"
+                android:textColor="@color/home_radio_text" />
+            <RadioButton
+                android:layout_marginRight="15dp"
+                android:layout_marginLeft="15dp"
+                android:paddingRight="5dp"
+                android:paddingLeft="5dp"
+                android:id="@+id/Home_Radio_iMac"
+                android:layout_width="wrap_content"
+                android:layout_height="25dp"
+                android:button="@null"
+                android:gravity="center"
+                android:background="@drawable/toradiocheck"
+                android:text="iMac"
+                android:textColor="@color/home_radio_text" />
+            <RadioButton
+                android:layout_marginRight="15dp"
+                android:layout_marginLeft="15dp"
+                android:paddingRight="5dp"
+                android:paddingLeft="5dp"
+                android:id="@+id/Home_Radio_WATCH"
+                android:layout_width="wrap_content"
+                android:layout_height="25dp"
+                android:button="@null"
+                android:gravity="center"
+                android:background="@drawable/toradiocheck"
+                android:text="WATCH"
+                android:textColor="@color/home_radio_text" />
+            <RadioButton
+                android:layout_marginRight="15dp"
+                android:layout_marginLeft="15dp"
+                android:paddingRight="5dp"
+                android:paddingLeft="5dp"
+                android:id="@+id/Home_Radio_Apple"
+                android:layout_width="wrap_content"
+                android:layout_height="25dp"
+                android:button="@null"
+                android:gravity="center"
+                android:background="@drawable/toradiocheck"
+                android:text="Apple"
+                android:textColor="@color/home_radio_text" />
+
+
+        </RadioGroup>
+
+    </HorizontalScrollView>
     <in.srain.cube.views.ptr.PtrClassicFrameLayout
         android:id="@+id/ptr"
         xmlns:cube_ptr="http://schemas.android.com/apk/res-auto"
@@ -15,6 +142,7 @@
         cube_ptr:ptr_resistance="1.7">
 
         <ListView
+            android:layout_marginTop="15dp"
             android:id="@+id/lv"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

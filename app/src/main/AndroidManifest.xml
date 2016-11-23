@@ -20,6 +20,9 @@
         <activity android:name=".HomePage.Home_ViewPager.Detalis.TopicsDetalis">
 
         </activity>
+        <activity android:name=".UI.SiginActivity">
+
+        </activity>
     </application>
 
 </manifest>

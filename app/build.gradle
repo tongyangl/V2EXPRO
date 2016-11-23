@@ -5,8 +5,8 @@ android {
     buildToolsVersion "25.0.0"
     defaultConfig {
         applicationId "zero.tongyang.threegrand.com.x2expro"
-        minSdkVersion 15
-        targetSdkVersion 25
+        minSdkVersion 17
+        targetSdkVersion 17
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -27,11 +27,15 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
+    compile 'com.android.support:appcompat-v7:23.4.0'
+    compile 'com.android.support:support-v4:23.4.0'
+    compile 'com.android.support:design:23.4.0'
+    compile 'org.greenrobot:eventbus:3.0.0'
     compile 'com.ldoublem.loadingview:loadingviewlib:0.0.1'
     compile 'com.zzhoujay.richtext:richtext:2.2.0'
     compile files('libs/jsoup-1.8.1.jar')
     compile 'com.squareup.okhttp:okhttp:2.4.0'
     compile 'in.srain.cube:ultra-ptr:1.0.11'
-    compile 'com.android.support:appcompat-v7:25.0.0'
+
     testCompile 'junit:junit:4.12'
 }

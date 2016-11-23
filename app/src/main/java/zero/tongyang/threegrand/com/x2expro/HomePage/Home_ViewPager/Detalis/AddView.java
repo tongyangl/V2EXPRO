@@ -30,11 +30,9 @@ public class AddView {
     private LinearLayout linear2;
     private String tag;
 
-    public AddView(Context context, LinearLayout linear1, LinearLayout linear, LinearLayout linear2) {
+    public AddView(Context context,  LinearLayout linear) {
         this.context = context;
-        this.linear1 = linear1;
         this.linear = linear;
-        this.linear2 = linear2;
     }
 
     private ImageView imageView;

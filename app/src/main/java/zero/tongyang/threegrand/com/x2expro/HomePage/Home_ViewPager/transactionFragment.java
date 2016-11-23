@@ -8,7 +8,10 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.HorizontalScrollView;
 import android.widget.ListView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +23,7 @@ import in.srain.cube.views.ptr.PtrDefaultHandler;
 import in.srain.cube.views.ptr.PtrFrameLayout;
 import in.srain.cube.views.ptr.PtrHandler;
 import zero.tongyang.threegrand.com.x2expro.HomePage.Home_ViewPager.Some.JsoupAsyncTask;
+import zero.tongyang.threegrand.com.x2expro.HomePage.Home_ViewPager.Some.NodeJsoupAsyncTask;
 import zero.tongyang.threegrand.com.x2expro.R;
 import zero.tongyang.threegrand.com.x2expro.Static;
 
@@ -34,6 +38,25 @@ public class transactionFragment extends Fragment {
     @BindView(R.id.ptr)
     PtrFrameLayout ptr;
     LayoutInflater inflater;
+    @BindView(R.id.Home_Radio_all)
+    RadioButton HomeRadioAll;
+    @BindView(R.id.Home_Radio_ershou)
+    RadioButton HomeRadioErshou;
+    @BindView(R.id.Home_Radio_jiaohuan)
+    RadioButton HomeRadioJiaohuan;
+    @BindView(R.id.Home_Radio_zengsong)
+    RadioButton HomeRadioZengsong;
+    @BindView(R.id.Home_Radio_yuming)
+    RadioButton HomeRadioYuming;
+    @BindView(R.id.Home_Radio_tuangou)
+    RadioButton HomeRadioTuangou;
+    @BindView(R.id.Home_Radio_tishi)
+    RadioButton HomeRadioTishi;
+    @BindView(R.id.Home_radioGroup)
+    RadioGroup HomeRadioGroup;
+    @BindView(R.id.horizontalScrollView)
+    HorizontalScrollView horizontalScrollView;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -48,9 +71,9 @@ public class transactionFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         inflater = getActivity().getLayoutInflater();
         list = new ArrayList<>();
-        listView.setDivider(new ColorDrawable(Color.argb(255,242 ,242, 242)));
-        listView.setDividerHeight((int) Static.dp2px(getContext(),10f));
-        JsoupAsyncTask jsoupAsyncTask = new JsoupAsyncTask(listView, inflater, list, getContext(),getActivity());
+        listView.setDivider(new ColorDrawable(Color.argb(255, 242, 242, 242)));
+        listView.setDividerHeight((int) Static.dp2px(getContext(), 10f));
+        JsoupAsyncTask jsoupAsyncTask = new JsoupAsyncTask(listView, inflater, list, getContext(), getActivity());
         jsoupAsyncTask.execute("?tab=deals");
 
         ptr.disableWhenHorizontalMove(false);
@@ -64,7 +87,7 @@ public class transactionFragment extends Fragment {
 
             @Override
             public void onRefreshBegin(PtrFrameLayout frame) {
-                JsoupAsyncTask jsoupAsyncTask = new JsoupAsyncTask(listView, inflater, list, getContext(),getActivity());
+                JsoupAsyncTask jsoupAsyncTask = new JsoupAsyncTask(listView, inflater, list, getContext(), getActivity());
                 jsoupAsyncTask.execute("?tab=deals");
                 frame.postDelayed(new Runnable() {
                     @Override
@@ -72,6 +95,38 @@ public class transactionFragment extends Fragment {
                         ptr.refreshComplete();
                     }
                 }, 1800);
+            }
+        });
+        HomeRadioGroup.check(R.id.Home_Radio_all);
+        HomeRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                switch (i){
+
+                    case R.id.Home_Radio_ershou:
+                        NodeJsoupAsyncTask jsoupAsyncTask  = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),"二手交易");
+                        jsoupAsyncTask.execute("go/programmer");break;
+                    case R.id.Home_Radio_jiaohuan:
+                        NodeJsoupAsyncTask jsoupAsyncTask1  = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),"物物交换");
+                        jsoupAsyncTask1.execute("go/python");break;
+                    case R.id.Home_Radio_zengsong:
+                        NodeJsoupAsyncTask jsoupAsyncTask2  = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),"免费赠送");
+                        jsoupAsyncTask2.execute("go/idev");break;
+                    case R.id.Home_Radio_yuming:
+                        NodeJsoupAsyncTask jsoupAsyncTask3  = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),"域名");
+                        jsoupAsyncTask3.execute("go/android");break;
+                    case R.id.Home_Radio_tuangou:
+                        NodeJsoupAsyncTask jsoupAsyncTask4  = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),"团购");
+                        jsoupAsyncTask4.execute("go/linux");break;
+                    case R.id.Home_Radio_tishi:
+                        NodeJsoupAsyncTask jsoupAsyncTask5  = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),"安全提示");
+                        jsoupAsyncTask5.execute("go/nodejs");break;
+                    case R.id.Home_Radio_all:
+                        JsoupAsyncTask jsoupAsyncTask9 = new JsoupAsyncTask(listView, inflater, list, getContext(), getActivity());
+                        jsoupAsyncTask9.execute("?tab=deals");
+
+
+                }
             }
         });
     }

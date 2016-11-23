@@ -1,8 +1,158 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    android:orientation="vertical"
     android:layout_height="match_parent">
-    <in.srain.cube.views.ptr.PtrClassicFrameLayout
+<HorizontalScrollView
+    android:layout_marginTop="5dp"
+    android:id="@+id/horizontalScrollView"
+    android:layout_width="match_parent"
+    android:layout_height="30dp"
+    android:background="#00000000"
+
+    android:scrollbars="none">>
+    <RadioGroup
+        android:layout_gravity="center_vertical"
+        android:id="@+id/Home_radioGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <RadioButton
+            android:layout_marginRight="15dp"
+            android:layout_marginLeft="15dp"
+            android:paddingRight="5dp"
+            android:paddingLeft="5dp"
+            android:id="@+id/Home_Radio_all"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:button="@null"
+            android:gravity="center"
+            android:background="@drawable/toradiocheck"
+            android:text="全部"
+            android:textColor="@color/home_radio_text" />
+        <RadioButton
+            android:layout_marginRight="15dp"
+            android:layout_marginLeft="15dp"
+            android:paddingRight="5dp"
+            android:paddingLeft="5dp"
+            android:id="@+id/Home_Radio_beijing"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:button="@null"
+            android:gravity="center"
+            android:background="@drawable/toradiocheck"
+            android:text="北京"
+            android:textColor="@color/home_radio_text" />
+
+        <RadioButton
+            android:layout_marginRight="15dp"
+            android:layout_marginLeft="15dp"
+            android:paddingRight="5dp"
+            android:paddingLeft="5dp"
+            android:id="@+id/Home_Radio_shanghai"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:button="@null"
+            android:gravity="center"
+            android:background="@drawable/toradiocheck"
+            android:text="上海"
+            android:textColor="@color/home_radio_text" />
+        <RadioButton
+            android:layout_marginRight="15dp"
+            android:layout_marginLeft="15dp"
+            android:paddingRight="5dp"
+            android:paddingLeft="5dp"
+            android:id="@+id/Home_Radio_shenzhen"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:button="@null"
+            android:gravity="center"
+            android:background="@drawable/toradiocheck"
+            android:text="深圳"
+            android:textColor="@color/home_radio_text" />
+        <RadioButton
+            android:layout_marginRight="15dp"
+            android:layout_marginLeft="15dp"
+            android:paddingRight="5dp"
+            android:paddingLeft="5dp"
+            android:id="@+id/Home_Radio_guangzhou"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:button="@null"
+            android:gravity="center"
+            android:background="@drawable/toradiocheck"
+            android:text="广州"
+            android:textColor="@color/home_radio_text" />
+        <RadioButton
+            android:layout_marginRight="15dp"
+            android:layout_marginLeft="15dp"
+            android:paddingRight="5dp"
+            android:paddingLeft="5dp"
+            android:id="@+id/Home_Radio_hangzhou"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:button="@null"
+            android:gravity="center"
+            android:background="@drawable/toradiocheck"
+            android:text="杭州"
+            android:textColor="@color/home_radio_text" />
+        <RadioButton
+            android:layout_marginRight="15dp"
+            android:layout_marginLeft="15dp"
+            android:paddingRight="5dp"
+            android:paddingLeft="5dp"
+            android:id="@+id/Home_Radio_chengdu"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:button="@null"
+            android:gravity="center"
+            android:background="@drawable/toradiocheck"
+            android:text="成都"
+            android:textColor="@color/home_radio_text" />
+        <RadioButton
+            android:layout_marginRight="15dp"
+            android:layout_marginLeft="15dp"
+            android:paddingRight="5dp"
+            android:paddingLeft="5dp"
+            android:id="@+id/Home_Radio_kunming"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:button="@null"
+            android:gravity="center"
+            android:background="@drawable/toradiocheck"
+            android:text="昆明"
+            android:textColor="@color/home_radio_text" />
+        <RadioButton
+            android:layout_marginRight="15dp"
+            android:layout_marginLeft="15dp"
+            android:paddingRight="5dp"
+            android:paddingLeft="5dp"
+            android:id="@+id/Home_Radio_niuyue"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:button="@null"
+            android:gravity="center"
+            android:background="@drawable/toradiocheck"
+            android:text="纽约"
+            android:textColor="@color/home_radio_text" />
+
+        <RadioButton
+            android:layout_marginRight="15dp"
+            android:layout_marginLeft="15dp"
+            android:paddingRight="5dp"
+            android:paddingLeft="5dp"
+            android:id="@+id/Home_Radio_luoshanji"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:button="@null"
+            android:gravity="center"
+            android:background="@drawable/toradiocheck"
+            android:text="洛杉矶"
+            android:textColor="@color/home_radio_text" />
+    </RadioGroup>
+</HorizontalScrollView>
+
+<in.srain.cube.views.ptr.PtrClassicFrameLayout
         android:id="@+id/ptr"
         xmlns:cube_ptr="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"

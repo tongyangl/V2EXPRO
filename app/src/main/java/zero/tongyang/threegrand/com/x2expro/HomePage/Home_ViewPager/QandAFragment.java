@@ -9,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +22,7 @@ import in.srain.cube.views.ptr.PtrDefaultHandler;
 import in.srain.cube.views.ptr.PtrFrameLayout;
 import in.srain.cube.views.ptr.PtrHandler;
 import zero.tongyang.threegrand.com.x2expro.HomePage.Home_ViewPager.Some.JsoupAsyncTask;
+import zero.tongyang.threegrand.com.x2expro.HomePage.Home_ViewPager.Some.NodeJsoupAsyncTask;
 import zero.tongyang.threegrand.com.x2expro.R;
 import zero.tongyang.threegrand.com.x2expro.Static;
 
@@ -34,6 +37,11 @@ public class QandAFragment extends Fragment {
     @BindView(R.id.ptr)
     PtrFrameLayout ptr;
     LayoutInflater inflater;
+    @BindView(R.id.Home_Radio_qad)
+    RadioButton HomeRadioQad;
+    @BindView(R.id.Home_radioGroup)
+    RadioGroup HomeRadioGroup;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -48,9 +56,9 @@ public class QandAFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         inflater = getActivity().getLayoutInflater();
         list = new ArrayList<>();
-        listView.setDivider(new ColorDrawable(Color.argb(255,242 ,242, 242)));
-        listView.setDividerHeight((int) Static.dp2px(getContext(),10f));
-        JsoupAsyncTask jsoupAsyncTask = new JsoupAsyncTask(listView, inflater, list, getContext(),getActivity());
+        listView.setDivider(new ColorDrawable(Color.argb(255, 242, 242, 242)));
+        listView.setDividerHeight((int) Static.dp2px(getContext(), 10f));
+        JsoupAsyncTask jsoupAsyncTask = new JsoupAsyncTask(listView, inflater, list, getContext(), getActivity());
         jsoupAsyncTask.execute("?tab=qna");
 
         ptr.disableWhenHorizontalMove(false);
@@ -64,7 +72,7 @@ public class QandAFragment extends Fragment {
 
             @Override
             public void onRefreshBegin(PtrFrameLayout frame) {
-                JsoupAsyncTask jsoupAsyncTask = new JsoupAsyncTask(listView, inflater, list, getContext(),getActivity());
+                JsoupAsyncTask jsoupAsyncTask = new JsoupAsyncTask(listView, inflater, list, getContext(), getActivity());
                 jsoupAsyncTask.execute("?tab=qna");
                 frame.postDelayed(new Runnable() {
                     @Override
@@ -72,6 +80,22 @@ public class QandAFragment extends Fragment {
                         ptr.refreshComplete();
                     }
                 }, 1800);
+            }
+        });
+        HomeRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                switch (i){
+
+                    case R.id.Home_Radio_qad:
+                        NodeJsoupAsyncTask jsoupAsyncTask  = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),"分享发现");
+                        jsoupAsyncTask.execute("go/share");break;
+                    case R.id.Home_Radio_dianziyouxi:
+                        NodeJsoupAsyncTask jsoupAsyncTask1  = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),"电子游戏");
+                        jsoupAsyncTask1.execute("go/games");break;
+
+
+                }
             }
         });
     }

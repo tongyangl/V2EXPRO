@@ -1,7 +1,118 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    android:orientation="vertical"
     android:layout_height="match_parent">
+    <HorizontalScrollView
+        android:layout_marginTop="5dp"
+        android:id="@+id/horizontalScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:background="#00000000"
+        android:scrollbars="none">
+
+
+    <RadioGroup
+        android:layout_gravity="center_vertical"
+        android:id="@+id/Home_radioGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <RadioButton
+            android:layout_marginRight="15dp"
+            android:layout_marginLeft="15dp"
+            android:paddingRight="5dp"
+            android:paddingLeft="5dp"
+            android:id="@+id/Home_Radio_all"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:button="@null"
+            android:gravity="center"
+            android:background="@drawable/toradiocheck"
+            android:text="全部"
+            android:textColor="@color/home_radio_text" />
+        <RadioButton
+            android:layout_marginRight="15dp"
+            android:layout_marginLeft="15dp"
+            android:paddingRight="5dp"
+            android:paddingLeft="5dp"
+            android:id="@+id/Home_Radio_ershou"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:button="@null"
+            android:gravity="center"
+            android:background="@drawable/toradiocheck"
+            android:text="二手交易"
+            android:textColor="@color/home_radio_text" />
+
+        <RadioButton
+            android:layout_marginRight="15dp"
+            android:layout_marginLeft="15dp"
+            android:paddingRight="5dp"
+            android:paddingLeft="5dp"
+            android:id="@+id/Home_Radio_jiaohuan"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:button="@null"
+            android:gravity="center"
+            android:background="@drawable/toradiocheck"
+            android:text="物物交换"
+            android:textColor="@color/home_radio_text" />
+        <RadioButton
+            android:layout_marginRight="15dp"
+            android:layout_marginLeft="15dp"
+            android:paddingRight="5dp"
+            android:paddingLeft="5dp"
+            android:id="@+id/Home_Radio_zengsong"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:button="@null"
+            android:gravity="center"
+            android:background="@drawable/toradiocheck"
+            android:text="赠送"
+            android:textColor="@color/home_radio_text" />
+        <RadioButton
+            android:layout_marginRight="15dp"
+            android:layout_marginLeft="15dp"
+            android:paddingRight="5dp"
+            android:paddingLeft="5dp"
+            android:id="@+id/Home_Radio_yuming"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:button="@null"
+            android:gravity="center"
+            android:background="@drawable/toradiocheck"
+            android:text="域名"
+            android:textColor="@color/home_radio_text" />
+        <RadioButton
+            android:layout_marginRight="15dp"
+            android:layout_marginLeft="15dp"
+            android:paddingRight="5dp"
+            android:paddingLeft="5dp"
+            android:id="@+id/Home_Radio_tuangou"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:button="@null"
+            android:gravity="center"
+            android:background="@drawable/toradiocheck"
+            android:text="团购"
+            android:textColor="@color/home_radio_text" />
+        <RadioButton
+            android:layout_marginRight="15dp"
+            android:layout_marginLeft="15dp"
+            android:paddingRight="5dp"
+            android:paddingLeft="5dp"
+            android:id="@+id/Home_Radio_tishi"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:button="@null"
+            android:gravity="center"
+            android:background="@drawable/toradiocheck"
+            android:text="安全提示"
+            android:textColor="@color/home_radio_text" />
+
+    </RadioGroup>
+    </HorizontalScrollView>
     <in.srain.cube.views.ptr.PtrClassicFrameLayout
         android:id="@+id/ptr"
         xmlns:cube_ptr="http://schemas.android.com/apk/res-auto"

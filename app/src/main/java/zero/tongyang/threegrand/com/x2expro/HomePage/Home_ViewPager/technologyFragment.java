@@ -8,7 +8,10 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.HorizontalScrollView;
 import android.widget.ListView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +23,7 @@ import in.srain.cube.views.ptr.PtrDefaultHandler;
 import in.srain.cube.views.ptr.PtrFrameLayout;
 import in.srain.cube.views.ptr.PtrHandler;
 import zero.tongyang.threegrand.com.x2expro.HomePage.Home_ViewPager.Some.JsoupAsyncTask;
+import zero.tongyang.threegrand.com.x2expro.HomePage.Home_ViewPager.Some.NodeJsoupAsyncTask;
 import zero.tongyang.threegrand.com.x2expro.R;
 import zero.tongyang.threegrand.com.x2expro.Static;
 
@@ -34,6 +38,29 @@ public class technologyFragment extends Fragment {
     @BindView(R.id.ptr)
     PtrFrameLayout ptr;
     LayoutInflater inflater;
+    @BindView(R.id.Home_Radio_quanbu)
+    RadioButton HomeRadioQuanbu;
+    @BindView(R.id.Home_Radio_chengxuyuan)
+    RadioButton HomeRadiochengxuyuan;
+    @BindView(R.id.Home_Radio_Python)
+    RadioButton HomeRadioPython;
+    @BindView(R.id.Home_Radio_iDev)
+    RadioButton HomeRadioIDev;
+    @BindView(R.id.Home_Radio_Android)
+    RadioButton HomeRadioAndroid;
+    @BindView(R.id.Home_Radio_Linux)
+    RadioButton HomeRadioLinux;
+    @BindView(R.id.Home_Radio_nodejs)
+    RadioButton HomeRadioJs;
+    @BindView(R.id.Home_Radio_yunjisuan)
+    RadioButton HomeRadioYunjisuan;
+    @BindView(R.id.Home_Radio_kuandai)
+    RadioButton HomeRadioKuandai;
+    @BindView(R.id.Home_radioGroup)
+    RadioGroup HomeRadioGroup;
+    @BindView(R.id.horizontalScrollView)
+    HorizontalScrollView horizontalScrollView;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -48,9 +75,9 @@ public class technologyFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         inflater = getActivity().getLayoutInflater();
         list = new ArrayList<>();
-        listView.setDivider(new ColorDrawable(Color.argb(255,242 ,242, 242)));
-        listView.setDividerHeight((int) Static.dp2px(getContext(),10f));
-        JsoupAsyncTask jsoupAsyncTask = new JsoupAsyncTask(listView, inflater, list, getContext(),getActivity());
+        listView.setDivider(new ColorDrawable(Color.argb(255, 242, 242, 242)));
+        listView.setDividerHeight((int) Static.dp2px(getContext(), 10f));
+        JsoupAsyncTask jsoupAsyncTask  = new JsoupAsyncTask(listView, inflater, list, getContext(), getActivity());
         jsoupAsyncTask.execute("?tab=tech");
 
         ptr.disableWhenHorizontalMove(false);
@@ -64,7 +91,8 @@ public class technologyFragment extends Fragment {
 
             @Override
             public void onRefreshBegin(PtrFrameLayout frame) {
-                JsoupAsyncTask jsoupAsyncTask = new JsoupAsyncTask(listView, inflater, list, getContext(),getActivity());
+                JsoupAsyncTask jsoupAsyncTask  = new JsoupAsyncTask(listView, inflater, list, getContext(), getActivity());
+
                 jsoupAsyncTask.execute("?tab=tech");
                 frame.postDelayed(new Runnable() {
                     @Override
@@ -72,6 +100,45 @@ public class technologyFragment extends Fragment {
                         ptr.refreshComplete();
                     }
                 }, 1800);
+            }
+        });
+
+        HomeRadioGroup.check(R.id.Home_Radio_quanbu);
+        HomeRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                switch (i){
+
+                    case R.id.Home_Radio_chengxuyuan:
+                        NodeJsoupAsyncTask jsoupAsyncTask  = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),"程序员");
+                        jsoupAsyncTask.execute("go/programmer");break;
+                    case R.id.Home_Radio_Python:
+                        NodeJsoupAsyncTask jsoupAsyncTask1  = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),"Python");
+                        jsoupAsyncTask1.execute("go/python");break;
+                    case R.id.Home_Radio_iDev:
+                        NodeJsoupAsyncTask jsoupAsyncTask2  = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),"iDev");
+                        jsoupAsyncTask2.execute("go/idev");break;
+                    case R.id.Home_Radio_Android:
+                        NodeJsoupAsyncTask jsoupAsyncTask3  = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),"Android");
+                        jsoupAsyncTask3.execute("go/android");break;
+                    case R.id.Home_Radio_Linux:
+                        NodeJsoupAsyncTask jsoupAsyncTask4  = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),"Linux");
+                        jsoupAsyncTask4.execute("go/linux");break;
+                    case R.id.Home_Radio_nodejs:
+                        NodeJsoupAsyncTask jsoupAsyncTask5  = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),"node.js");
+                        jsoupAsyncTask5.execute("go/nodejs");break;
+                    case R.id.Home_Radio_yunjisuan:
+                        NodeJsoupAsyncTask jsoupAsyncTask6  = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),"云计算");
+                        jsoupAsyncTask6.execute("go/cloud");break;
+                    case R.id.Home_Radio_kuandai:
+                        NodeJsoupAsyncTask jsoupAsyncTask7  = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),"宽带症候群");
+                        jsoupAsyncTask7.execute("go/bb");break;
+                    case R.id.Home_Radio_quanbu:
+                        JsoupAsyncTask jsoupAsyncTask8  = new JsoupAsyncTask(listView, inflater, list, getContext(), getActivity());
+                        jsoupAsyncTask8.execute("?tab=tech");break;
+
+
+                }
             }
         });
     }

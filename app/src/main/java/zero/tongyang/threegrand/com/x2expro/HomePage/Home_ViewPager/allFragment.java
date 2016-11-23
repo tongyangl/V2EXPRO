@@ -1,8 +1,13 @@
 package zero.tongyang.threegrand.com.x2expro.HomePage.Home_ViewPager;
 
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.renderscript.Allocation;
+import android.renderscript.Element;
+import android.renderscript.RenderScript;
+import android.renderscript.ScriptIntrinsicBlur;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -76,6 +81,8 @@ public class allFragment extends Fragment {
                 }, 1800);
             }
         });
+
+
     }
 
 

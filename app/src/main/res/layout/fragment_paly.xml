@@ -1,10 +1,154 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <in.srain.cube.views.ptr.PtrClassicFrameLayout
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+<HorizontalScrollView
+    android:layout_marginTop="5dp"
+    android:id="@+id/horizontalScrollView"
+    android:layout_width="match_parent"
+    android:layout_height="30dp"
+    android:background="#00000000"
+
+    android:scrollbars="none">>
+    <RadioGroup
+        android:id="@+id/Home_radioGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/Home_Radio_quanbu"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:background="@drawable/toradiocheck"
+            android:button="@null"
+            android:gravity="center"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:text="全部"
+            android:textColor="@color/home_radio_text" />
+
+        <RadioButton
+            android:id="@+id/Home_Radio_fenxiangfaxian"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:background="@drawable/toradiocheck"
+            android:button="@null"
+            android:gravity="center"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:text="分享发现"
+            android:textColor="@color/home_radio_text" />
+
+        <RadioButton
+            android:id="@+id/Home_Radio_dianziyouxi"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:background="@drawable/toradiocheck"
+            android:button="@null"
+            android:gravity="center"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:text="电子游戏"
+            android:textColor="@color/home_radio_text" />
+
+        <RadioButton
+            android:id="@+id/Home_Radio_dianying"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:background="@drawable/toradiocheck"
+            android:button="@null"
+            android:gravity="center"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:text="电影"
+            android:textColor="@color/home_radio_text" />
+
+        <RadioButton
+            android:id="@+id/Home_Radio_juji"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:background="@drawable/toradiocheck"
+            android:button="@null"
+            android:gravity="center"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:text="剧集"
+            android:textColor="@color/home_radio_text" />
+
+        <RadioButton
+            android:id="@+id/Home_Radio_music"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:background="@drawable/toradiocheck"
+            android:button="@null"
+            android:gravity="center"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:text="音乐"
+            android:textColor="@color/home_radio_text" />
+
+        <RadioButton
+            android:id="@+id/Home_Radio_lvyou"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:background="@drawable/toradiocheck"
+            android:button="@null"
+            android:gravity="center"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:text="旅游"
+            android:textColor="@color/home_radio_text" />
+
+        <RadioButton
+            android:id="@+id/Home_Radio_android"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:background="@drawable/toradiocheck"
+            android:button="@null"
+            android:gravity="center"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:text="Android"
+            android:textColor="@color/home_radio_text" />
+
+        <RadioButton
+            android:id="@+id/Home_Radio_julebu"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:background="@drawable/toradiocheck"
+            android:button="@null"
+            android:gravity="center"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:text="午夜俱乐部"
+            android:textColor="@color/home_radio_text" />
+
+    </RadioGroup>
+</HorizontalScrollView>
+
+    <in.srain.cube.views.ptr.PtrClassicFrameLayout xmlns:cube_ptr="http://schemas.android.com/apk/res-auto"
         android:id="@+id/ptr"
-        xmlns:cube_ptr="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         cube_ptr:ptr_duration_to_close="200"
@@ -18,8 +162,8 @@
             android:id="@+id/lv"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scrollbarStyle="outsideOverlay"
-            android:choiceMode="singleChoice" />
+            android:choiceMode="singleChoice"
+            android:scrollbarStyle="outsideOverlay" />
 
     </in.srain.cube.views.ptr.PtrClassicFrameLayout>
 </LinearLayout>

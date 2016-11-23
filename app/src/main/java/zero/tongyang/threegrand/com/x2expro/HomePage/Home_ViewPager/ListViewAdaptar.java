@@ -11,6 +11,8 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.List;
 import java.util.Map;
 
@@ -27,7 +29,8 @@ public class ListViewAdaptar extends BaseAdapter {
     private Context context;
     private Viewholder viewholder = null;
     private ListView listView;
-    private AsyncImageLoader asyncImageLoader;
+    public static AsyncImageLoader asyncImageLoader;
+    private boolean[] istouch;
 
     public ListViewAdaptar(List<Map<String, String>> list, Context context, LayoutInflater inflater, ListView listView) {
         this.list = list;
@@ -35,6 +38,11 @@ public class ListViewAdaptar extends BaseAdapter {
         this.inflater = inflater;
         this.listView = listView;
         asyncImageLoader = new AsyncImageLoader();
+        istouch = new boolean[list.size()];
+        for (int i = 0; i < istouch.length; i++) {
+            istouch[i] = false;
+
+        }
     }
 
     @Override
@@ -70,9 +78,9 @@ public class ListViewAdaptar extends BaseAdapter {
         }
         viewholder.nodename.setText(list.get(i).get("nodetitle"));
         viewholder.username.setText(list.get(i).get("username"));
-        if (list.get(i).get("replies").equals("")){
+        if (list.get(i).get("replies").equals("")) {
             viewholder.replice.setVisibility(View.GONE);
-        }else {
+        } else {
             viewholder.replice.setVisibility(View.VISIBLE);
             viewholder.replice.setText(list.get(i).get("replies"));
 
@@ -81,7 +89,10 @@ public class ListViewAdaptar extends BaseAdapter {
         viewholder.title.setText(list.get(i).get("title"));
         viewholder.lastreplice.setText(list.get(i).get("lastreplice"));
         viewholder.imageView.setTag(list.get(i).get("img"));
+        if (istouch[i]) {
+            viewholder.replice.setBackgroundResource(R.drawable.list_textview_replice1);
 
+        }
         Drawable cachedImage = asyncImageLoader.loadDrawable(list.get(i).get("img").trim(), new AsyncImageLoader.ImageCallback() {
             public void imageLoaded(Drawable imageDrawable, String imageUrl) {
                 ImageView imageViewByTag = (ImageView) listView.findViewWithTag(imageUrl);
@@ -91,14 +102,15 @@ public class ListViewAdaptar extends BaseAdapter {
             }
         });
         if (cachedImage == null) {
-            viewholder.imageView.setImageResource(R.drawable.android);
+            viewholder.imageView.setImageResource(R.drawable.moren);
         } else {
             viewholder.imageView.setImageDrawable(cachedImage);
         }
 
-
         return view;
     }
+
+
 
     public class Viewholder {
         TextView username;
@@ -107,9 +119,7 @@ public class ListViewAdaptar extends BaseAdapter {
         TextView time;
         TextView title;
         TextView lastreplice;
-
         ImageView imageView;
-
 
     }
 }

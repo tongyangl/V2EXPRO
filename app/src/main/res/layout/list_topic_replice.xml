@@ -2,52 +2,52 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
     <RelativeLayout
         android:id="@+id/relat"
         android:layout_width="match_parent"
-        android:layout_height="50dp">
-
-        <RelativeLayout
-            android:id="@+id/re"
-
-            android:layout_width="50dp"
-            android:layout_height="match_parent">
+        android:layout_height="60dp">
 
             <ImageView
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="15dp"
                 android:id="@+id/imagView"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true" />
-        </RelativeLayout>
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                 />
 
         <TextView
+            android:layout_marginTop="5dp"
+
+            android:layout_marginLeft="10dp"
             android:id="@+id/username"
             android:layout_width="wrap_content"
             android:layout_height="30dp"
-            android:layout_toRightOf="@+id/re"
+            android:layout_toRightOf="@+id/imagView"
             android:gravity="center_vertical"
             android:textColor="#000000" />
 
         <TextView
+            android:textSize="12sp"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="10dp"
             android:id="@+id/time"
             android:layout_width="wrap_content"
             android:layout_height="20dp"
             android:layout_below="@+id/username"
-            android:layout_toRightOf="@+id/re"
+            android:layout_toRightOf="@+id/imagView"
             android:gravity="center_vertical" />
 
     </RelativeLayout>
 
     <TextView
+        android:textSize="14sp"
         android:layout_marginBottom="20dp"
         android:textColor="#000000"
         android:id="@+id/replice_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/relat"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="50dp"
-        android:layout_marginRight="10dp" />
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="65dp"
+        android:layout_marginRight="20dp" />
 </RelativeLayout>

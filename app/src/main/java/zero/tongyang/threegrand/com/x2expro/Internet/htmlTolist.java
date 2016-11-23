@@ -18,6 +18,57 @@ import java.util.Map;
 
 public class htmlTolist {
 
+    public static List<Map<String, String>> NodeTopicsToList(String s) {
+        List<Map<String, String>> list = new ArrayList<>();
+        Document document = Jsoup.parse(s);
+        Elements elements = document.select("div[id=TopicsNode]").select("tbody");
+        Log.d("eeeee", elements.size() + "asd");
+        for (Element element : elements) {
+            Map<String, String> map = new HashMap<>();
+            Elements tr = element.select("tr").select("td");
+            String image = tr.get(0).select("img").attr("src");
+            String img = image.substring(2, image.length());
+            map.put("img", "http://" + img);
+            String replice = "";
+            String title = tr.get(2).select("span[class=item_title]").select("a").text();
+            if (tr.get(3).hasText()) {
+                replice = tr.get(3).select("a").text();
+
+            }
+            String username = "";
+            String lastreplice = "";
+
+            map.put("title", title);
+            map.put("replies", replice);
+            Elements elements1 = tr.get(2).select("span[class=small fade]").select("strong");
+            if (elements1.size() == 2) {
+                username = elements1.get(0).select("a").text();
+                if (elements1.get(1).hasText()) {
+                    lastreplice = elements1.get(1).select("a").text();
+
+                } else {
+                    username = elements1.get(0).select("a").text();
+                    lastreplice = null;
+                }
+            } else if (elements1.size() == 1) {
+                username = elements1.get(0).select("a").text();
+                lastreplice = null;
+
+            }
+            map.put("username", username);
+            map.put("lastreplice", lastreplice);
+            Element t = tr.get(2).select("span[class=small fade]").first();
+            String ti = t.ownText();
+            String time = ti.substring(3, ti.length());
+            map.put("time", time);
+            String repliceurl = tr.get(2).select("span[class=item_title]").select("a").attr("href");
+            map.put("repliceurl", repliceurl);
+            list.add(map);
+        }
+
+        return list;
+    }
+
     public static List<Map<String, String>> TopicsToList(String string) {
 
         List<Map<String, String>> list = new ArrayList<>();
@@ -60,8 +111,8 @@ public class htmlTolist {
                         lastreplice = null;
 
                     }
-                    map.put("repliceurl",  repliceurl.substring(1,repliceurl.length()));
-                    Log.d("===",repliceurl.substring(1,repliceurl.length()));
+                    map.put("repliceurl", repliceurl.substring(1, repliceurl.length()));
+                    Log.d("===", repliceurl.substring(1, repliceurl.length()));
                     map.put("title", title);
                     map.put("nodetitle", nodetitle);
                     map.put("time", time);

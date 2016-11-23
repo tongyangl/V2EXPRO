@@ -45,21 +45,17 @@ public class LoadTopicsById extends AsyncTask<String, Void, String[]> implements
     private List<Map<String, String>> list;
     private Map<String, String> map;
     private ListView listView;
-    private ProgressBar progressBar;
-    private LinearLayout linearLayout;
-    private RelativeLayout relativeLayout;
     private Context context;
     private LayoutInflater inflater;
     private com.ldoublem.loadingviewlib.LVNews load;
-
-    public LoadTopicsById(List<Map<String, String>> list, LinearLayout linearLayout, com.ldoublem.loadingviewlib.LVNews load,
-                          TextView time, TextView nodetitle, TextView username, ImageView imageView,
-                          ListView listView, Map<String, String> map, RelativeLayout relativeLayout, Context context, LayoutInflater inflater) {
+    private  TextView content;
+    public LoadTopicsById(List<Map<String, String>> list,com.ldoublem.loadingviewlib.LVNews load,
+                          ListView listView, Map<String, String> map, Context context, LayoutInflater inflater,TextView content) {
         this.list = list;
-        this.linearLayout = linearLayout;
+
         this.listView = listView;
         this.map = map;
-        this.relativeLayout = relativeLayout;
+         this.content=content;
         this.context = context;
         this.inflater = inflater;
         this.load = load;
@@ -77,19 +73,18 @@ public class LoadTopicsById extends AsyncTask<String, Void, String[]> implements
             addTextView(map.get("content"), 14);
 
         }
-
-        TopicRepliceAdaptar repliceAdaptar = new TopicRepliceAdaptar(inflater, list, listView);
+        TopicRepliceAdaptar repliceAdaptar = new TopicRepliceAdaptar(inflater, list, listView,context);
         listView.setAdapter(repliceAdaptar);
         load.stopAnim();
         load.setVisibility(View.GONE);
-        relativeLayout.setVisibility(View.VISIBLE);
+
     }
 
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
         load.startAnim();
-        relativeLayout.setVisibility(View.GONE);
+
     }
 
     @Override
@@ -109,18 +104,13 @@ public class LoadTopicsById extends AsyncTask<String, Void, String[]> implements
     }
 
     public void addTextView(String s, int size) {
-        TextView textView = new TextView(context);
-        textView.setGravity(Gravity.CENTER_VERTICAL);
-        textView.setTextColor(Color.BLACK);
-        textView.setText(s);
-        textView.setTextSize(size);
         RichText.fromHtml(s).autoFix(true).clickable(true).urlClick(this).fix(new ImageFixCallback() {
             @Override
             public void onFix(ImageHolder holder) {
 
             }
-        }).into(textView);
-        linearLayout.addView(textView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        }).into(content);
+
     }
 
     @Override

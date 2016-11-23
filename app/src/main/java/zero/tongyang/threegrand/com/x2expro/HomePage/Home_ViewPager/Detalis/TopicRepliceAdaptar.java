@@ -1,6 +1,9 @@
 package zero.tongyang.threegrand.com.x2expro.HomePage.Home_ViewPager.Detalis;
 
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,7 +14,9 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.zzhoujay.richtext.ImageHolder;
 import com.zzhoujay.richtext.RichText;
+import com.zzhoujay.richtext.callback.ImageFixCallback;
 import com.zzhoujay.richtext.callback.OnURLClickListener;
 
 import org.jsoup.Jsoup;
@@ -25,6 +30,8 @@ import java.util.Map;
 import zero.tongyang.threegrand.com.x2expro.HomePage.Home_ViewPager.Some.AsyncImageLoader;
 import zero.tongyang.threegrand.com.x2expro.R;
 
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
+
 /**
  * Created by tongyang on 16-11-16.
  */
@@ -36,11 +43,12 @@ public class TopicRepliceAdaptar extends BaseAdapter implements OnURLClickListen
     private viewHolder viewHolder;
     private ListView lv;
     private AsyncImageLoader asyncImageLoader;
-
-    public TopicRepliceAdaptar(LayoutInflater inflater, List<Map<String, String>> list, ListView lv) {
+     private Context context;
+    public TopicRepliceAdaptar(LayoutInflater inflater, List<Map<String, String>> list, ListView lv,Context context) {
         this.inflater = inflater;
         this.list = list;
         this.lv = lv;
+        this.context=context;
     }
 
     @Override
@@ -88,14 +96,13 @@ public class TopicRepliceAdaptar extends BaseAdapter implements OnURLClickListen
 
             a = min + "分" + sec + "秒前";
         } else if (day == 0) {
-            a = hour + "小时" + min + "分"; /*+ sec + "秒前";*/
+            a = hour + "小时" + min + "分前"; //**//*+ sec + "秒前";*//**//*
 
         } else {
 
-            a =day+"天"+ hour + "小时" ;/*+ min + "分" + sec + "秒前";*/
+            a =day+"天"+ hour + "小时前" ;//**//*+ min + "分" + sec + "秒前";*//**//*
         }
-        RichText.fromHtml(list.get(i).get("content_rendered")).autoFix(true).clickable(true).urlClick(this).into(viewHolder.replice);
-        /*viewHolder.replice.setText(list.get(i).get("content"));*/
+
         viewHolder.time.setText(a);
         viewHolder.username.setText(list.get(i).get("username"));
         viewHolder.imageView.setTag(list.get(i).get("img"));
@@ -109,11 +116,16 @@ public class TopicRepliceAdaptar extends BaseAdapter implements OnURLClickListen
             }
         });
         if (cachedImage == null) {
-            viewHolder.imageView.setImageResource(R.drawable.android);
+            viewHolder.imageView.setImageResource(R.drawable.moren);
         } else {
             viewHolder.imageView.setImageDrawable(cachedImage);
         }
-
+        RichText.fromHtml(list.get(i).get("content_rendered")).autoFix(true).fix(new ImageFixCallback() {
+            @Override
+            public void onFix(ImageHolder holder) {
+                holder.setImageType(ImageHolder.ImageType.JPG);
+            }
+        }).clickable(true).urlClick(this).into(viewHolder.replice);
         return view;
     }
 
@@ -129,7 +141,12 @@ public class TopicRepliceAdaptar extends BaseAdapter implements OnURLClickListen
     @Override
     public boolean urlClicked(String url) {
 
-
+        Intent intent=new Intent();
+        intent.setAction("android.intent.action.VIEW");
+        Uri uri=Uri.parse(url);
+        intent.setData(uri);
+        intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);
         return true;
     }
 }

@@ -3,7 +3,11 @@ package zero.tongyang.threegrand.com.x2expro.Main;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.PagerAdapter;
+import android.view.ViewGroup;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -11,11 +15,20 @@ import java.util.List;
  */
 
 public class MyFragmentPagerAdaptar extends FragmentPagerAdapter {
-    private List<Fragment>fragmentList;
+    private List<Fragment>fragmentList=new ArrayList<>();
+    private List<String> titles = new ArrayList<>();
 
-    public MyFragmentPagerAdaptar(FragmentManager fm, List<Fragment> fragmentList) {
+    public MyFragmentPagerAdaptar(FragmentManager fm) {
         super(fm);
-        this.fragmentList = fragmentList;
+    }
+    public void addTab(Fragment fragment, String title) {
+        fragmentList.add(fragment);
+        titles.add(title);
+    }
+
+    @Override
+    public CharSequence getPageTitle(int position) {
+        return titles.get(position);
     }
 
     @Override
@@ -26,5 +39,10 @@ public class MyFragmentPagerAdaptar extends FragmentPagerAdapter {
     @Override
     public int getCount() {
         return fragmentList.size();
+    }
+
+    @Override
+    public void destroyItem(ViewGroup container, int position, Object object) {
+       // super.destroyItem(container, position, object);
     }
 }
