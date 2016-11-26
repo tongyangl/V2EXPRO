@@ -1,4 +1,8 @@
-package zero.tongyang.threegrand.com.x2expro.HomePage.Home_ViewPager;
+package zero.tongyang.threegrand.com.x2expro.Adaptar;
+
+/**
+ * Created by tongyang on 16-11-25.
+ */
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
@@ -11,13 +15,12 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 import java.util.Map;
 
-import zero.tongyang.threegrand.com.x2expro.HomePage.Home_ViewPager.Some.AsyncImageLoader;
 import zero.tongyang.threegrand.com.x2expro.R;
+import zero.tongyang.threegrand.com.x2expro.Utils.AsyncImageLoader;
 
 /**
  * Created by tongyang on 16-11-12.

@@ -1,4 +1,4 @@
-package zero.tongyang.threegrand.com.x2expro.HomePage.Home_ViewPager.Some;
+package zero.tongyang.threegrand.com.x2expro.Utils;
 
 import android.graphics.drawable.Drawable;
 import android.os.Handler;

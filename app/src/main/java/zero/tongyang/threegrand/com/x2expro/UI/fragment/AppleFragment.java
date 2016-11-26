@@ -1,4 +1,4 @@
-package zero.tongyang.threegrand.com.x2expro.HomePage.Home_ViewPager;
+package zero.tongyang.threegrand.com.x2expro.UI.fragment;
 
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;

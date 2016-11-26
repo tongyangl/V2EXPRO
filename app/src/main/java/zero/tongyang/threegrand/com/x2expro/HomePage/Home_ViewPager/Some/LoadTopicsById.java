@@ -1,21 +1,12 @@
-package zero.tongyang.threegrand.com.x2expro.HomePage.Home_ViewPager.Detalis;
+package zero.tongyang.threegrand.com.x2expro.HomePage.Home_ViewPager.Some;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.text.Html;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.zzhoujay.richtext.ImageHolder;
@@ -23,16 +14,11 @@ import com.zzhoujay.richtext.RichText;
 import com.zzhoujay.richtext.callback.ImageFixCallback;
 import com.zzhoujay.richtext.callback.OnURLClickListener;
 
-import org.json.JSONObject;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
-
 import java.util.List;
 import java.util.Map;
-import java.util.zip.Inflater;
 
+import zero.tongyang.threegrand.com.x2expro.Adaptar.TopicRepliceAdaptar;
+import zero.tongyang.threegrand.com.x2expro.Utils.JsonTolist;
 import zero.tongyang.threegrand.com.x2expro.Internet.GetTopics;
 
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
@@ -48,14 +34,15 @@ public class LoadTopicsById extends AsyncTask<String, Void, String[]> implements
     private Context context;
     private LayoutInflater inflater;
     private com.ldoublem.loadingviewlib.LVNews load;
-    private  TextView content;
-    public LoadTopicsById(List<Map<String, String>> list,com.ldoublem.loadingviewlib.LVNews load,
-                          ListView listView, Map<String, String> map, Context context, LayoutInflater inflater,TextView content) {
+    private TextView content;
+
+    public LoadTopicsById(List<Map<String, String>> list, com.ldoublem.loadingviewlib.LVNews load,
+                          ListView listView, Map<String, String> map, Context context, LayoutInflater inflater, TextView content) {
         this.list = list;
 
         this.listView = listView;
         this.map = map;
-         this.content=content;
+        this.content = content;
         this.context = context;
         this.inflater = inflater;
         this.load = load;
@@ -73,7 +60,7 @@ public class LoadTopicsById extends AsyncTask<String, Void, String[]> implements
             addTextView(map.get("content"), 14);
 
         }
-        TopicRepliceAdaptar repliceAdaptar = new TopicRepliceAdaptar(inflater, list, listView,context);
+        TopicRepliceAdaptar repliceAdaptar = new TopicRepliceAdaptar(inflater, list, listView, context);
         listView.setAdapter(repliceAdaptar);
         load.stopAnim();
         load.setVisibility(View.GONE);
@@ -92,9 +79,10 @@ public class LoadTopicsById extends AsyncTask<String, Void, String[]> implements
 
         String topics = "api/topics/show.json?id=" + strings[0];
         String topicsreplice = "api/replies/show.json?topic_id=" + strings[0];
+        GetTopics getTopics = new GetTopics(context);
 
-        String a = GetTopics.getTopic(topics);
-        String b = GetTopics.getTopic(topicsreplice);
+        String a = getTopics.getTopic(topics);
+        String b = getTopics.getTopic(topicsreplice);
         return new String[]{
 
                 a, b
@@ -115,9 +103,9 @@ public class LoadTopicsById extends AsyncTask<String, Void, String[]> implements
 
     @Override
     public boolean urlClicked(String url) {
-        Intent intent=new Intent();
+        Intent intent = new Intent();
         intent.setAction("android.intent.action.VIEW");
-        Uri uri=Uri.parse(url);
+        Uri uri = Uri.parse(url);
         intent.setData(uri);
         intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);

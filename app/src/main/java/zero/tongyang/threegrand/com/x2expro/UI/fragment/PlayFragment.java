@@ -1,4 +1,4 @@
-package zero.tongyang.threegrand.com.x2expro.HomePage.Home_ViewPager;
+package zero.tongyang.threegrand.com.x2expro.UI.fragment;
 
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -31,7 +31,7 @@ import zero.tongyang.threegrand.com.x2expro.Static;
  * Created by tongyang on 16-11-12.
  */
 
-public class R2Fragment extends Fragment {
+public class PlayFragment extends Fragment {
     List<Map<String, String>> list;
     @BindView(R.id.lv)
     ListView listView;
@@ -42,20 +42,20 @@ public class R2Fragment extends Fragment {
     RadioButton HomeRadioQuanbu;
     @BindView(R.id.Home_Radio_fenxiangfaxian)
     RadioButton HomeRadioFenxiangfaxian;
-    @BindView(R.id.Home_Radio_fenxiangchuangzao)
-    RadioButton HomeRadioFenxiangchuangzao;
-    @BindView(R.id.Home_Radio_qad)
-    RadioButton HomeRadioQad;
-    @BindView(R.id.Home_Radio_kugongzuo)
-    RadioButton HomeRadioKugongzuo;
-    @BindView(R.id.Home_Radio_chengxuyuan)
-    RadioButton HomeRadioChengxuyuan;
-    @BindView(R.id.Home_Radio_zhichanghuati)
-    RadioButton HomeRadioZhichanghuati;
-    @BindView(R.id.Home_Radio_qisimiaoxiang)
-    RadioButton HomeRadioQisimiaoxiang;
-    @BindView(R.id.Home_Radio_youhuixinxi)
-    RadioButton HomeRadioYouhuixinxi;
+    @BindView(R.id.Home_Radio_dianziyouxi)
+    RadioButton HomeRadioDianziyouxi;
+    @BindView(R.id.Home_Radio_dianying)
+    RadioButton HomeRadioDianying;
+    @BindView(R.id.Home_Radio_juji)
+    RadioButton HomeRadioJuji;
+    @BindView(R.id.Home_Radio_music)
+    RadioButton HomeRadioMusic;
+    @BindView(R.id.Home_Radio_lvyou)
+    RadioButton HomeRadioLvyou;
+    @BindView(R.id.Home_Radio_android)
+    RadioButton HomeRadioAndroid;
+    @BindView(R.id.Home_Radio_julebu)
+    RadioButton HomeRadioJulebu;
     @BindView(R.id.Home_radioGroup)
     RadioGroup HomeRadioGroup;
     @BindView(R.id.horizontalScrollView)
@@ -65,20 +65,21 @@ public class R2Fragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_r2, container, false);
+        View view = inflater.inflate(R.layout.fragment_paly, container, false);
         ButterKnife.bind(this, view);
+
         return view;
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        inflater = getActivity().getLayoutInflater();
-        list = new ArrayList<>();
-        JsoupAsyncTask jsoupAsyncTask = new JsoupAsyncTask(listView, inflater, list, getContext(), getActivity());
-        jsoupAsyncTask.execute("?tab=r2");
         listView.setDivider(new ColorDrawable(Color.argb(255, 242, 242, 242)));
         listView.setDividerHeight((int) Static.dp2px(getContext(), 10f));
+        list = new ArrayList<>();
+        inflater = getActivity().getLayoutInflater();
+        JsoupAsyncTask jsoupAsyncTask = new JsoupAsyncTask(listView, inflater, list, getContext(), getActivity());
+        jsoupAsyncTask.execute("?tab=play");
         ptr.disableWhenHorizontalMove(false);
         ptr.setPtrHandler(new PtrHandler() {
             @Override
@@ -90,9 +91,8 @@ public class R2Fragment extends Fragment {
 
             @Override
             public void onRefreshBegin(PtrFrameLayout frame) {
-
                 JsoupAsyncTask jsoupAsyncTask = new JsoupAsyncTask(listView, inflater, list, getContext(), getActivity());
-                jsoupAsyncTask.execute("?tab=r2");
+                jsoupAsyncTask.execute("?tab=play");
                 frame.postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -110,34 +110,35 @@ public class R2Fragment extends Fragment {
                     case R.id.Home_Radio_fenxiangfaxian:
                         NodeJsoupAsyncTask jsoupAsyncTask  = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),"分享发现");
                         jsoupAsyncTask.execute("go/share");break;
-                    case R.id.Home_Radio_fenxiangchuangzao:
-                        NodeJsoupAsyncTask jsoupAsyncTask1  = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),"分享创造");
-                        jsoupAsyncTask1.execute("go/create");break;
-                    case R.id.Home_Radio_qad:
-                        NodeJsoupAsyncTask jsoupAsyncTask2  = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),"问与答");
-                        jsoupAsyncTask2.execute("go/qna");break;
-                    case R.id.Home_Radio_kugongzuo:
-                        NodeJsoupAsyncTask jsoupAsyncTask3  = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),"酷工作");
-                        jsoupAsyncTask3.execute("go/jobs");break;
-                    case R.id.Home_Radio_chengxuyuan:
-                        NodeJsoupAsyncTask jsoupAsyncTask4  = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),"程序员");
-                        jsoupAsyncTask4.execute("go/programmer");break;
-                    case R.id.Home_Radio_zhichanghuati:
-                        NodeJsoupAsyncTask jsoupAsyncTask5 = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),"职场话题");
-                        jsoupAsyncTask5.execute("go/career");break;
-                    case R.id.Home_Radio_qisimiaoxiang:
-                        NodeJsoupAsyncTask jsoupAsyncTask6  = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),"奇思妙想");
-                        jsoupAsyncTask6.execute("go/ideas");break;
-                    case R.id.Home_Radio_youhuixinxi:
-                        NodeJsoupAsyncTask jsoupAsyncTask7  = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),"优惠信息");
-                        jsoupAsyncTask7.execute("go/deals");break;
+                    case R.id.Home_Radio_dianziyouxi:
+                        NodeJsoupAsyncTask jsoupAsyncTask1  = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),"电子游戏");
+                        jsoupAsyncTask1.execute("go/games");break;
+                    case R.id.Home_Radio_dianying:
+                        NodeJsoupAsyncTask jsoupAsyncTask2  = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),"电影");
+                        jsoupAsyncTask2.execute("go/movie");break;
+                    case R.id.Home_Radio_juji:
+                        NodeJsoupAsyncTask jsoupAsyncTask3  = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),"剧集");
+                        jsoupAsyncTask3.execute("go/tv");break;
+                    case R.id.Home_Radio_music:
+                        NodeJsoupAsyncTask jsoupAsyncTask4  = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),"音乐");
+                        jsoupAsyncTask4.execute("go/music");break;
+                    case R.id.Home_Radio_lvyou:
+                        NodeJsoupAsyncTask jsoupAsyncTask5 = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),"旅游");
+                        jsoupAsyncTask5.execute("go/travel");break;
+                    case R.id.Home_Radio_android:
+                        NodeJsoupAsyncTask jsoupAsyncTask6  = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),"Android");
+                        jsoupAsyncTask6.execute("go/android");break;
+                    case R.id.Home_Radio_julebu:
+                        NodeJsoupAsyncTask jsoupAsyncTask7  = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),"午夜俱乐部");
+                        jsoupAsyncTask7.execute("go/bb");break;
                     case R.id.Home_Radio_quanbu:
                         JsoupAsyncTask jsoupAsyncTask8 = new JsoupAsyncTask(listView, inflater, list, getContext(), getActivity());
-                        jsoupAsyncTask8.execute("?tab=r2");
+                        jsoupAsyncTask8.execute("?tab=play");
 
 
                 }
             }
         });
     }
+
 }

@@ -1,4 +1,4 @@
-package zero.tongyang.threegrand.com.x2expro.HomePage.Home_ViewPager;
+package zero.tongyang.threegrand.com.x2expro.UI.fragment;
 
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -31,7 +31,7 @@ import zero.tongyang.threegrand.com.x2expro.Static;
  * Created by tongyang on 16-11-12.
  */
 
-public class PlayFragment extends Fragment {
+public class JobFragment extends Fragment {
     List<Map<String, String>> list;
     @BindView(R.id.lv)
     ListView listView;
@@ -40,22 +40,14 @@ public class PlayFragment extends Fragment {
     LayoutInflater inflater;
     @BindView(R.id.Home_Radio_quanbu)
     RadioButton HomeRadioQuanbu;
-    @BindView(R.id.Home_Radio_fenxiangfaxian)
-    RadioButton HomeRadioFenxiangfaxian;
-    @BindView(R.id.Home_Radio_dianziyouxi)
-    RadioButton HomeRadioDianziyouxi;
-    @BindView(R.id.Home_Radio_dianying)
-    RadioButton HomeRadioDianying;
-    @BindView(R.id.Home_Radio_juji)
-    RadioButton HomeRadioJuji;
-    @BindView(R.id.Home_Radio_music)
-    RadioButton HomeRadioMusic;
-    @BindView(R.id.Home_Radio_lvyou)
-    RadioButton HomeRadioLvyou;
-    @BindView(R.id.Home_Radio_android)
-    RadioButton HomeRadioAndroid;
-    @BindView(R.id.Home_Radio_julebu)
-    RadioButton HomeRadioJulebu;
+    @BindView(R.id.Home_Radio_kugongzuo)
+    RadioButton HomeRadioKugongzuo;
+    @BindView(R.id.Home_Radio_qiuzhi)
+    RadioButton HomeRadioQiuzhi;
+    @BindView(R.id.Home_Radio_zhichanghuati)
+    RadioButton HomeRadioZhichanghuati;
+    @BindView(R.id.Home_Radio_waibao)
+    RadioButton HomeRadioWaibao;
     @BindView(R.id.Home_radioGroup)
     RadioGroup HomeRadioGroup;
     @BindView(R.id.horizontalScrollView)
@@ -65,21 +57,21 @@ public class PlayFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_paly, container, false);
+        View view = inflater.inflate(R.layout.fragment_job, container, false);
         ButterKnife.bind(this, view);
-
         return view;
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        inflater = getActivity().getLayoutInflater();
         listView.setDivider(new ColorDrawable(Color.argb(255, 242, 242, 242)));
         listView.setDividerHeight((int) Static.dp2px(getContext(), 10f));
         list = new ArrayList<>();
-        inflater = getActivity().getLayoutInflater();
         JsoupAsyncTask jsoupAsyncTask = new JsoupAsyncTask(listView, inflater, list, getContext(), getActivity());
-        jsoupAsyncTask.execute("?tab=play");
+        jsoupAsyncTask.execute("?tab=jobs");
+
         ptr.disableWhenHorizontalMove(false);
         ptr.setPtrHandler(new PtrHandler() {
             @Override
@@ -92,7 +84,7 @@ public class PlayFragment extends Fragment {
             @Override
             public void onRefreshBegin(PtrFrameLayout frame) {
                 JsoupAsyncTask jsoupAsyncTask = new JsoupAsyncTask(listView, inflater, list, getContext(), getActivity());
-                jsoupAsyncTask.execute("?tab=play");
+                jsoupAsyncTask.execute("?tab=jobs");
                 frame.postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -105,40 +97,26 @@ public class PlayFragment extends Fragment {
         HomeRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
-                switch (i){
+                switch (i) {
+                    case R.id.Home_Radio_kugongzuo:
+                        NodeJsoupAsyncTask jsoupAsyncTask  = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),"酷工作");
+                        jsoupAsyncTask.execute("go/jobs");break;
+                    case R.id.Home_Radio_qiuzhi:
+                        NodeJsoupAsyncTask jsoupAsyncTask1  = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),"求职");
+                        jsoupAsyncTask1.execute("go/cv");break;
+                    case R.id.Home_Radio_zhichanghuati:
+                        NodeJsoupAsyncTask jsoupAsyncTask2  = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),"职场话题");
+                        jsoupAsyncTask2.execute("go/career");break;
+                    case R.id.Home_Radio_waibao:
+                        NodeJsoupAsyncTask jsoupAsyncTask3  = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),"外包");
+                        jsoupAsyncTask3.execute("go/outsourcing");break;
 
-                    case R.id.Home_Radio_fenxiangfaxian:
-                        NodeJsoupAsyncTask jsoupAsyncTask  = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),"分享发现");
-                        jsoupAsyncTask.execute("go/share");break;
-                    case R.id.Home_Radio_dianziyouxi:
-                        NodeJsoupAsyncTask jsoupAsyncTask1  = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),"电子游戏");
-                        jsoupAsyncTask1.execute("go/games");break;
-                    case R.id.Home_Radio_dianying:
-                        NodeJsoupAsyncTask jsoupAsyncTask2  = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),"电影");
-                        jsoupAsyncTask2.execute("go/movie");break;
-                    case R.id.Home_Radio_juji:
-                        NodeJsoupAsyncTask jsoupAsyncTask3  = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),"剧集");
-                        jsoupAsyncTask3.execute("go/tv");break;
-                    case R.id.Home_Radio_music:
-                        NodeJsoupAsyncTask jsoupAsyncTask4  = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),"音乐");
-                        jsoupAsyncTask4.execute("go/music");break;
-                    case R.id.Home_Radio_lvyou:
-                        NodeJsoupAsyncTask jsoupAsyncTask5 = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),"旅游");
-                        jsoupAsyncTask5.execute("go/travel");break;
-                    case R.id.Home_Radio_android:
-                        NodeJsoupAsyncTask jsoupAsyncTask6  = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),"Android");
-                        jsoupAsyncTask6.execute("go/android");break;
-                    case R.id.Home_Radio_julebu:
-                        NodeJsoupAsyncTask jsoupAsyncTask7  = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),"午夜俱乐部");
-                        jsoupAsyncTask7.execute("go/bb");break;
                     case R.id.Home_Radio_quanbu:
                         JsoupAsyncTask jsoupAsyncTask8 = new JsoupAsyncTask(listView, inflater, list, getContext(), getActivity());
-                        jsoupAsyncTask8.execute("?tab=play");
-
+                        jsoupAsyncTask8.execute("?tab=jobs");
 
                 }
             }
         });
     }
-
 }

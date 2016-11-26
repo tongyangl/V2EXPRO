@@ -1,11 +1,9 @@
-package zero.tongyang.threegrand.com.x2expro.Main;
+package zero.tongyang.threegrand.com.x2expro.UI.Activity;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.renderscript.Allocation;
@@ -23,11 +21,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.TableLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -35,18 +29,19 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import zero.tongyang.threegrand.com.x2expro.HomePage.Home_ViewPager.AppleFragment;
-import zero.tongyang.threegrand.com.x2expro.HomePage.Home_ViewPager.CityFragment;
-import zero.tongyang.threegrand.com.x2expro.HomePage.Home_ViewPager.HotFragment;
-import zero.tongyang.threegrand.com.x2expro.HomePage.Home_ViewPager.JobFragment;
-import zero.tongyang.threegrand.com.x2expro.HomePage.Home_ViewPager.PlayFragment;
-import zero.tongyang.threegrand.com.x2expro.HomePage.Home_ViewPager.QandAFragment;
-import zero.tongyang.threegrand.com.x2expro.HomePage.Home_ViewPager.R2Fragment;
-import zero.tongyang.threegrand.com.x2expro.HomePage.Home_ViewPager.allFragment;
-import zero.tongyang.threegrand.com.x2expro.HomePage.Home_ViewPager.technologyFragment;
-import zero.tongyang.threegrand.com.x2expro.HomePage.Home_ViewPager.transactionFragment;
+
+import zero.tongyang.threegrand.com.x2expro.Adaptar.MyFragmentPagerAdaptar;
 import zero.tongyang.threegrand.com.x2expro.R;
-import zero.tongyang.threegrand.com.x2expro.UI.SiginActivity;
+import zero.tongyang.threegrand.com.x2expro.UI.fragment.AppleFragment;
+import zero.tongyang.threegrand.com.x2expro.UI.fragment.CityFragment;
+import zero.tongyang.threegrand.com.x2expro.UI.fragment.HotFragment;
+import zero.tongyang.threegrand.com.x2expro.UI.fragment.JobFragment;
+import zero.tongyang.threegrand.com.x2expro.UI.fragment.PlayFragment;
+import zero.tongyang.threegrand.com.x2expro.UI.fragment.QandAFragment;
+import zero.tongyang.threegrand.com.x2expro.UI.fragment.R2Fragment;
+import zero.tongyang.threegrand.com.x2expro.UI.fragment.allFragment;
+import zero.tongyang.threegrand.com.x2expro.UI.fragment.technologyFragment;
+import zero.tongyang.threegrand.com.x2expro.UI.fragment.transactionFragment;
 
 public class MainActivity extends AppCompatActivity {
     List<Fragment> fragmentList;

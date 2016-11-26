@@ -1,4 +1,4 @@
-package zero.tongyang.threegrand.com.x2expro.HomePage.Home_ViewPager.Detalis;
+package zero.tongyang.threegrand.com.x2expro.Utils;
 
 import org.json.JSONArray;
 import org.json.JSONException;

@@ -1,10 +1,9 @@
-package zero.tongyang.threegrand.com.x2expro.HomePage.Home_ViewPager.Detalis;
+package zero.tongyang.threegrand.com.x2expro.Adaptar;
 
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,16 +18,13 @@ import com.zzhoujay.richtext.RichText;
 import com.zzhoujay.richtext.callback.ImageFixCallback;
 import com.zzhoujay.richtext.callback.OnURLClickListener;
 
-import org.jsoup.Jsoup;
-
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
-import zero.tongyang.threegrand.com.x2expro.HomePage.Home_ViewPager.Some.AsyncImageLoader;
 import zero.tongyang.threegrand.com.x2expro.R;
+import zero.tongyang.threegrand.com.x2expro.Utils.AsyncImageLoader;
 
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 

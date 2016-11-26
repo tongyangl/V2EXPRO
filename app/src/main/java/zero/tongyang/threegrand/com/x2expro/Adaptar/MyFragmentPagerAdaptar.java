@@ -1,4 +1,4 @@
-package zero.tongyang.threegrand.com.x2expro.Main;
+package zero.tongyang.threegrand.com.x2expro.Adaptar;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;

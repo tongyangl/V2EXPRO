@@ -1,4 +1,4 @@
-package zero.tongyang.threegrand.com.x2expro.UI;
+package zero.tongyang.threegrand.com.x2expro.UI.Activity;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -18,8 +18,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import zero.tongyang.threegrand.com.x2expro.Internet.GetTopics;
-import zero.tongyang.threegrand.com.x2expro.Internet.Login;
 import zero.tongyang.threegrand.com.x2expro.R;
+import zero.tongyang.threegrand.com.x2expro.Utils.User;
 
 import static zero.tongyang.threegrand.com.x2expro.Value.value.Cookie;
 
@@ -34,10 +34,8 @@ public class SiginActivity extends Activity {
     EditText password;
     @BindView(R.id.signin)
     Button signin;
-    private Login login;
-    private String usernameformat = "";
-    private String passwordformat = "";
-    private String once = "";
+    private GetTopics login;
+    private User user;
     private ProgressDialog dialog;
 
     @Override
@@ -67,13 +65,28 @@ public class SiginActivity extends Activity {
             super.onPostExecute(s);
             Document document = Jsoup.parse(s);
             Elements elements = document.select("div[id=Rightbar]").select("div[class=box]");
+            if (elements.size() == 8) {
 
-            Log.d("sss", elements.size() + "ss");
+                user = new User();
+                user.getUserInfo(elements);
+                finish();
+            } else {
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(SiginActivity.this);
+                builder.setTitle("提示");
+                builder.setMessage("登陆遇到问题，请检查用户名密码");
+                builder.setPositiveButton("确定", null);
+                builder.show();
+            }
+
+
         }
 
         @Override
         protected String doInBackground(String... strings) {
-            return GetTopics.getTopic("");
+
+            login = new GetTopics(getApplicationContext());
+            return login.getTopic("");
 
         }
     }
@@ -114,7 +127,7 @@ public class SiginActivity extends Activity {
 
         @Override
         protected String doInBackground(String... strings) {
-            login = new Login();
+            login = new GetTopics(getApplicationContext());
 
             return login.login(strings[0], strings[1]);
         }

@@ -7,18 +7,15 @@ import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import java.util.List;
 import java.util.Map;
 
-import zero.tongyang.threegrand.com.x2expro.HomePage.Home_ViewPager.Detalis.TopicsDetalis;
-import zero.tongyang.threegrand.com.x2expro.HomePage.Home_ViewPager.ListViewAdaptar;
+import zero.tongyang.threegrand.com.x2expro.Adaptar.ListViewAdaptar;
 import zero.tongyang.threegrand.com.x2expro.Internet.GetTopics;
-import zero.tongyang.threegrand.com.x2expro.Internet.htmlTolist;
-import zero.tongyang.threegrand.com.x2expro.R;
+import zero.tongyang.threegrand.com.x2expro.Utils.htmlTolist;
+import zero.tongyang.threegrand.com.x2expro.UI.Activity.TopicsDetalis;
 
 /**
  * Created by tongyang on 16-11-14.
@@ -68,7 +65,8 @@ public class JsoupAsyncTask extends AsyncTask<String, Void, String> {
 
     @Override
     protected String doInBackground(String... strings) {
-        return GetTopics.getTopic(strings[0]);
+        GetTopics getTopics=new GetTopics(activity);
+        return getTopics.getTopic(strings[0]);
 
 
     }

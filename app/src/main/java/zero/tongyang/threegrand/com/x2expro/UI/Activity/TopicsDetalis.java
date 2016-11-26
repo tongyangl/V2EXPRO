@@ -1,4 +1,4 @@
-package zero.tongyang.threegrand.com.x2expro.HomePage.Home_ViewPager.Detalis;
+package zero.tongyang.threegrand.com.x2expro.UI.Activity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -21,10 +21,11 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import zero.tongyang.threegrand.com.x2expro.HomePage.Home_ViewPager.Some.AsyncImageLoader;
+import zero.tongyang.threegrand.com.x2expro.HomePage.Home_ViewPager.Some.LoadTopicsById;
 import zero.tongyang.threegrand.com.x2expro.R;
+import zero.tongyang.threegrand.com.x2expro.Utils.AsyncImageLoader;
 
-import static zero.tongyang.threegrand.com.x2expro.HomePage.Home_ViewPager.ListViewAdaptar.asyncImageLoader;
+import static zero.tongyang.threegrand.com.x2expro.Adaptar.ListViewAdaptar.asyncImageLoader;
 
 /**
  * Created by tongyang on 16-11-16.
