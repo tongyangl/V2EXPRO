@@ -13,6 +13,8 @@ import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
+import com.romainpiel.shimmer.ShimmerTextView;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +24,7 @@ import butterknife.ButterKnife;
 import in.srain.cube.views.ptr.PtrDefaultHandler;
 import in.srain.cube.views.ptr.PtrFrameLayout;
 import in.srain.cube.views.ptr.PtrHandler;
+import in.srain.cube.views.ptr.header.StoreHouseHeader;
 import zero.tongyang.threegrand.com.x2expro.HomePage.Home_ViewPager.Some.JsoupAsyncTask;
 import zero.tongyang.threegrand.com.x2expro.HomePage.Home_ViewPager.Some.NodeJsoupAsyncTask;
 import zero.tongyang.threegrand.com.x2expro.R;
@@ -58,13 +61,20 @@ public class AppleFragment extends Fragment {
     RadioButton HomeRadioApple;
     @BindView(R.id.horizontalScrollView)
     HorizontalScrollView horizontalScrollView;
-
+    @BindView(R.id.text_v2ex)
+    ShimmerTextView textV2ex;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_apple, container, false);
         ButterKnife.bind(this, view);
+        StoreHouseHeader header = new StoreHouseHeader(getContext());
+        header.initWithString("v2ex");
+
+        header.setTextColor(Color.BLACK);
+        ptr.addPtrUIHandler(header);
+        ptr.setHeaderView(header);
         return view;
     }
 
@@ -77,7 +87,7 @@ public class AppleFragment extends Fragment {
         listView.setDividerHeight((int) Static.dp2px(getContext(), 10f));
         inflater = getActivity().getLayoutInflater();
         list = new ArrayList<>();
-        JsoupAsyncTask jsoupAsyncTask = new JsoupAsyncTask(listView, inflater, list, getContext(), getActivity());
+        JsoupAsyncTask jsoupAsyncTask = new JsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),textV2ex);
         jsoupAsyncTask.execute("?tab=apple");
         List<String> stringList = new ArrayList<>();
 
@@ -92,8 +102,42 @@ public class AppleFragment extends Fragment {
 
             @Override
             public void onRefreshBegin(PtrFrameLayout frame) {
-                JsoupAsyncTask jsoupAsyncTask = new JsoupAsyncTask(listView, inflater, list, getContext(), getActivity());
-                jsoupAsyncTask.execute("?tab=apple");
+                switch (HomeRadioGroup.getCheckedRadioButtonId()) {
+                    case R.id.Home_Radio_macOS:
+                        NodeJsoupAsyncTask jsoupAsyncTask = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(), "macOS",null);
+                        jsoupAsyncTask.execute("go/macos");
+                        break;
+                    case R.id.Home_Radio_iPhone:
+                        NodeJsoupAsyncTask jsoupAsyncTask1 = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(), "iPhone",null);
+                        jsoupAsyncTask1.execute("go/iphone");
+                        break;
+                    case R.id.Home_Radio_iPad:
+                        NodeJsoupAsyncTask jsoupAsyncTask2 = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(), "iPad",null);
+                        jsoupAsyncTask2.execute("go/ipad");
+                        break;
+                    case R.id.Home_Radio_MBP:
+                        NodeJsoupAsyncTask jsoupAsyncTask3 = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(), "MBP",null);
+                        jsoupAsyncTask3.execute("go/mbp");
+                        break;
+                    case R.id.Home_Radio_iMac:
+                        NodeJsoupAsyncTask jsoupAsyncTask4 = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(), "iMac",null);
+                        jsoupAsyncTask4.execute("go/imac");
+                        break;
+                    case R.id.Home_Radio_Apple:
+                        NodeJsoupAsyncTask jsoupAsyncTask5 = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(), "apple",null);
+                        jsoupAsyncTask5.execute("go/apple");
+                        break;
+                    case R.id.Home_Radio_WATCH:
+                        NodeJsoupAsyncTask jsoupAsyncTask9 = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(), "WWATCH",null);
+                        jsoupAsyncTask9.execute("go/watch");
+                        break;
+                    case R.id.Home_Radio_APPLE:
+                        JsoupAsyncTask jsoupAsyncTask6 = new JsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),null);
+                        jsoupAsyncTask6.execute("?tab=apple");
+                        break;
+
+
+                }
                 frame.postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -108,29 +152,37 @@ public class AppleFragment extends Fragment {
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
                 switch (i) {
                     case R.id.Home_Radio_macOS:
-                        NodeJsoupAsyncTask jsoupAsyncTask  = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),"macOS");
-                        jsoupAsyncTask.execute("go/macos");break;
+                        NodeJsoupAsyncTask jsoupAsyncTask = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(), "macOS",textV2ex);
+                        jsoupAsyncTask.execute("go/macos");
+                        break;
                     case R.id.Home_Radio_iPhone:
-                        NodeJsoupAsyncTask jsoupAsyncTask1  = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),"iPhone");
-                        jsoupAsyncTask1.execute("go/iphone");break;
+                        NodeJsoupAsyncTask jsoupAsyncTask1 = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(), "iPhone",textV2ex);
+                        jsoupAsyncTask1.execute("go/iphone");
+                        break;
                     case R.id.Home_Radio_iPad:
-                        NodeJsoupAsyncTask jsoupAsyncTask2  = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),"iPad");
-                        jsoupAsyncTask2.execute("go/ipad");break;
+                        NodeJsoupAsyncTask jsoupAsyncTask2 = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(), "iPad",textV2ex);
+                        jsoupAsyncTask2.execute("go/ipad");
+                        break;
                     case R.id.Home_Radio_MBP:
-                        NodeJsoupAsyncTask jsoupAsyncTask3  = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),"MBP");
-                        jsoupAsyncTask3.execute("go/mbp");break;
+                        NodeJsoupAsyncTask jsoupAsyncTask3 = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(), "MBP",textV2ex);
+                        jsoupAsyncTask3.execute("go/mbp");
+                        break;
                     case R.id.Home_Radio_iMac:
-                        NodeJsoupAsyncTask jsoupAsyncTask4  = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),"iMac");
-                        jsoupAsyncTask4.execute("go/imac");break;
+                        NodeJsoupAsyncTask jsoupAsyncTask4 = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(), "iMac",textV2ex);
+                        jsoupAsyncTask4.execute("go/imac");
+                        break;
                     case R.id.Home_Radio_Apple:
-                        NodeJsoupAsyncTask jsoupAsyncTask5  = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),"apple");
-                        jsoupAsyncTask5.execute("go/apple");break;
+                        NodeJsoupAsyncTask jsoupAsyncTask5 = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(), "apple",textV2ex);
+                        jsoupAsyncTask5.execute("go/apple");
+                        break;
                     case R.id.Home_Radio_WATCH:
-                        NodeJsoupAsyncTask jsoupAsyncTask9  = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),"WWATCH");
-                        jsoupAsyncTask9.execute("go/watch");break;
+                        NodeJsoupAsyncTask jsoupAsyncTask9 = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(), "WWATCH",textV2ex);
+                        jsoupAsyncTask9.execute("go/watch");
+                        break;
                     case R.id.Home_Radio_APPLE:
-                        JsoupAsyncTask jsoupAsyncTask6 = new JsoupAsyncTask(listView, inflater, list, getContext(), getActivity());
-                        jsoupAsyncTask6.execute("?tab=apple");break;
+                        JsoupAsyncTask jsoupAsyncTask6 = new JsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),textV2ex);
+                        jsoupAsyncTask6.execute("?tab=apple");
+                        break;
 
                 }
             }

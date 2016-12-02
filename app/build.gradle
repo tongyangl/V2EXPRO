@@ -28,6 +28,7 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
+
     compile 'com.squareup.retrofit2:adapter-rxjava:2.0.0-beta4'
     compile 'com.squareup.retrofit2:retrofit:2.0.0-beta4'//Retrofit2所需要的包
     compile 'com.squareup.retrofit2:converter-gson:2.0.0-beta4'//ConverterFactory的Gson依赖包
@@ -40,6 +41,7 @@ dependencies {
     compile 'org.greenrobot:eventbus:3.0.0'
     compile 'com.ldoublem.loadingview:loadingviewlib:0.0.1'
     compile 'com.zzhoujay.richtext:richtext:2.2.0'
+    compile 'com.romainpiel.shimmer:library:1.4.0@aar'
     compile files('libs/jsoup-1.8.1.jar')
     compile 'com.squareup.okhttp:okhttp:2.4.0'
     compile 'com.github.franmontiel:PersistentCookieJar:v1.0.0'

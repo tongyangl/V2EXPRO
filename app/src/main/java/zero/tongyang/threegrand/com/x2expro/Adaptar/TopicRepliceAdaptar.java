@@ -39,12 +39,13 @@ public class TopicRepliceAdaptar extends BaseAdapter implements OnURLClickListen
     private viewHolder viewHolder;
     private ListView lv;
     private AsyncImageLoader asyncImageLoader;
-     private Context context;
-    public TopicRepliceAdaptar(LayoutInflater inflater, List<Map<String, String>> list, ListView lv,Context context) {
+    private Context context;
+
+    public TopicRepliceAdaptar(LayoutInflater inflater, List<Map<String, String>> list, ListView lv, Context context) {
         this.inflater = inflater;
         this.list = list;
         this.lv = lv;
-        this.context=context;
+        this.context = context;
     }
 
     @Override
@@ -77,7 +78,7 @@ public class TopicRepliceAdaptar extends BaseAdapter implements OnURLClickListen
         } else {
             viewHolder = (TopicRepliceAdaptar.viewHolder) view.getTag();
         }
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd mm:ss");
+       /* SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd mm:ss");
         Long t = new Long(list.get(i).get("created"));
         Long d = Calendar.getInstance().getTimeInMillis();
         Log.d("----", d + "ddd");
@@ -92,14 +93,14 @@ public class TopicRepliceAdaptar extends BaseAdapter implements OnURLClickListen
 
             a = min + "分" + sec + "秒前";
         } else if (day == 0) {
-            a = hour + "小时" + min + "分前"; //**//*+ sec + "秒前";*//**//*
+            a = hour + "小时" + min + "分前"; /*//**//**//*+ sec + "秒前";*//**//**//**//*
 
         } else {
 
-            a =day+"天"+ hour + "小时前" ;//**//*+ min + "分" + sec + "秒前";*//**//*
-        }
+            a =day+"天"+ hour + "小时前" ;/*//**//**//*+ min + "分" + sec + "秒前";*//**//**//**//*
+        }*/
 
-        viewHolder.time.setText(a);
+        viewHolder.time.setText(list.get(i).get("time"));
         viewHolder.username.setText(list.get(i).get("username"));
         viewHolder.imageView.setTag(list.get(i).get("img"));
         asyncImageLoader = new AsyncImageLoader();
@@ -116,7 +117,7 @@ public class TopicRepliceAdaptar extends BaseAdapter implements OnURLClickListen
         } else {
             viewHolder.imageView.setImageDrawable(cachedImage);
         }
-        RichText.fromHtml(list.get(i).get("content_rendered")).autoFix(true).fix(new ImageFixCallback() {
+        RichText.fromHtml(list.get(i).get("content")).autoFix(true).fix(new ImageFixCallback() {
             @Override
             public void onFix(ImageHolder holder) {
                 holder.setImageType(ImageHolder.ImageType.JPG);
@@ -137,9 +138,9 @@ public class TopicRepliceAdaptar extends BaseAdapter implements OnURLClickListen
     @Override
     public boolean urlClicked(String url) {
 
-        Intent intent=new Intent();
+        Intent intent = new Intent();
         intent.setAction("android.intent.action.VIEW");
-        Uri uri=Uri.parse(url);
+        Uri uri = Uri.parse(url);
         intent.setData(uri);
         intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);

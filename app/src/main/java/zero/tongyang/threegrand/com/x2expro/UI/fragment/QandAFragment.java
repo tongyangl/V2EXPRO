@@ -12,6 +12,8 @@ import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
+import com.romainpiel.shimmer.ShimmerTextView;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +23,7 @@ import butterknife.ButterKnife;
 import in.srain.cube.views.ptr.PtrDefaultHandler;
 import in.srain.cube.views.ptr.PtrFrameLayout;
 import in.srain.cube.views.ptr.PtrHandler;
+import in.srain.cube.views.ptr.header.StoreHouseHeader;
 import zero.tongyang.threegrand.com.x2expro.HomePage.Home_ViewPager.Some.JsoupAsyncTask;
 import zero.tongyang.threegrand.com.x2expro.HomePage.Home_ViewPager.Some.NodeJsoupAsyncTask;
 import zero.tongyang.threegrand.com.x2expro.R;
@@ -41,7 +44,8 @@ public class QandAFragment extends Fragment {
     RadioButton HomeRadioQad;
     @BindView(R.id.Home_radioGroup)
     RadioGroup HomeRadioGroup;
-
+    @BindView(R.id.text_v2ex)
+    ShimmerTextView textV2ex;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -58,9 +62,14 @@ public class QandAFragment extends Fragment {
         list = new ArrayList<>();
         listView.setDivider(new ColorDrawable(Color.argb(255, 242, 242, 242)));
         listView.setDividerHeight((int) Static.dp2px(getContext(), 10f));
-        JsoupAsyncTask jsoupAsyncTask = new JsoupAsyncTask(listView, inflater, list, getContext(), getActivity());
+        JsoupAsyncTask jsoupAsyncTask = new JsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),textV2ex);
         jsoupAsyncTask.execute("?tab=qna");
+        StoreHouseHeader header=new StoreHouseHeader(getContext());
+        header.initWithString("v2ex");
 
+        header.setTextColor(Color.BLACK);
+        ptr.addPtrUIHandler(header);
+        ptr.setHeaderView(header);
         ptr.disableWhenHorizontalMove(false);
         ptr.setPtrHandler(new PtrHandler() {
             @Override
@@ -72,8 +81,15 @@ public class QandAFragment extends Fragment {
 
             @Override
             public void onRefreshBegin(PtrFrameLayout frame) {
-                JsoupAsyncTask jsoupAsyncTask = new JsoupAsyncTask(listView, inflater, list, getContext(), getActivity());
-                jsoupAsyncTask.execute("?tab=qna");
+               switch (HomeRadioGroup.getCheckedRadioButtonId()){
+
+                   case R.id.Home_Radio_qad:
+                       NodeJsoupAsyncTask jsoupAsyncTask  = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),"分享发现",null);
+                       jsoupAsyncTask.execute("go/share");break;
+                   case R.id.Home_Radio_dianziyouxi:
+                       NodeJsoupAsyncTask jsoupAsyncTask1  = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),"电子游戏",null);
+                       jsoupAsyncTask1.execute("go/games");break;
+               }
                 frame.postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -88,10 +104,10 @@ public class QandAFragment extends Fragment {
                 switch (i){
 
                     case R.id.Home_Radio_qad:
-                        NodeJsoupAsyncTask jsoupAsyncTask  = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),"分享发现");
+                        NodeJsoupAsyncTask jsoupAsyncTask  = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),"分享发现",textV2ex);
                         jsoupAsyncTask.execute("go/share");break;
                     case R.id.Home_Radio_dianziyouxi:
-                        NodeJsoupAsyncTask jsoupAsyncTask1  = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),"电子游戏");
+                        NodeJsoupAsyncTask jsoupAsyncTask1  = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),"电子游戏",textV2ex);
                         jsoupAsyncTask1.execute("go/games");break;
 
 

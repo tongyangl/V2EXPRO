@@ -1,11 +1,15 @@
 package zero.tongyang.threegrand.com.x2expro.UI.Activity;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Environment;
 import android.renderscript.Allocation;
 import android.renderscript.Element;
 import android.renderscript.RenderScript;
@@ -24,6 +28,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,6 +47,7 @@ import zero.tongyang.threegrand.com.x2expro.UI.fragment.R2Fragment;
 import zero.tongyang.threegrand.com.x2expro.UI.fragment.allFragment;
 import zero.tongyang.threegrand.com.x2expro.UI.fragment.technologyFragment;
 import zero.tongyang.threegrand.com.x2expro.UI.fragment.transactionFragment;
+import zero.tongyang.threegrand.com.x2expro.Utils.tyutils;
 
 public class MainActivity extends AppCompatActivity {
     List<Fragment> fragmentList;
@@ -87,22 +93,22 @@ public class MainActivity extends AppCompatActivity {
         mydrawToggle.syncState();
         drawerLayout.setDrawerListener(mydrawToggle);
         View view = ngv.getHeaderView(0);
-        TextView textView = (TextView) view.findViewById(R.id.username);
-        ImageView imageView = (ImageView) view.findViewById(R.id.userimg);
+        final TextView textView = (TextView) view.findViewById(R.id.username);
+        final ImageView imageView = (ImageView) view.findViewById(R.id.userimg);
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(MainActivity.this, SiginActivity.class);
+                Intent intent = new Intent(MainActivity.this, SiginActivity.class);
                 startActivity(intent);
             }
         });
-       imageView.setOnClickListener(new View.OnClickListener() {
-           @Override
-           public void onClick(View view) {
-               Intent intent=new Intent(MainActivity.this, SiginActivity.class);
-               startActivity(intent);
-           }
-       });
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, SiginActivity.class);
+                startActivity(intent);
+            }
+        });
         ngv.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             MenuItem mymenuItem;
 
@@ -137,10 +143,29 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
+        IntentFilter filter = new IntentFilter();
+        BroadcastReceiver receiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                String username = intent.getStringExtra("nickname");
+                String img = intent.getStringExtra("img");
+                textView.setText(username);
+                String path="";
+                if (tyutils.SdCardHelper()) {
+                    path = Environment.getExternalStorageDirectory().getPath() + "/v2expro/userimg/userimg.png";
 
+                } else {
+
+
+                }
+                Bitmap bitmap = BitmapFactory.decodeFile(path);
+                imageView.setImageBitmap(bitmap);
+            }
+        };
+        filter.addAction("userinfo");
+        registerReceiver(receiver, filter);
 
     }
-
 
     public void init() {
         fragmentList = new ArrayList<>();

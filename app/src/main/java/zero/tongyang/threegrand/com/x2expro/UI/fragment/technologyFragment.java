@@ -13,6 +13,8 @@ import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
+import com.romainpiel.shimmer.ShimmerTextView;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +24,7 @@ import butterknife.ButterKnife;
 import in.srain.cube.views.ptr.PtrDefaultHandler;
 import in.srain.cube.views.ptr.PtrFrameLayout;
 import in.srain.cube.views.ptr.PtrHandler;
+import in.srain.cube.views.ptr.header.StoreHouseHeader;
 import zero.tongyang.threegrand.com.x2expro.HomePage.Home_ViewPager.Some.JsoupAsyncTask;
 import zero.tongyang.threegrand.com.x2expro.HomePage.Home_ViewPager.Some.NodeJsoupAsyncTask;
 import zero.tongyang.threegrand.com.x2expro.R;
@@ -60,7 +63,8 @@ public class technologyFragment extends Fragment {
     RadioGroup HomeRadioGroup;
     @BindView(R.id.horizontalScrollView)
     HorizontalScrollView horizontalScrollView;
-
+    @BindView(R.id.text_v2ex)
+    ShimmerTextView textV2ex;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -77,9 +81,14 @@ public class technologyFragment extends Fragment {
         list = new ArrayList<>();
         listView.setDivider(new ColorDrawable(Color.argb(255, 242, 242, 242)));
         listView.setDividerHeight((int) Static.dp2px(getContext(), 10f));
-        JsoupAsyncTask jsoupAsyncTask  = new JsoupAsyncTask(listView, inflater, list, getContext(), getActivity());
+        JsoupAsyncTask jsoupAsyncTask = new JsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),textV2ex);
         jsoupAsyncTask.execute("?tab=tech");
+        StoreHouseHeader header = new StoreHouseHeader(getContext());
+        header.initWithString("v2ex");
 
+        header.setTextColor(Color.BLACK);
+        ptr.addPtrUIHandler(header);
+        ptr.setHeaderView(header);
         ptr.disableWhenHorizontalMove(false);
         ptr.setPtrHandler(new PtrHandler() {
             @Override
@@ -91,9 +100,46 @@ public class technologyFragment extends Fragment {
 
             @Override
             public void onRefreshBegin(PtrFrameLayout frame) {
-                JsoupAsyncTask jsoupAsyncTask  = new JsoupAsyncTask(listView, inflater, list, getContext(), getActivity());
+                switch (HomeRadioGroup.getCheckedRadioButtonId()) {
+                    case R.id.Home_Radio_chengxuyuan:
+                        NodeJsoupAsyncTask jsoupAsyncTask = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(), "程序员",null);
+                        jsoupAsyncTask.execute("go/programmer");
+                        break;
+                    case R.id.Home_Radio_Python:
+                        NodeJsoupAsyncTask jsoupAsyncTask1 = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(), "Python",null);
+                        jsoupAsyncTask1.execute("go/python");
+                        break;
+                    case R.id.Home_Radio_iDev:
+                        NodeJsoupAsyncTask jsoupAsyncTask2 = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(), "iDev",null);
+                        jsoupAsyncTask2.execute("go/idev");
+                        break;
+                    case R.id.Home_Radio_Android:
+                        NodeJsoupAsyncTask jsoupAsyncTask3 = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(), "Android",null);
+                        jsoupAsyncTask3.execute("go/android");
+                        break;
+                    case R.id.Home_Radio_Linux:
+                        NodeJsoupAsyncTask jsoupAsyncTask4 = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(), "Linux",null);
+                        jsoupAsyncTask4.execute("go/linux");
+                        break;
+                    case R.id.Home_Radio_nodejs:
+                        NodeJsoupAsyncTask jsoupAsyncTask5 = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(), "node.js",null);
+                        jsoupAsyncTask5.execute("go/nodejs");
+                        break;
+                    case R.id.Home_Radio_yunjisuan:
+                        NodeJsoupAsyncTask jsoupAsyncTask6 = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(), "云计算",null);
+                        jsoupAsyncTask6.execute("go/cloud");
+                        break;
+                    case R.id.Home_Radio_kuandai:
+                        NodeJsoupAsyncTask jsoupAsyncTask7 = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(), "宽带症候群",null);
+                        jsoupAsyncTask7.execute("go/bb");
+                        break;
+                    case R.id.Home_Radio_quanbu:
+                        JsoupAsyncTask jsoupAsyncTask8 = new JsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),null);
+                        jsoupAsyncTask8.execute("?tab=tech");
+                        break;
 
-                jsoupAsyncTask.execute("?tab=tech");
+
+                }
                 frame.postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -107,35 +153,44 @@ public class technologyFragment extends Fragment {
         HomeRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
-                switch (i){
+                switch (i) {
 
                     case R.id.Home_Radio_chengxuyuan:
-                        NodeJsoupAsyncTask jsoupAsyncTask  = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),"程序员");
-                        jsoupAsyncTask.execute("go/programmer");break;
+                        NodeJsoupAsyncTask jsoupAsyncTask = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(), "程序员",textV2ex);
+                        jsoupAsyncTask.execute("go/programmer");
+                        break;
                     case R.id.Home_Radio_Python:
-                        NodeJsoupAsyncTask jsoupAsyncTask1  = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),"Python");
-                        jsoupAsyncTask1.execute("go/python");break;
+                        NodeJsoupAsyncTask jsoupAsyncTask1 = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(), "Python",textV2ex);
+                        jsoupAsyncTask1.execute("go/python");
+                        break;
                     case R.id.Home_Radio_iDev:
-                        NodeJsoupAsyncTask jsoupAsyncTask2  = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),"iDev");
-                        jsoupAsyncTask2.execute("go/idev");break;
+                        NodeJsoupAsyncTask jsoupAsyncTask2 = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(), "iDev",textV2ex);
+                        jsoupAsyncTask2.execute("go/idev");
+                        break;
                     case R.id.Home_Radio_Android:
-                        NodeJsoupAsyncTask jsoupAsyncTask3  = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),"Android");
-                        jsoupAsyncTask3.execute("go/android");break;
+                        NodeJsoupAsyncTask jsoupAsyncTask3 = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(), "Android",textV2ex);
+                        jsoupAsyncTask3.execute("go/android");
+                        break;
                     case R.id.Home_Radio_Linux:
-                        NodeJsoupAsyncTask jsoupAsyncTask4  = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),"Linux");
-                        jsoupAsyncTask4.execute("go/linux");break;
+                        NodeJsoupAsyncTask jsoupAsyncTask4 = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(), "Linux",textV2ex);
+                        jsoupAsyncTask4.execute("go/linux");
+                        break;
                     case R.id.Home_Radio_nodejs:
-                        NodeJsoupAsyncTask jsoupAsyncTask5  = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),"node.js");
-                        jsoupAsyncTask5.execute("go/nodejs");break;
+                        NodeJsoupAsyncTask jsoupAsyncTask5 = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(), "node.js",textV2ex);
+                        jsoupAsyncTask5.execute("go/nodejs");
+                        break;
                     case R.id.Home_Radio_yunjisuan:
-                        NodeJsoupAsyncTask jsoupAsyncTask6  = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),"云计算");
-                        jsoupAsyncTask6.execute("go/cloud");break;
+                        NodeJsoupAsyncTask jsoupAsyncTask6 = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(), "云计算",textV2ex);
+                        jsoupAsyncTask6.execute("go/cloud");
+                        break;
                     case R.id.Home_Radio_kuandai:
-                        NodeJsoupAsyncTask jsoupAsyncTask7  = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),"宽带症候群");
-                        jsoupAsyncTask7.execute("go/bb");break;
+                        NodeJsoupAsyncTask jsoupAsyncTask7 = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(), "宽带症候群",textV2ex);
+                        jsoupAsyncTask7.execute("go/bb");
+                        break;
                     case R.id.Home_Radio_quanbu:
-                        JsoupAsyncTask jsoupAsyncTask8  = new JsoupAsyncTask(listView, inflater, list, getContext(), getActivity());
-                        jsoupAsyncTask8.execute("?tab=tech");break;
+                        JsoupAsyncTask jsoupAsyncTask8 = new JsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),textV2ex);
+                        jsoupAsyncTask8.execute("?tab=tech");
+                        break;
 
 
                 }

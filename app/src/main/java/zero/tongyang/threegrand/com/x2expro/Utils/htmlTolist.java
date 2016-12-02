@@ -17,6 +17,42 @@ import java.util.Map;
  */
 
 public class htmlTolist {
+    public static String gettoticdetalis(String s) {
+
+        Document document = Jsoup.parse(s);
+        return document.select("div[class=topic_content]").toString();
+
+
+    }
+
+    public static List<Map<String, String>> getdetals(String s) {
+        List<Map<String, String>> list = new ArrayList<>();
+        Document document = Jsoup.parse(s);
+        Elements elements = document.select("div[id=Main]").select("div[class=box]");
+        Log.d("lllll",elements.size()+"");
+        if (elements.get(1).select("div").hasClass("cell")) {
+            Elements elements1 = elements.get(1).select("div[class=cell]");
+            for (int i = 1; i < elements1.size(); i++) {
+                Elements e = elements1.get(i).select("td");
+                Map<String, String> map = new HashMap<>();
+                String image = e.get(0).select("img").attr("src");
+                String img = "http://" + image.substring(2, image.length());
+                String username = e.get(2).select("strong").text();
+                String time = e.get(2).select("span[class=fade small]").text();
+                String content = e.get(2).select("div[class=reply_content]").toString();
+                map.put("img", img);
+                map.put("username", username);
+                map.put("time", time);
+                map.put("content", content);
+                list.add(map);
+
+            }
+            return list;
+        } else {
+
+            return list;
+        }
+    }
 
     public static List<Map<String, String>> NodeTopicsToList(String s) {
         List<Map<String, String>> list = new ArrayList<>();
@@ -62,7 +98,7 @@ public class htmlTolist {
             String time = ti.substring(3, ti.length());
             map.put("time", time);
             String repliceurl = tr.get(2).select("span[class=item_title]").select("a").attr("href");
-            map.put("repliceurl", repliceurl);
+            map.put("repliceurl", repliceurl.substring(1, repliceurl.length()));
             list.add(map);
         }
 

@@ -10,7 +10,7 @@
         android:id="@+id/userimg"
          app:border_width="2dp"
         android:clickable="true"
-        android:src="@drawable/moren"
+        android:src="@mipmap/ic_launcher"
         app:border_color="#ffff"
          android:layout_width="80dp"
         android:layout_height="80dp"

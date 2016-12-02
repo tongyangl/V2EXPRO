@@ -2,6 +2,7 @@ package zero.tongyang.threegrand.com.x2expro.UI.Activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -11,7 +12,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.ldoublem.loadingviewlib.LVNews;
+import com.romainpiel.shimmer.ShimmerTextView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,6 +22,11 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import in.srain.cube.views.ptr.PtrClassicFrameLayout;
+import in.srain.cube.views.ptr.PtrDefaultHandler;
+import in.srain.cube.views.ptr.PtrFrameLayout;
+import in.srain.cube.views.ptr.PtrHandler;
+import in.srain.cube.views.ptr.header.StoreHouseHeader;
 import zero.tongyang.threegrand.com.x2expro.HomePage.Home_ViewPager.Some.LoadTopicsById;
 import zero.tongyang.threegrand.com.x2expro.R;
 import zero.tongyang.threegrand.com.x2expro.Utils.AsyncImageLoader;
@@ -38,10 +44,12 @@ public class TopicsDetalis extends Activity {
     Toolbar toolbar;
     @BindView(R.id.shadow_view)
     View shadowView;
-    @BindView(R.id.load)
-    LVNews load;
     @BindView(R.id.lv)
     ListView lv;
+    @BindView(R.id.ptr)
+    PtrClassicFrameLayout ptr;
+    @BindView(R.id.text_v2ex)
+    ShimmerTextView textV2ex;
 
     private String title;
     private String repliceurl;
@@ -68,14 +76,14 @@ public class TopicsDetalis extends Activity {
         nodetitle = intent.getStringExtra("nodetitle");
 
         t = intent.getStringExtra("time");
-        LayoutInflater inflater = getLayoutInflater();
+        final LayoutInflater inflater = getLayoutInflater();
         View view = inflater.inflate(R.layout.lv_header, null);
         TextView nodename = (TextView) view.findViewById(R.id.nodename);
         nodename.setBackgroundResource(R.drawable.nodetitle);
         TextView username = (TextView) view.findViewById(R.id.username);
         TextView topictitle = (TextView) view.findViewById(R.id.topictitle);
         TextView time = (TextView) view.findViewById(R.id.time);
-        TextView content = (TextView) view.findViewById(R.id.content);
+        final TextView content = (TextView) view.findViewById(R.id.content);
         ImageView imageView = (ImageView) view.findViewById(R.id.imagView);
         Drawable cachedImage = asyncImageLoader.loadDrawable(img, new AsyncImageLoader.ImageCallback() {
             public void imageLoaded(Drawable imageDrawable, String imageUrl) {
@@ -86,28 +94,48 @@ public class TopicsDetalis extends Activity {
             }
         });
         if (cachedImage == null) {
-           imageView.setImageResource(R.drawable.android);
+            imageView.setImageResource(R.drawable.android);
         } else {
             imageView.setImageDrawable(cachedImage);
         }
         topictitle.setText(title);
+        StoreHouseHeader header = new StoreHouseHeader(this);
+        header.initWithString("V2EX");
+
+        header.setTextColor(Color.BLACK);
+        ptr.addPtrUIHandler(header);
+        ptr.setHeaderView(header);
         nodename.setText(nodetitle);
-        if (t.length()>9){
-            String string=t.substring(5,t.length()-9);
+        if (t.length() > 9) {
+            String string = t.substring(5, t.length() - 9);
             time.setText(string);
         }
 
         username.setText(Username);
 
         lv.addHeaderView(view);
-        id = repliceurl.substring(2, 8);
         map = new HashMap<>();
         list = new ArrayList<>();
+        LoadTopicsById loadTopicsById = new LoadTopicsById(list, lv, map, getApplicationContext(), inflater, content,textV2ex);
+        loadTopicsById.execute(repliceurl);
+        ptr.setPtrHandler(new PtrHandler() {
+            @Override
+            public boolean checkCanDoRefresh(PtrFrameLayout frame, View content, View header) {
+                return PtrDefaultHandler.checkContentCanBePulledDown(frame, content, header);
+            }
 
-
-        LoadTopicsById loadTopicsById = new LoadTopicsById(list, load, lv, map,  getApplicationContext(), inflater,content);
-        loadTopicsById.execute(id);
-
+            @Override
+            public void onRefreshBegin(PtrFrameLayout frame) {
+                LoadTopicsById loadTopicsById = new LoadTopicsById(list, lv, map, getApplicationContext(), inflater, content,null);
+                loadTopicsById.execute(repliceurl);
+                frame.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        ptr.refreshComplete();
+                    }
+                }, 1800);
+            }
+        });
     }
 
     @OnClick(R.id.back)

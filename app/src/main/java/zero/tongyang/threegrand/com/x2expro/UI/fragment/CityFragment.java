@@ -13,6 +13,8 @@ import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
+import com.romainpiel.shimmer.ShimmerTextView;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +24,7 @@ import butterknife.ButterKnife;
 import in.srain.cube.views.ptr.PtrDefaultHandler;
 import in.srain.cube.views.ptr.PtrFrameLayout;
 import in.srain.cube.views.ptr.PtrHandler;
+import in.srain.cube.views.ptr.header.StoreHouseHeader;
 import zero.tongyang.threegrand.com.x2expro.HomePage.Home_ViewPager.Some.JsoupAsyncTask;
 import zero.tongyang.threegrand.com.x2expro.HomePage.Home_ViewPager.Some.NodeJsoupAsyncTask;
 import zero.tongyang.threegrand.com.x2expro.R;
@@ -62,7 +65,8 @@ public class CityFragment extends Fragment {
     RadioGroup HomeRadioGroup;
     @BindView(R.id.horizontalScrollView)
     HorizontalScrollView horizontalScrollView;
-
+    @BindView(R.id.text_v2ex)
+    ShimmerTextView textV2ex;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -79,9 +83,14 @@ public class CityFragment extends Fragment {
         list = new ArrayList<>();
         listView.setDivider(new ColorDrawable(Color.argb(255, 242, 242, 242)));
         listView.setDividerHeight((int) Static.dp2px(getContext(), 10f));
-        JsoupAsyncTask jsoupAsyncTask = new JsoupAsyncTask(listView, inflater, list, getContext(), getActivity());
+        JsoupAsyncTask jsoupAsyncTask = new JsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),textV2ex);
         jsoupAsyncTask.execute("?tab=city");
+        StoreHouseHeader header=new StoreHouseHeader(getContext());
+        header.initWithString("v2ex");
 
+        header.setTextColor(Color.BLACK);
+        ptr.addPtrUIHandler(header);
+        ptr.setHeaderView(header);
         ptr.disableWhenHorizontalMove(false);
         ptr.setPtrHandler(new PtrHandler() {
             @Override
@@ -93,8 +102,41 @@ public class CityFragment extends Fragment {
 
             @Override
             public void onRefreshBegin(PtrFrameLayout frame) {
-                JsoupAsyncTask jsoupAsyncTask = new JsoupAsyncTask(listView, inflater, list, getContext(), getActivity());
-                jsoupAsyncTask.execute("?tab=city");
+              switch (HomeRadioGroup.getCheckedRadioButtonId()){
+                  case R.id.Home_Radio_beijing:
+                      NodeJsoupAsyncTask jsoupAsyncTask  = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),"北京",null);
+                      jsoupAsyncTask.execute("go/beijing");break;
+                  case R.id.Home_Radio_shanghai:
+                      NodeJsoupAsyncTask jsoupAsyncTask1  = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),"Python",null);
+                      jsoupAsyncTask1.execute("go/shanghai");break;
+                  case R.id.Home_Radio_shenzhen:
+                      NodeJsoupAsyncTask jsoupAsyncTask2  = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),"iDev",null);
+                      jsoupAsyncTask2.execute("go/shenzhen");break;
+                  case R.id.Home_Radio_guangzhou:
+                      NodeJsoupAsyncTask jsoupAsyncTask3  = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),"Android",null);
+                      jsoupAsyncTask3.execute("go/guangzhou");break;
+                  case R.id.Home_Radio_hangzhou:
+                      NodeJsoupAsyncTask jsoupAsyncTask4  = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),"Linux",null);
+                      jsoupAsyncTask4.execute("go/hangzhou");break;
+                  case R.id.Home_Radio_chengdu:
+                      NodeJsoupAsyncTask jsoupAsyncTask5  = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),"node.js",null);
+                      jsoupAsyncTask5.execute("go/chengdu");break;
+                  case R.id.Home_Radio_kunming:
+                      NodeJsoupAsyncTask jsoupAsyncTask6  = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),"云计算",null);
+                      jsoupAsyncTask6.execute("go/kunming");break;
+                  case R.id.Home_Radio_niuyue:
+                      NodeJsoupAsyncTask jsoupAsyncTask7  = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),"宽带症候群",null);
+                      jsoupAsyncTask7.execute("go/nyc");break;
+
+                  case R.id.Home_Radio_luoshanji:
+                      JsoupAsyncTask jsoupAsyncTask8  = new JsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),null);
+                      jsoupAsyncTask8.execute("go/la");break;
+
+                  case R.id.Home_Radio_all:
+                      JsoupAsyncTask jsoupAsyncTask9 = new JsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),null);
+                      jsoupAsyncTask9.execute("?tab=city");
+
+              }
                 frame.postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -110,36 +152,36 @@ public class CityFragment extends Fragment {
                 switch (i){
 
                     case R.id.Home_Radio_beijing:
-                        NodeJsoupAsyncTask jsoupAsyncTask  = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),"北京");
+                        NodeJsoupAsyncTask jsoupAsyncTask  = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),"北京",textV2ex);
                         jsoupAsyncTask.execute("go/beijing");break;
                     case R.id.Home_Radio_shanghai:
-                        NodeJsoupAsyncTask jsoupAsyncTask1  = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),"Python");
+                        NodeJsoupAsyncTask jsoupAsyncTask1  = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),"Python",textV2ex);
                         jsoupAsyncTask1.execute("go/shanghai");break;
                     case R.id.Home_Radio_shenzhen:
-                        NodeJsoupAsyncTask jsoupAsyncTask2  = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),"iDev");
+                        NodeJsoupAsyncTask jsoupAsyncTask2  = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),"iDev",textV2ex);
                         jsoupAsyncTask2.execute("go/shenzhen");break;
                     case R.id.Home_Radio_guangzhou:
-                        NodeJsoupAsyncTask jsoupAsyncTask3  = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),"Android");
+                        NodeJsoupAsyncTask jsoupAsyncTask3  = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),"Android",textV2ex);
                         jsoupAsyncTask3.execute("go/guangzhou");break;
                     case R.id.Home_Radio_hangzhou:
-                        NodeJsoupAsyncTask jsoupAsyncTask4  = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),"Linux");
+                        NodeJsoupAsyncTask jsoupAsyncTask4  = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),"Linux",textV2ex);
                         jsoupAsyncTask4.execute("go/hangzhou");break;
                     case R.id.Home_Radio_chengdu:
-                        NodeJsoupAsyncTask jsoupAsyncTask5  = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),"node.js");
+                        NodeJsoupAsyncTask jsoupAsyncTask5  = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),"node.js",textV2ex);
                         jsoupAsyncTask5.execute("go/chengdu");break;
                     case R.id.Home_Radio_kunming:
-                        NodeJsoupAsyncTask jsoupAsyncTask6  = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),"云计算");
+                        NodeJsoupAsyncTask jsoupAsyncTask6  = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),"云计算",textV2ex);
                         jsoupAsyncTask6.execute("go/kunming");break;
                     case R.id.Home_Radio_niuyue:
-                        NodeJsoupAsyncTask jsoupAsyncTask7  = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),"宽带症候群");
+                        NodeJsoupAsyncTask jsoupAsyncTask7  = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),"宽带症候群",textV2ex);
                         jsoupAsyncTask7.execute("go/nyc");break;
 
                     case R.id.Home_Radio_luoshanji:
-                        JsoupAsyncTask jsoupAsyncTask8  = new JsoupAsyncTask(listView, inflater, list, getContext(), getActivity());
+                        JsoupAsyncTask jsoupAsyncTask8  = new JsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),textV2ex);
                         jsoupAsyncTask8.execute("go/la");break;
 
                     case R.id.Home_Radio_all:
-                        JsoupAsyncTask jsoupAsyncTask9 = new JsoupAsyncTask(listView, inflater, list, getContext(), getActivity());
+                        JsoupAsyncTask jsoupAsyncTask9 = new JsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),textV2ex);
                         jsoupAsyncTask9.execute("?tab=city");
                 }
             }

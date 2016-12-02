@@ -13,6 +13,8 @@ import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
+import com.romainpiel.shimmer.ShimmerTextView;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +24,7 @@ import butterknife.ButterKnife;
 import in.srain.cube.views.ptr.PtrDefaultHandler;
 import in.srain.cube.views.ptr.PtrFrameLayout;
 import in.srain.cube.views.ptr.PtrHandler;
+import in.srain.cube.views.ptr.header.StoreHouseHeader;
 import zero.tongyang.threegrand.com.x2expro.HomePage.Home_ViewPager.Some.JsoupAsyncTask;
 import zero.tongyang.threegrand.com.x2expro.HomePage.Home_ViewPager.Some.NodeJsoupAsyncTask;
 import zero.tongyang.threegrand.com.x2expro.R;
@@ -52,7 +55,8 @@ public class JobFragment extends Fragment {
     RadioGroup HomeRadioGroup;
     @BindView(R.id.horizontalScrollView)
     HorizontalScrollView horizontalScrollView;
-
+    @BindView(R.id.text_v2ex)
+    ShimmerTextView textV2ex;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -69,9 +73,14 @@ public class JobFragment extends Fragment {
         listView.setDivider(new ColorDrawable(Color.argb(255, 242, 242, 242)));
         listView.setDividerHeight((int) Static.dp2px(getContext(), 10f));
         list = new ArrayList<>();
-        JsoupAsyncTask jsoupAsyncTask = new JsoupAsyncTask(listView, inflater, list, getContext(), getActivity());
+        JsoupAsyncTask jsoupAsyncTask = new JsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),textV2ex);
         jsoupAsyncTask.execute("?tab=jobs");
+        StoreHouseHeader header=new StoreHouseHeader(getContext());
+        header.initWithString("v2ex");
 
+        header.setTextColor(Color.BLACK);
+        ptr.addPtrUIHandler(header);
+        ptr.setHeaderView(header);
         ptr.disableWhenHorizontalMove(false);
         ptr.setPtrHandler(new PtrHandler() {
             @Override
@@ -83,8 +92,26 @@ public class JobFragment extends Fragment {
 
             @Override
             public void onRefreshBegin(PtrFrameLayout frame) {
-                JsoupAsyncTask jsoupAsyncTask = new JsoupAsyncTask(listView, inflater, list, getContext(), getActivity());
-                jsoupAsyncTask.execute("?tab=jobs");
+                switch (HomeRadioGroup.getCheckedRadioButtonId()){
+                    case R.id.Home_Radio_kugongzuo:
+                        NodeJsoupAsyncTask jsoupAsyncTask  = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),"酷工作",null);
+                        jsoupAsyncTask.execute("go/jobs");break;
+                    case R.id.Home_Radio_qiuzhi:
+                        NodeJsoupAsyncTask jsoupAsyncTask1  = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),"求职",null);
+                        jsoupAsyncTask1.execute("go/cv");break;
+                    case R.id.Home_Radio_zhichanghuati:
+                        NodeJsoupAsyncTask jsoupAsyncTask2  = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),"职场话题",null);
+                        jsoupAsyncTask2.execute("go/career");break;
+                    case R.id.Home_Radio_waibao:
+                        NodeJsoupAsyncTask jsoupAsyncTask3  = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),"外包",null);
+                        jsoupAsyncTask3.execute("go/outsourcing");break;
+
+                    case R.id.Home_Radio_quanbu:
+                        JsoupAsyncTask jsoupAsyncTask8 = new JsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),null);
+                        jsoupAsyncTask8.execute("?tab=jobs");
+
+
+                }
                 frame.postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -99,20 +126,20 @@ public class JobFragment extends Fragment {
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
                 switch (i) {
                     case R.id.Home_Radio_kugongzuo:
-                        NodeJsoupAsyncTask jsoupAsyncTask  = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),"酷工作");
+                        NodeJsoupAsyncTask jsoupAsyncTask  = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),"酷工作",textV2ex);
                         jsoupAsyncTask.execute("go/jobs");break;
                     case R.id.Home_Radio_qiuzhi:
-                        NodeJsoupAsyncTask jsoupAsyncTask1  = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),"求职");
+                        NodeJsoupAsyncTask jsoupAsyncTask1  = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),"求职",textV2ex);
                         jsoupAsyncTask1.execute("go/cv");break;
                     case R.id.Home_Radio_zhichanghuati:
-                        NodeJsoupAsyncTask jsoupAsyncTask2  = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),"职场话题");
+                        NodeJsoupAsyncTask jsoupAsyncTask2  = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),"职场话题",textV2ex);
                         jsoupAsyncTask2.execute("go/career");break;
                     case R.id.Home_Radio_waibao:
-                        NodeJsoupAsyncTask jsoupAsyncTask3  = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),"外包");
+                        NodeJsoupAsyncTask jsoupAsyncTask3  = new NodeJsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),"外包",textV2ex);
                         jsoupAsyncTask3.execute("go/outsourcing");break;
 
                     case R.id.Home_Radio_quanbu:
-                        JsoupAsyncTask jsoupAsyncTask8 = new JsoupAsyncTask(listView, inflater, list, getContext(), getActivity());
+                        JsoupAsyncTask jsoupAsyncTask8 = new JsoupAsyncTask(listView, inflater, list, getContext(), getActivity(),textV2ex);
                         jsoupAsyncTask8.execute("?tab=jobs");
 
                 }
