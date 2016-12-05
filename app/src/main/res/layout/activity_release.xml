@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+
+        app:contentInsetLeft="0dp"
+        app:contentInsetStart="0dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <Button
+                android:id="@+id/back"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="10dp"
+                android:background="@drawable/flase" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_centerHorizontal="true"
+                android:gravity="center"
+                android:text="发布主题"
+                android:textColor="#000"
+                android:textSize="20sp" />
+
+            <Button
+                android:id="@+id/release"
+                android:layout_width="40dp"
+                android:layout_height="35dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/fabu" />
+        </RelativeLayout>
+
+    </android.support.v7.widget.Toolbar>
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="3px"
+        android:layout_below="@+id/toolbar"
+        android:background="@drawable/shadow">
+
+    </View>
+
+    <zero.tongyang.threegrand.com.x2expro.Design.CircleImageView
+        android:id="@+id/userimg"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_below="@id/toolbar"
+        android:clickable="true"
+        app:border_color="#ffff"
+        app:border_width="1dp" />
+
+    <EditText
+        android:layout_marginLeft="5dp"
+        android:id="@+id/topictitle"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@+id/view"
+        android:layout_toRightOf="@+id/userimg"
+        android:background="@null"
+        android:drawablePadding="10dp"
+        android:gravity="center_vertical"
+        android:hint="标题(必写)" />
+
+    <View
+        android:id="@+id/view1"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_below="@+id/topictitle"
+        android:background="#BEBEBE">
+
+    </View>
+
+    <EditText
+
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/view1"
+        android:background="@null"
+        android:gravity="top"
+        android:hint="请输入(若标题已经足够表达你的意思，可不写)"
+        android:paddingLeft="10dp"
+        android:paddingTop="5dp" />
+
+    <TextView
+        android:id="@+id/choose"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="20dp"
+        android:clickable="true"
+        android:drawableLeft="@drawable/taggg"
+        android:drawablePadding="3dp"
+        android:text="选择节点" />
+</RelativeLayout>

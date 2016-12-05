@@ -21,6 +21,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -61,33 +62,33 @@ public class SiginActivity extends Activity {
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
         SharedPreferences sharedPreferences = getSharedPreferences("user", MODE_PRIVATE);
-        if (!sharedPreferences.getString("username", "").equals("")){
+        if (!sharedPreferences.getString("username", "").equals("")) {
             username.setText(sharedPreferences.getString("username", ""));
         }
-        if (!sharedPreferences.getString("password", "").equals("")){
+        if (!sharedPreferences.getString("password", "").equals("")) {
             password.setText(sharedPreferences.getString("password", ""));
         }
-            password.setDrawableRightListener(new XEditText.DrawableRightListener() {
-                @Override
-                public void onDrawableRightClick(View view) {
+      /*  password.setDrawableRightListener(new XEditText.DrawableRightListener() {
+            @Override
+            public void onDrawableRightClick(View view) {
 
-                    if (iscansee) {
-                        password.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                        password.setCompoundDrawablesWithIntrinsicBounds(R.drawable.password, 0, R.drawable.nosee, 0);
-                        iscansee = false;
-                    } else {
-                        password.setCompoundDrawablesWithIntrinsicBounds(R.drawable.password, 0, R.drawable.see, 0);
-                        password.setInputType(InputType.TYPE_NULL);
+                if (iscansee) {
+                    password.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                    password.setCompoundDrawablesWithIntrinsicBounds(R.drawable.password, 0, R.drawable.nosee, 0);
+                    iscansee = false;
+                } else {
+                    password.setCompoundDrawablesWithIntrinsicBounds(R.drawable.password, 0, R.drawable.see, 0);
+                    password.setInputType(InputType.TYPE_NULL);
 
-                        iscansee = true;
+                    iscansee = true;
 
-                    }
                 }
-            });
-        Resources r = getResources();
+            }
+        });*/
+      /*  Resources r = getResources();
         Bitmap bitmap = BitmapFactory.decodeResource(r, R.drawable.ff);
         Drawable drawable = new BitmapDrawable(blur(bitmap, 25f));
-        linear.setBackground(drawable);
+        linear.setBackground(drawable);*/
     }
 
     private Bitmap blur(Bitmap bitmap, float radius) {
@@ -129,13 +130,14 @@ public class SiginActivity extends Activity {
             Elements elements = document.select("div[id=Rightbar]").select("div[class=box]");
             Log.d("----", elements.size() + "");
 
-            if (elements.size() == 7) {
+            if (elements.size() == 8 | elements.size() == 7) {
                 user = new User(SiginActivity.this);
                 try {
                     user.getUserInfo(elements);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                Toast.makeText(getApplicationContext(), "欢迎回来" + username.getText().toString(), Toast.LENGTH_SHORT).show();
                 finish();
             } else {
 

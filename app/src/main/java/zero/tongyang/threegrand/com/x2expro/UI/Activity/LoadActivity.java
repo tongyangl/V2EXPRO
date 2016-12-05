@@ -1,17 +1,19 @@
 package zero.tongyang.threegrand.com.x2expro.UI.Activity;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.PixelFormat;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.WindowManager;
+import android.widget.LinearLayout;
 import android.widget.Toast;
+
+import com.romainpiel.shimmer.Shimmer;
+import com.romainpiel.shimmer.ShimmerTextView;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -19,6 +21,8 @@ import org.jsoup.select.Elements;
 
 import java.io.IOException;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import zero.tongyang.threegrand.com.x2expro.Internet.GetTopics;
 import zero.tongyang.threegrand.com.x2expro.R;
 import zero.tongyang.threegrand.com.x2expro.Utils.User;
@@ -29,19 +33,29 @@ import zero.tongyang.threegrand.com.x2expro.Utils.tyutils;
  */
 
 public class LoadActivity extends Activity {
+    @BindView(R.id.linear)
+    LinearLayout linear;
+    @BindView(R.id.tv1)
+    ShimmerTextView tv1;
+    @BindView(R.id.tv2)
+    ShimmerTextView tv2;
     private GetTopics login;
-
+   private Shimmer shimmer;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().setFormat(PixelFormat.RGBA_8888);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_DITHER);
         setContentView(R.layout.activity_load);
+        ButterKnife.bind(this);
+        shimmer = new Shimmer();
+        shimmer.start(tv1);
+        shimmer.start(tv2);
         new Handler().postDelayed(new Runnable() {
 
             @Override
             public void run() {
-                if (tyutils.isNetworkReachable(getApplicationContext())){
+                if (tyutils.isNetworkReachable(getApplicationContext())) {
                     SharedPreferences sharedPreferences = LoadActivity.this.getSharedPreferences("isfirst", MODE_PRIVATE);
                     boolean isFirstRun = sharedPreferences.getBoolean("isFirstRun", true);
                     SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -71,7 +85,7 @@ public class LoadActivity extends Activity {
                             };
                             getFormat.execute(args);
                             Intent intent = new Intent(LoadActivity.this, MainActivity.class);
-                            Toast.makeText(getApplication(),"欢迎回来"+username,Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplication(), "欢迎回来" + username, Toast.LENGTH_SHORT).show();
                             startActivity(intent);
 
                             finish();
@@ -79,7 +93,7 @@ public class LoadActivity extends Activity {
                         }
                     }
 
-                }else {
+                } else {
 
                     Intent intent = new Intent(LoadActivity.this, MainActivity.class);
                     startActivity(intent);
@@ -112,11 +126,7 @@ public class LoadActivity extends Activity {
                 finish();
             } else {
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(LoadActivity.this);
-                builder.setTitle("提示");
-                builder.setMessage("登陆遇到问题，请检查用户名密码");
-                builder.setPositiveButton("确定", null);
-                builder.show();
+
             }
 
 

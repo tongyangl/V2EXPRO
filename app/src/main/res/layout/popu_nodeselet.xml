@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <Button
+        android:layout_alignParentRight="true"
+        android:id="@+id/back"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/flase" />
+
+    <ScrollView
+        android:layout_below="@+id/back"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+       <RelativeLayout
+           android:layout_width="match_parent"
+           android:layout_height="match_parent">
+           <TextView
+               android:id="@+id/jiediandaohang"
+               android:textSize="15sp"
+               android:clickable="true"
+               android:gravity="center"
+               android:text="节点导航"
+               android:layout_width="100dp"
+               android:layout_height="30dp" />
+          <Button
+              android:text="确定"
+              android:layout_alignParentRight="true"
+              android:id="@+id/sure"
+              android:layout_width="80dp"
+              android:layout_height="40dp" />
+
+       </RelativeLayout>
+    </ScrollView>
+
+
+
+</RelativeLayout>

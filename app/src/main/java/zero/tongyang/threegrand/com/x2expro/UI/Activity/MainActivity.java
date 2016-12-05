@@ -4,6 +4,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -23,6 +25,8 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -72,10 +76,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        toolbar.setTitle("V2EX");
         init();
         setSupportActionBar(toolbar);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setTitle("V2EX");
         mydrawToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, 0, 0) {
 
 
@@ -109,6 +115,22 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        SharedPreferences sharedPreferences = getSharedPreferences("user", MODE_PRIVATE);
+        if (!sharedPreferences.getString("nickname", "").equals("")) {
+
+            String path1 = Environment.getExternalStorageDirectory().getPath() + "/v2expro/userimg/userimg.png";
+            Bitmap bitmap = BitmapFactory.decodeFile(path1);
+            imageView.setImageBitmap(bitmap);
+            textView.setText(sharedPreferences.getString("username", ""));
+
+        } else {
+            Resources resources = getResources();
+            Bitmap bitmap = BitmapFactory.decodeResource(resources, R.drawable.nologin);
+            imageView.setImageBitmap(bitmap);
+        }
+
+
         ngv.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             MenuItem mymenuItem;
 
@@ -150,7 +172,7 @@ public class MainActivity extends AppCompatActivity {
                 String username = intent.getStringExtra("nickname");
                 String img = intent.getStringExtra("img");
                 textView.setText(username);
-                String path="";
+                String path = "";
                 if (tyutils.SdCardHelper()) {
                     path = Environment.getExternalStorageDirectory().getPath() + "/v2expro/userimg/userimg.png";
 
@@ -165,6 +187,30 @@ public class MainActivity extends AppCompatActivity {
         filter.addAction("userinfo");
         registerReceiver(receiver, filter);
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        MenuItem mMenuItem;
+        menuInflater.inflate(R.menu.right_menu, menu);
+
+        mMenuItem = menu.findItem(R.id.release);
+
+        return super.onCreateOptionsMenu(menu);
+
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.release) {
+            Intent intent = new Intent(MainActivity.this, ReleaseTopticActivity.class);
+            startActivity(intent);
+
+
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     public void init() {

@@ -27,6 +27,11 @@
         <activity android:name=".UI.Activity.MainActivity">
 
         </activity>
+        <activity
+            android:windowSoftInputMode="adjustResize"
+            android:name=".UI.Activity.ReleaseTopticActivity">
+
+        </activity>
         <activity android:name=".UI.Activity.TopicsDetalis">
 
         </activity>

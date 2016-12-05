@@ -1,25 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/linear"
     android:layout_height="match_parent"
-    android:background="@drawable/f3"
     android:orientation="vertical">
 
-    <TextView
+    <com.romainpiel.shimmer.ShimmerTextView
         android:layout_width="match_parent"
         android:layout_height="80dp"
         android:layout_marginTop="20dp"
+        android:id="@+id/tv1"
         android:gravity="center"
         android:text="V2EX"
-        android:textColor="#ffff"
+        android:textColor="#000"
         android:textSize="50sp"
+        app:reflectionColor="#ffff"
         android:textStyle="bold" />
 
-    <TextView
+    <com.romainpiel.shimmer.ShimmerTextView
+        android:id="@+id/tv2"
+        app:reflectionColor="#ffff"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:gravity="center_horizontal"
         android:text="创意者的工作区"
-        android:textColor="#ffff"
-        android:textSize="18sp" />
+        android:textColor="#000"
+        android:textSize="25sp" />
 </LinearLayout>

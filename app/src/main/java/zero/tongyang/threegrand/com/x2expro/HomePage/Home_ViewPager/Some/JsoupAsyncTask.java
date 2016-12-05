@@ -45,11 +45,12 @@ public class JsoupAsyncTask extends AsyncTask<String, Void, String> {
 
     @Override
     protected void onPreExecute() {
+
         if (textView != null) {
             textView.setVisibility(View.VISIBLE);
             shimmer = new Shimmer();
             shimmer.start(textView);
-
+            listView.setVisibility(View.GONE);
         } else {
 
 
@@ -62,7 +63,7 @@ public class JsoupAsyncTask extends AsyncTask<String, Void, String> {
         list.clear();
         list = htmlTolist.TopicsToList(s);
         if (textView == null) {
-
+            listView.setVisibility(View.VISIBLE);
             adaptar = new ListViewAdaptar(list, context, inflater, listView);
             listView.setAdapter(adaptar);
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -74,7 +75,6 @@ public class JsoupAsyncTask extends AsyncTask<String, Void, String> {
                     intent.putExtra("time", list.get(i).get("time"));
                     intent.putExtra("img", list.get(i).get("img"));
                     intent.putExtra("username", list.get(i).get("username"));
-
                     intent.putExtra("nodetitle", list.get(i).get("nodetitle"));
                     activity.startActivity(intent);
 
@@ -84,6 +84,7 @@ public class JsoupAsyncTask extends AsyncTask<String, Void, String> {
         } else {
             adaptar = new ListViewAdaptar(list, context, inflater, listView);
             shimmer.cancel();
+            listView.setVisibility(View.VISIBLE);
             textView.setVisibility(View.GONE);
             listView.setAdapter(adaptar);
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

@@ -1,33 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="#FF6EB4"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <zero.tongyang.threegrand.com.x2expro.Design.CircleImageView
         android:id="@+id/userimg"
-         app:border_width="2dp"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="30dp"
         android:clickable="true"
         android:src="@mipmap/ic_launcher"
         app:border_color="#ffff"
-         android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="30dp" />
+        app:border_width="2dp" />
 
     <TextView
-        android:clickable="true"
-        android:textColor="#ffff"
-        android:layout_marginBottom="20dp"
-        android:text="未登录"
         android:id="@+id/username"
         android:layout_width="wrap_content"
         android:layout_height="20dp"
         android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="20dp"
         android:layout_marginTop="20dp"
+        android:clickable="true"
         android:gravity="center"
+        android:text="未登录"
+        android:textColor="#ffff"
         android:textSize="14sp" />
 
 </LinearLayout>
