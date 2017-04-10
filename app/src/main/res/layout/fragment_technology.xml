@@ -1,183 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_height="match_parent">
-    <HorizontalScrollView
-        android:layout_marginTop="5dp"
-        android:id="@+id/horizontalScrollView"
+
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipe"
         android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:background="#00000000"
+        android:layout_height="match_parent">
 
-        android:scrollbars="none">>
-
-    <RadioGroup
-        android:id="@+id/Home_radioGroup"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:orientation="horizontal">
-
-        <RadioButton
-            android:id="@+id/Home_Radio_quanbu"
-            android:layout_width="wrap_content"
-            android:layout_height="25dp"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
-            android:background="@drawable/toradiocheck"
-            android:button="@null"
-            android:gravity="center"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
-            android:text="全部"
-            android:textColor="@color/home_radio_text" />
-
-        <RadioButton
-            android:id="@+id/Home_Radio_chengxuyuan"
-            android:layout_width="wrap_content"
-            android:layout_height="25dp"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
-            android:background="@drawable/toradiocheck"
-            android:button="@null"
-            android:gravity="center"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
-            android:text="程序员"
-            android:textColor="@color/home_radio_text" />
-
-        <RadioButton
-            android:id="@+id/Home_Radio_Python"
-            android:layout_width="wrap_content"
-            android:layout_height="25dp"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
-            android:background="@drawable/toradiocheck"
-            android:button="@null"
-            android:gravity="center"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
-            android:text=" Python"
-            android:textColor="@color/home_radio_text" />
-
-        <RadioButton
-            android:id="@+id/Home_Radio_iDev"
-            android:layout_width="wrap_content"
-            android:layout_height="25dp"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
-            android:background="@drawable/toradiocheck"
-            android:button="@null"
-            android:gravity="center"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
-            android:text="iDev"
-            android:textColor="@color/home_radio_text" />
-
-        <RadioButton
-            android:id="@+id/Home_Radio_Android"
-            android:layout_width="wrap_content"
-            android:layout_height="25dp"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
-            android:background="@drawable/toradiocheck"
-            android:button="@null"
-            android:gravity="center"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
-            android:text="Android"
-            android:textColor="@color/home_radio_text" />
-
-        <RadioButton
-            android:id="@+id/Home_Radio_Linux"
-            android:layout_width="wrap_content"
-            android:layout_height="25dp"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
-            android:background="@drawable/toradiocheck"
-            android:button="@null"
-            android:gravity="center"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
-            android:text="Linux"
-            android:textColor="@color/home_radio_text" />
-
-        <RadioButton
-            android:id="@+id/Home_Radio_nodejs"
-            android:layout_width="wrap_content"
-            android:layout_height="25dp"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
-            android:background="@drawable/toradiocheck"
-            android:button="@null"
-            android:gravity="center"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
-            android:text="node.js"
-            android:textColor="@color/home_radio_text" />
-
-        <RadioButton
-            android:id="@+id/Home_Radio_yunjisuan"
-            android:layout_width="wrap_content"
-            android:layout_height="25dp"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
-            android:background="@drawable/toradiocheck"
-            android:button="@null"
-            android:gravity="center"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
-            android:text="云计算"
-            android:textColor="@color/home_radio_text" />
-
-        <RadioButton
-            android:id="@+id/Home_Radio_kuandai"
-            android:layout_width="wrap_content"
-            android:layout_height="25dp"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
-            android:background="@drawable/toradiocheck"
-            android:button="@null"
-            android:gravity="center"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
-            android:text="宽带症候群"
-            android:textColor="@color/home_radio_text" />
-
-    </RadioGroup>
-    </HorizontalScrollView>
-    <com.romainpiel.shimmer.ShimmerTextView
-        android:layout_marginTop="200dp"
-        android:id="@+id/text_v2ex"
-        android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:gravity="center"
-        android:text="V2EX"
-        android:textColor="#444"
-        android:textSize="50sp"
-        app:reflectionColor="#ffff" />
-    <in.srain.cube.views.ptr.PtrClassicFrameLayout
-        android:id="@+id/ptr"
-        xmlns:cube_ptr="http://schemas.android.com/apk/res-auto"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        cube_ptr:ptr_duration_to_close="200"
-        cube_ptr:ptr_duration_to_close_header="1000"
-        cube_ptr:ptr_keep_header_when_refresh="true"
-        cube_ptr:ptr_pull_to_fresh="false"
-        cube_ptr:ptr_ratio_of_header_height_to_refresh="1.2"
-        cube_ptr:ptr_resistance="1.7">
-
-        <ListView
-            android:id="@+id/lv"
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycle"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scrollbarStyle="outsideOverlay"
-            android:choiceMode="singleChoice" />
+            android:layout_height="match_parent">
 
-    </in.srain.cube.views.ptr.PtrClassicFrameLayout>
+        </android.support.v7.widget.RecyclerView>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
 </LinearLayout>

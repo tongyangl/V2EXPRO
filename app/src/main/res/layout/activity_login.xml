@@ -3,7 +3,6 @@
     android:layout_width="match_parent"
     android:id="@+id/linear"
     android:layout_height="match_parent"
-    android:background="@drawable/f3"
     android:orientation="vertical">
 
     <TextView
@@ -12,7 +11,7 @@
         android:layout_marginTop="20dp"
         android:gravity="center"
         android:text="V2EX"
-        android:textColor="#ffff"
+        android:textColor="#000"
         android:textSize="50sp"
         android:textStyle="bold" />
 
@@ -21,45 +20,51 @@
         android:layout_height="50dp"
         android:gravity="center_horizontal"
         android:text="创意者的工作区"
-        android:textColor="#ffff"
+        android:textColor="#000"
         android:textSize="18sp" />
 
-    <EditText
-        android:id="@+id/username"
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/textinput_number"
         android:layout_width="match_parent"
-        android:layout_height="40sp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
-        android:background="@drawable/edti_login"
-        android:drawableLeft="@drawable/loginp"
-        android:drawablePadding="10dp"
-        android:hint="用户名"
-        android:paddingLeft="10dp"
-        android:singleLine="true"
-        android:textColor="#ffff"
-        android:textColorHint="#ffff" />
+        android:layout_height="wrap_content"
+        android:hint="帐号"
+     >
 
-    <zero.tongyang.threegrand.com.x2expro.Design.XEditText
-        android:id="@+id/password"
+        <EditText
+            android:id="@+id/username"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:imeActionId="@+id/passname"
+            android:imeOptions="actionNext"
+            android:singleLine="true"
+            android:text="" />
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+
+        android:id="@+id/textinput_password"
         android:layout_width="match_parent"
-        android:layout_height="40sp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/edti_login"
-        android:drawableLeft="@drawable/password"
-        android:drawablePadding="10dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:hint="密码">
 
-        android:hint="密码"
-        android:inputType="textPassword"
-        android:paddingLeft="7dp"
-        android:paddingRight="7dp"
-        android:singleLine="true"
-        android:textColor="#ffff"
-        android:textColorHint="#ffff" />
+        <EditText
 
+            android:id="@+id/password"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:imeActionId="@+id/button_login"
+            android:imeOptions="actionDone"
+            android:inputType="textPassword"
+            android:singleLine="true"
+            android:text="" />
+    </android.support.design.widget.TextInputLayout>
     <Button
-        android:background="@drawable/login_button"
+        android:background="@drawable/button_login2"
         android:textColor="#ffff"
         android:textSize="18sp"
         android:text="登陆"

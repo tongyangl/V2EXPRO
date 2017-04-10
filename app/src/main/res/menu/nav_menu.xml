@@ -7,14 +7,12 @@
         <item
             android:id="@+id/home"
             android:checkable="true"
-            android:icon="@drawable/home"
             android:title="首页">
             
         </item>
         <item
             android:id="@+id/mine"
             android:checkable="true"
-            android:icon="@drawable/person"
             android:title="个人中心"
 
             >
@@ -23,7 +21,6 @@
         <item
             android:id="@+id/notice"
             android:checkable="true"
-            android:icon="@drawable/notice"
             android:title="消息提醒">
 
         </item>
@@ -31,14 +28,12 @@
             android:id="@+id/collection"
 
             android:checkable="true"
-            android:icon="@drawable/collection"
             android:title="我的收藏">
 
         </item>
         <item
             android:id="@+id/node"
             android:checkable="true"
-            android:icon="@drawable/node"
             android:title="节点">
 
         </item>
@@ -53,18 +48,11 @@
             <item
                 android:id="@+id/setting"
                 android:checkable="true"
-                android:icon="@drawable/setting"
                 android:title="设置">
 
             </item>
 
-            <item
-                android:id="@+id/more"
-                android:checkable="true"
-                android:icon="@drawable/maro"
-                android:title="更多">
 
-            </item>
 
         </menu>
 

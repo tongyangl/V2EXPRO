@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="zero.tongyang.threegrand.com.x2expro">
+    package="rxjavatest.tycoding.com.iv2ex">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE">
 
     </uses-permission>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.INTERNET">
 
     </uses-permission>
@@ -24,28 +27,34 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".UI.Activity.MainActivity">
-
-        </activity>
-        <activity
-            android:windowSoftInputMode="adjustResize"
-            android:name=".UI.Activity.ReleaseTopticActivity">
-
-        </activity>
-        <activity android:name=".UI.Activity.TopicsDetalis">
-
-        </activity>
-        <activity android:name=".UI.Activity.SiginActivity">
-
-        </activity>
-
-        <activity android:name=".UI.Activity.LoadActivity">
-
+        <activity android:name=".ui.activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".ui.activity.photoviewactivity">
+
+        </activity>
+        <activity android:name=".ui.activity.NoticeActivity">
+
+        </activity>
+        <activity android:name=".ui.activity.NodeActivity">
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/search" />
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ui.activity.TopicsDetalisActivity"
+            android:windowSoftInputMode="stateAlwaysHidden">
+
+        </activity>
+        <activity android:name=".ui.activity.SiginActivity">
+
 
         </activity>
     </application>
