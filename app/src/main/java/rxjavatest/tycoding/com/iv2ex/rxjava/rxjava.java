@@ -82,6 +82,7 @@ import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
  */
 
 public class rxjava {
+    public static String topticdetal = "";
     private static int indexpage = -1;
     private static int nowpage = -1;
 
@@ -329,7 +330,7 @@ public class rxjava {
 
                             }
                         });
-
+                        editText.setHint("回复楼主/当前已有" + list.size() + "条评论");
                         button.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -342,6 +343,8 @@ public class rxjava {
 
                             }
                         });
+                        topticdetal = Jsoup.parse(s).select("div[class=topic_buttons]").select("a").get(0).attr("href").substring(1);
+
                     }
                 });
 
@@ -385,8 +388,9 @@ public class rxjava {
                         list = htmlTolist.NodeTopicsToList(s);
                         final NodeTopticsAdapter adapter = new NodeTopticsAdapter(list, activity);
                         Elements elements;
+                        View v=null;
                         if (list.size() > 0) {
-                            if (Integer.parseInt(num)> 20) {
+                            if (Integer.parseInt(num) > 20) {
                                 elements = Jsoup.parse(s).select("div[class=cell]").get(4).select("a");
                                 String p = "";
                                 p = elements.get(elements.size() - 1).text();
@@ -400,8 +404,8 @@ public class rxjava {
                                 }
                                 Log.d("ppp", p + "");
                                 page = Integer.parseInt(p);
-                                View view = activity.getLayoutInflater().inflate(R.layout.lv_footer, null);
-                                listView.addFooterView(view);
+                             v  = activity.getLayoutInflater().inflate(R.layout.lv_footer, null);
+                                listView.addFooterView(v);
 
                             } else {
                                 page = -2;
@@ -416,6 +420,7 @@ public class rxjava {
                         swipeRefreshLayout.setRefreshing(false);
                         if (page > 1)
                             nowpage = 1;
+                        final View finalV = v;
                         listView.setOnScrollListener(new AbsListView.OnScrollListener() {
                             @Override
                             public void onScrollStateChanged(AbsListView view, int scrollState) {
@@ -427,7 +432,7 @@ public class rxjava {
                                                 nowpage++;
                                                 getNodepage(list, adapter, nowpage, activity, "https" + string.substring(4));
                                             } else if (nowpage == page) {
-                                                listView.removeFooterView(view);
+                                                listView.removeFooterView(finalV);
                                                 Toast.makeText(activity, "已经加载全部信息", Toast.LENGTH_SHORT).show();
                                             }
                                         }
@@ -722,7 +727,7 @@ public class rxjava {
             public void call(Subscriber<? super String> subscriber) {
                 intertnet net = new intertnet(activity);
                 String b = net.getNodetoptic(url);
-                Log.d("asdasd",b+"asd");
+                Log.d("asdasd", b + "asd");
                 subscriber.onNext(b);
                 subscriber.onCompleted();
             }

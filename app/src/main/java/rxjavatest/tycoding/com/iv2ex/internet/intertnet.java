@@ -98,7 +98,7 @@ public class intertnet {
                 addEncoded("once", once).
                 build();
         String url = tyutils.BASE_URL + "t/" + topticid;
-         Log.d("---",url);
+        Log.d("---", url);
         Request request = new Request.Builder().url(url)
                 .addHeader("Referer", url)
                 .addHeader("Content-Type", "application/x-www-form-urlencoded")
@@ -190,11 +190,32 @@ public class intertnet {
         return okHttpClient;
 
     }
+
+    public int collection(String string) {
+
+
+        Request request = new Request.Builder().url(string).addHeader("Referer", tyutils.BASE_URL).
+                addHeader("Content-Type", "application/x-www-form-urlencoded")
+                .build();
+        try {
+            Response response = getokhttp().newCall(request).execute();
+
+                return response.code();
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    return  0;
+
+    }
+
     public String getNodetoptic(String string) {
 
 
-        Request request = new Request.Builder().url(string).addHeader("Referer",tyutils.BASE_URL).
-                addHeader("Content-Type","application/x-www-form-urlencoded")
+        Request request = new Request.Builder().url(string).addHeader("Referer", tyutils.BASE_URL).
+                addHeader("Content-Type", "application/x-www-form-urlencoded")
                 .build();
         try {
             Response response = getokhttp().newCall(request).execute();
@@ -211,14 +232,15 @@ public class intertnet {
 
         return null;
     }
+
     public String getTopic(String string) {
 
 
-        String     url = tyutils.BASE_URL + string;
+        String url = tyutils.BASE_URL + string;
 
 
-        Request request = new Request.Builder().url(url).addHeader("Referer",tyutils.BASE_URL).
-                addHeader("Content-Type","application/x-www-form-urlencoded")
+        Request request = new Request.Builder().url(url).addHeader("Referer", tyutils.BASE_URL).
+                addHeader("Content-Type", "application/x-www-form-urlencoded")
                 .build();
         try {
             Response response = getokhttp().newCall(request).execute();

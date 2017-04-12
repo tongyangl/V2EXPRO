@@ -12,11 +12,13 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +40,7 @@ import rxjavatest.tycoding.com.iv2ex.ui.fragment.transactionFragment;
 
 public class MainActivity extends AppCompatActivity {
     List<Fragment> fragmentList;
-
+   private long exitTime=0;
     @BindView(R.id.Home_viewPager)
     ViewPager HomeViewPager;
 
@@ -80,8 +82,8 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-       View view=ngv.getHeaderView(0);
-        ImageView imageView= (ImageView) view.findViewById(R.id.userimg);
+        View view = ngv.getHeaderView(0);
+        ImageView imageView = (ImageView) view.findViewById(R.id.userimg);
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -93,6 +95,7 @@ public class MainActivity extends AppCompatActivity {
         drawerLayout.setDrawerListener(mydrawToggle);
         ngv.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             MenuItem mymenuItem;
+
             @Override
             public boolean onNavigationItemSelected(MenuItem item) {
 
@@ -144,6 +147,21 @@ public class MainActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
 
 
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN){
+            if((System.currentTimeMillis()-exitTime) > 2000){
+                Toast.makeText(getApplicationContext(), "再按一次退出程序", Toast.LENGTH_SHORT).show();
+                exitTime = System.currentTimeMillis();
+            } else {
+
+               moveTaskToBack(true);
+            }
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     @Override

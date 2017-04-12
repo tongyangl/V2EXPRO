@@ -57,6 +57,13 @@ public class NodeActivity extends AppCompatActivity implements SearchView.OnQuer
         setContentView(R.layout.activity_node);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         recycle.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         recycle.setItemAnimator(new DefaultItemAnimator());
         InputStream inputStream = getResources().openRawResource(R.raw.nodejson);

@@ -1,7 +1,9 @@
 package rxjavatest.tycoding.com.iv2ex.ui.activity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -10,15 +12,21 @@ import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import rxjavatest.tycoding.com.iv2ex.R;
+import rxjavatest.tycoding.com.iv2ex.internet.intertnet;
 import rxjavatest.tycoding.com.iv2ex.rxjava.rxjava;
+import rxjavatest.tycoding.com.iv2ex.utils.tyutils;
 
 /**
  * Created by 佟杨 on 2017/4/6.
@@ -35,12 +43,15 @@ public class TopicsDetalisActivity extends AppCompatActivity {
     EditText editText;
     @BindView(R.id.replice)
     ImageButton replice;
+    private ProgressDialog dialog;
     private String title;
     private String repliceurl;
     private String img;
     private String Username;
     private String nodetitle;
     private String time;
+    private String collectionurl;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,7 +79,7 @@ public class TopicsDetalisActivity extends AppCompatActivity {
             replice.setClickable(true);
             Drawable drawable = getResources().getDrawable(R.drawable.ic_send2_black_24dp);
             replice.setBackgroundDrawable(drawable);
-        }else {
+        } else {
             Drawable drawable = getResources().getDrawable(R.drawable.ic_send_black_24dp);
             replice.setBackgroundDrawable(drawable);
             replice.setClickable(false);
@@ -91,7 +102,7 @@ public class TopicsDetalisActivity extends AppCompatActivity {
                     replice.setClickable(true);
                     Drawable drawable = getResources().getDrawable(R.drawable.ic_send2_black_24dp);
                     replice.setBackgroundDrawable(drawable);
-                }else {
+                } else {
                     Drawable drawable = getResources().getDrawable(R.drawable.ic_send_black_24dp);
                     replice.setBackgroundDrawable(drawable);
                     replice.setClickable(false);
@@ -116,10 +127,89 @@ public class TopicsDetalisActivity extends AppCompatActivity {
         });
         listener.onRefresh();
     }
- public void gettopticdetal(){
-     rxjava.getTopticDetils(TopicsDetalisActivity.this, repliceurl, swipe,
-             lv, title, img, Username, nodetitle, time
-             ,editText,replice
-     );
- }
+
+    public void gettopticdetal() {
+        rxjava.getTopticDetils(TopicsDetalisActivity.this, repliceurl, swipe,
+                lv, title, img, Username, nodetitle, time
+                , editText, replice
+        );
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.it_collect) {
+
+            collecttion cool = new collecttion();
+            cool.execute();
+
+            return true;
+        } else if (item.getItemId() == R.id.share) {
+            Intent shareIntent = new Intent();
+            shareIntent.setAction(Intent.ACTION_SEND);
+            shareIntent.putExtra(Intent.EXTRA_TEXT, "这个主题不错快来看看吧！" + tyutils.BASE_URL + repliceurl);
+            shareIntent.setType("text/plain");
+
+            //设置分享列表的标题，并且每次都显示分享列表
+            startActivity(Intent.createChooser(shareIntent, "分享到"));//分享的标题
+
+        } else if (item.getItemId() == R.id.replice) {
+
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        MenuItem mMenuItem;
+        menuInflater.inflate(R.menu.topticdetal, menu);
+
+
+        return super.onCreateOptionsMenu(menu);
+
+
+    }
+
+    class collecttion extends AsyncTask<String, Void, Integer> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            dialog = new ProgressDialog(TopicsDetalisActivity.this);
+            dialog.setTitle("收藏中...");
+            dialog.show();
+        }
+
+        @Override
+        protected void onPostExecute(Integer i) {
+            Log.d("---", i + "");
+            if (i == 302) {
+                if (rxjava.topticdetal.startsWith("unfavorite")) {
+                    rxjava.topticdetal = rxjava.topticdetal.substring(2);
+                    dialog.dismiss();
+
+                    Toast.makeText(TopicsDetalisActivity.this, "取消收藏成功", Toast.LENGTH_SHORT).show();
+                    Log.d("---", rxjava.topticdetal);
+                } else {
+                    dialog.dismiss();
+
+                    rxjava.topticdetal = "un" + rxjava.topticdetal;
+                    Log.d("---", rxjava.topticdetal);
+                    Toast.makeText(TopicsDetalisActivity.this, "主题收藏成功", Toast.LENGTH_SHORT).show();
+
+                }
+            } else {
+                Toast.makeText(TopicsDetalisActivity.this, "收藏失败", Toast.LENGTH_SHORT).show();
+            }
+            super.onPostExecute(i);
+        }
+
+        @Override
+        protected Integer doInBackground(String... params) {
+            intertnet net = new intertnet(TopicsDetalisActivity.this);
+            String url = tyutils.BASE_URL + rxjava.topticdetal;
+            Log.d("---", url);
+            return net.collection(url);
+        }
+    }
 }
