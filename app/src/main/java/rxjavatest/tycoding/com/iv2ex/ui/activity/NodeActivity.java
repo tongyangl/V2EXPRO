@@ -93,19 +93,12 @@ public class NodeActivity extends AppCompatActivity implements SearchView.OnQuer
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        adapter = new NodeRecycleAdapter(list);
+        adapter = new NodeRecycleAdapter(list,this);
 
         adapter.notifiy(list);
         recycle.setAdapter(adapter);
 
-        adapter.setOnItemClickListener(new NodeRecycleAdapter.OnRecyclerViewItemClickListener() {
-            @Override
-            public void onItemClick(View view, Map<String, String> data) {
-                Intent intent=new Intent(NodeActivity.this,NodeTopticsActivity.class);
-                intent.putExtra("url",data.get("url"));
-                startActivity(intent);
-            }
-        });
+
 
     }
 

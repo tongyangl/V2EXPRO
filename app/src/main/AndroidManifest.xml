@@ -48,6 +48,9 @@
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
         </activity>
+        <activity android:name=".ui.activity.NodeTopticsActivity">
+
+        </activity>
         <activity
             android:name=".ui.activity.TopicsDetalisActivity"
             android:windowSoftInputMode="stateAlwaysHidden">

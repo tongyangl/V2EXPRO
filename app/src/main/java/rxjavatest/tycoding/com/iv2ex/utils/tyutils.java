@@ -8,6 +8,9 @@ import android.os.Environment;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
  * Created by tongyang on 16-12-2.
  */
@@ -34,7 +37,14 @@ public class tyutils {
             return false;
         }
     }
-
+    public static boolean isNumeric(String str){
+        Pattern pattern = Pattern.compile("[0-9]*");
+        Matcher isNum = pattern.matcher(str);
+        if( !isNum.matches() ){
+            return false;
+        }
+        return true;
+    }
     public  static class SpacesItemDecoration extends RecyclerView.ItemDecoration {
         private int space;
         public SpacesItemDecoration(int space) {

@@ -1,7 +1,10 @@
 package rxjavatest.tycoding.com.iv2ex.adatper;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,7 +12,7 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
 
-import com.zzhoujay.richtext.RichText;
+
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,6 +20,8 @@ import java.util.List;
 import java.util.Map;
 
 import rxjavatest.tycoding.com.iv2ex.R;
+import rxjavatest.tycoding.com.iv2ex.ui.activity.NodeActivity;
+import rxjavatest.tycoding.com.iv2ex.ui.activity.NodeTopticsActivity;
 
 /**
  * Created by 佟杨 on 2017/4/10.
@@ -24,9 +29,9 @@ import rxjavatest.tycoding.com.iv2ex.R;
 
 public class NodeRecycleAdapter extends RecyclerView.Adapter<NodeRecycleAdapter.ViewHolder> implements View.OnClickListener, Filterable {
     private List<Map<String, String>> list = new ArrayList<>();
-    private OnRecyclerViewItemClickListener listener = null;
+    private OnRecyclerViewItemClickListener mOnItemClickListener = null;
     private List<Map<String, String>> mlist;
-
+    private Activity activity;
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.lv_node, parent, false);
@@ -36,15 +41,16 @@ public class NodeRecycleAdapter extends RecyclerView.Adapter<NodeRecycleAdapter.
 
     @Override
     public void onClick(View v) {
-        if (listener != null) {
+        if (mOnItemClickListener != null) {
 
             Map<String, String> list = (HashMap<String, String>) v.getTag();
-            listener.onItemClick(v, list);
+            mOnItemClickListener.onItemClick(v, list);
         }
     }
 
-    public NodeRecycleAdapter(List<Map<String, String>> list) {
+    public NodeRecycleAdapter(List<Map<String, String>> list,Activity activity) {
         mlist = list;
+       this.activity=activity;
     }
 
     public void notifiy(List<Map<String, String>> list) {
@@ -60,7 +66,7 @@ public class NodeRecycleAdapter extends RecyclerView.Adapter<NodeRecycleAdapter.
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, final int position) {
         holder.title.setText(list.get(position).get("title"));
 
         if (!list.get(position).get("content").equals("null") | list.get(position).get("content").contains("nbsp")) {
@@ -70,7 +76,19 @@ public class NodeRecycleAdapter extends RecyclerView.Adapter<NodeRecycleAdapter.
 
         holder.num.setText(list.get(position).get("num") + "条信息");
         holder.itemView.setTag(list.get(position));
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(activity,NodeTopticsActivity.class);
+                intent.putExtra("url",list.get(position).get("url"));
+                intent.putExtra("num",list.get(position).get("num"));
+                intent.putExtra("title",list.get(position).get("title"));
 
+                Log.d("----","click");
+
+                activity.startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -79,7 +97,7 @@ public class NodeRecycleAdapter extends RecyclerView.Adapter<NodeRecycleAdapter.
     }
 
     public void setOnItemClickListener(OnRecyclerViewItemClickListener listener) {
-        this.listener = listener;
+        this.mOnItemClickListener = listener;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -95,7 +113,7 @@ public class NodeRecycleAdapter extends RecyclerView.Adapter<NodeRecycleAdapter.
         }
     }
 
-    public interface OnRecyclerViewItemClickListener {
+    public  interface OnRecyclerViewItemClickListener {
         void onItemClick(View view, Map<String, String> data);
 
     }

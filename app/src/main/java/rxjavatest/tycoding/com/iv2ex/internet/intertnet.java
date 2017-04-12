@@ -190,15 +190,32 @@ public class intertnet {
         return okHttpClient;
 
     }
+    public String getNodetoptic(String string) {
 
-    public String getTopic(String string) {
-        String url="";
-        if (!string.startsWith("http")){
 
-             url = tyutils.BASE_URL + string;
-        }else {
-            url=string;
+        Request request = new Request.Builder().url(string).addHeader("Referer",tyutils.BASE_URL).
+                addHeader("Content-Type","application/x-www-form-urlencoded")
+                .build();
+        try {
+            Response response = getokhttp().newCall(request).execute();
+            if (response.isSuccessful()) {
+                return response.body().string();
+            } else {
+
+                return null;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+
+
+        return null;
+    }
+    public String getTopic(String string) {
+
+
+        String     url = tyutils.BASE_URL + string;
+
 
         Request request = new Request.Builder().url(url).addHeader("Referer",tyutils.BASE_URL).
                 addHeader("Content-Type","application/x-www-form-urlencoded")

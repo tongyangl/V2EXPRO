@@ -63,6 +63,7 @@ import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rxjavatest.tycoding.com.iv2ex.R;
+import rxjavatest.tycoding.com.iv2ex.adatper.NodeTopticsAdapter;
 import rxjavatest.tycoding.com.iv2ex.adatper.NoticeLvAdapter;
 import rxjavatest.tycoding.com.iv2ex.adatper.TopicRepliceAdaptar;
 import rxjavatest.tycoding.com.iv2ex.adatper.myrecycleadapter;
@@ -82,6 +83,7 @@ import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 
 public class rxjava {
     private static int indexpage = -1;
+    private static int nowpage = -1;
 
     public static void repliceToptic(final Activity activity, final String content,
                                      final String topticid, final SwipeRefreshLayout swipeRefreshLayout,
@@ -345,6 +347,111 @@ public class rxjava {
 
     }
 
+    public static void getNodetoptics(final Activity activity, final String string,
+                                      final SwipeRefreshLayout swipeRefreshLayout,
+                                      final ListView listView,
+                                      final String num
+    ) {
+
+        Observable.create(new Observable.OnSubscribe<String>() {
+            @Override
+            public void call(Subscriber<? super String> subscriber) {
+                intertnet inter = new intertnet(activity);
+                String url = "https" + string.substring(4);
+                String result = inter.getNodetoptic(url);
+                subscriber.onNext(result);
+                subscriber.onCompleted();
+
+            }
+        }).subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<String>() {
+                    @Override
+                    public void onCompleted() {
+                        Log.d("----", "onCompleted");
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                        swipeRefreshLayout.setRefreshing(false);
+                        Log.d("---", e.getMessage());
+                    }
+
+                    @Override
+                    public void onNext(String s) {
+                        final int page;
+                        final List<Map<String, String>> list;
+                        list = htmlTolist.NodeTopicsToList(s);
+                        final NodeTopticsAdapter adapter = new NodeTopticsAdapter(list, activity);
+                        Elements elements;
+                        if (list.size() > 0) {
+                            if (Integer.parseInt(num)> 20) {
+                                elements = Jsoup.parse(s).select("div[class=cell]").get(4).select("a");
+                                String p = "";
+                                p = elements.get(elements.size() - 1).text();
+                                if (!tyutils.isNumeric(p)) {
+                                    elements = Jsoup.parse(s).select("div[class=cell]").get(5).select("a");
+                                    p = elements.get(elements.size() - 1).text();
+                                }
+                                if (!tyutils.isNumeric(p)) {
+                                    elements = Jsoup.parse(s).select("div[class=cell]").get(3).select("a");
+                                    p = elements.get(elements.size() - 1).text();
+                                }
+                                Log.d("ppp", p + "");
+                                page = Integer.parseInt(p);
+                                View view = activity.getLayoutInflater().inflate(R.layout.lv_footer, null);
+                                listView.addFooterView(view);
+
+                            } else {
+                                page = -2;
+                            }
+
+                        } else {
+                            page = -2;
+                            Toast.makeText(activity, "本节点暂无主题", Toast.LENGTH_SHORT).show();
+
+                        }
+                        listView.setAdapter(adapter);
+                        swipeRefreshLayout.setRefreshing(false);
+                        if (page > 1)
+                            nowpage = 1;
+                        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+                            @Override
+                            public void onScrollStateChanged(AbsListView view, int scrollState) {
+                                Log.d("----", nowpage + "");
+                                switch (scrollState) {
+                                    case AbsListView.OnScrollListener.SCROLL_STATE_IDLE: // 当不迁移转变时
+                                        if (view.getLastVisiblePosition() == view.getCount() - 1) {
+                                            if (nowpage < page && nowpage != -2) {
+                                                nowpage++;
+                                                getNodepage(list, adapter, nowpage, activity, "https" + string.substring(4));
+                                            } else if (nowpage == page) {
+                                                listView.removeFooterView(view);
+                                                Toast.makeText(activity, "已经加载全部信息", Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+                                }
+                            }
+
+                            @Override
+                            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+
+                            }
+                        });
+                        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                Intent intent = new Intent(activity, TopicsDetalisActivity.class);
+                                intent.putExtra("repliceurl", list.get(position).get("repliceurl"));
+                                activity.startActivity(intent);
+                            }
+                        });
+                    }
+
+                });
+    }
+
     public static void getToptics(final Activity c, final String string, final SwipeRefreshLayout refreshLayout, final RecyclerView recyclerview, final boolean isnode) {
 
         Observable.create(new Observable.OnSubscribe<String>() {
@@ -458,7 +565,6 @@ public class rxjava {
     }
 
 
-
     public static void setImg(final String url, final ImageView imageView, Context context) {
         String path = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES).getPath();
         imageView.setBackgroundResource(R.drawable.ic_img_load);
@@ -570,16 +676,18 @@ public class rxjava {
                         lstview.setOnScrollListener(new AbsListView.OnScrollListener() {
                             @Override
                             public void onScrollStateChanged(AbsListView view, int scrollState) {
+
                                 switch (scrollState) {
+
                                     case AbsListView.OnScrollListener.SCROLL_STATE_IDLE: // 当不迁移转变时
                                         if (view.getLastVisiblePosition() == view.getCount() - 1) {
-                                            if (indexpage < page) {
+                                            if (indexpage < page && indexpage != -1) {
                                                 indexpage++;
-                                                Log.d("----", indexpage + "");
+
                                                 getnoticepage(list, adapter, indexpage, activity);
                                             } else if (indexpage == page) {
                                                 lstview.removeFooterView(v);
-                                                Toast.makeText(activity,"已经加载全部信息",Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(activity, "已经加载全部信息", Toast.LENGTH_SHORT).show();
                                             }
                                         }
 
@@ -604,6 +712,40 @@ public class rxjava {
                     }
                 });
 
+
+    }
+
+    public static void getNodepage(final List<Map<String, String>> list, final NodeTopticsAdapter adapter, int page, final Activity activity, String s) {
+        final String url = s + "?p=" + page;
+        Observable.create(new Observable.OnSubscribe<String>() {
+            @Override
+            public void call(Subscriber<? super String> subscriber) {
+                intertnet net = new intertnet(activity);
+                String b = net.getNodetoptic(url);
+                Log.d("asdasd",b+"asd");
+                subscriber.onNext(b);
+                subscriber.onCompleted();
+            }
+        }).subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<String>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(String s) {
+
+                        list.addAll(htmlTolist.NodeTopicsToList(s));
+
+                        adapter.notifyDataSetChanged();
+                    }
+                });
 
     }
 
