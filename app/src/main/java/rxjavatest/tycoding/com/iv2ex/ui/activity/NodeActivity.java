@@ -76,8 +76,8 @@ public class NodeActivity extends AppCompatActivity implements SearchView.OnQuer
         recycle.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         recycle.setItemAnimator(new DefaultItemAnimator());
 
-        adapter = new NodeRecycleAdapter(list, this);
-        adapter.notifiy(list);
+        adapter = new NodeRecycleAdapter(getlist(this,list), this);
+        adapter.notifiy(getlist(this,list));
         recycle.setAdapter(adapter);
         swipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
