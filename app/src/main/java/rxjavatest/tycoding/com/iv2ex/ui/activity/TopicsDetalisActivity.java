@@ -1,6 +1,7 @@
 package rxjavatest.tycoding.com.iv2ex.ui.activity;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
@@ -16,6 +17,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -153,7 +155,8 @@ public class TopicsDetalisActivity extends AppCompatActivity {
             startActivity(Intent.createChooser(shareIntent, "分享到"));//分享的标题
 
         } else if (item.getItemId() == R.id.replice) {
-
+            InputMethodManager imm = (InputMethodManager) editText.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.toggleSoftInput(0, InputMethodManager.SHOW_FORCED);
         }
 
         return super.onOptionsItemSelected(item);

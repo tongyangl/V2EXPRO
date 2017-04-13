@@ -85,6 +85,7 @@ public class rxjava {
     public static String topticdetal = "";
     private static int indexpage = -1;
     private static int nowpage = -1;
+    public static String nodetoptics = "";
 
     public static void repliceToptic(final Activity activity, final String content,
                                      final String topticid, final SwipeRefreshLayout swipeRefreshLayout,
@@ -388,7 +389,7 @@ public class rxjava {
                         list = htmlTolist.NodeTopicsToList(s);
                         final NodeTopticsAdapter adapter = new NodeTopticsAdapter(list, activity);
                         Elements elements;
-                        View v=null;
+                        View v = null;
                         if (list.size() > 0) {
                             if (Integer.parseInt(num) > 20) {
                                 elements = Jsoup.parse(s).select("div[class=cell]").get(4).select("a");
@@ -404,7 +405,7 @@ public class rxjava {
                                 }
                                 Log.d("ppp", p + "");
                                 page = Integer.parseInt(p);
-                             v  = activity.getLayoutInflater().inflate(R.layout.lv_footer, null);
+                                v = activity.getLayoutInflater().inflate(R.layout.lv_footer, null);
                                 listView.addFooterView(v);
 
                             } else {
@@ -444,6 +445,7 @@ public class rxjava {
 
                             }
                         });
+                        nodetoptics = Jsoup.parse(s).select("div[class=fr f12]").select("a").attr("href").substring(1);
                         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                             @Override
                             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

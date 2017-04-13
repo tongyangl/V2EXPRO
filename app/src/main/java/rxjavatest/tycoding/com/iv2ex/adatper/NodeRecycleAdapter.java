@@ -13,7 +13,6 @@ import android.widget.Filterable;
 import android.widget.TextView;
 
 
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -32,6 +31,7 @@ public class NodeRecycleAdapter extends RecyclerView.Adapter<NodeRecycleAdapter.
     private OnRecyclerViewItemClickListener mOnItemClickListener = null;
     private List<Map<String, String>> mlist;
     private Activity activity;
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.lv_node, parent, false);
@@ -48,9 +48,9 @@ public class NodeRecycleAdapter extends RecyclerView.Adapter<NodeRecycleAdapter.
         }
     }
 
-    public NodeRecycleAdapter(List<Map<String, String>> list,Activity activity) {
+    public NodeRecycleAdapter(List<Map<String, String>> list, Activity activity) {
         mlist = list;
-       this.activity=activity;
+        this.activity = activity;
     }
 
     public void notifiy(List<Map<String, String>> list) {
@@ -61,8 +61,8 @@ public class NodeRecycleAdapter extends RecyclerView.Adapter<NodeRecycleAdapter.
             notifyDataSetChanged();
 
         }
-       // this.list.clear();
-     //   this.list.addAll(mlist);
+        // this.list.clear();
+        //   this.list.addAll(mlist);
     }
 
     @Override
@@ -79,12 +79,12 @@ public class NodeRecycleAdapter extends RecyclerView.Adapter<NodeRecycleAdapter.
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(activity,NodeTopticsActivity.class);
-                intent.putExtra("url",list.get(position).get("url"));
-                intent.putExtra("num",list.get(position).get("num"));
-                intent.putExtra("title",list.get(position).get("title"));
+                Intent intent = new Intent(activity, NodeTopticsActivity.class);
+                intent.putExtra("url", list.get(position).get("url"));
+                intent.putExtra("num", list.get(position).get("num"));
+                intent.putExtra("title", list.get(position).get("title"));
 
-                Log.d("----","click");
+                Log.d("----", "click");
 
                 activity.startActivity(intent);
             }
@@ -113,7 +113,7 @@ public class NodeRecycleAdapter extends RecyclerView.Adapter<NodeRecycleAdapter.
         }
     }
 
-    public  interface OnRecyclerViewItemClickListener {
+    public interface OnRecyclerViewItemClickListener {
         void onItemClick(View view, Map<String, String> data);
 
     }
@@ -128,7 +128,8 @@ public class NodeRecycleAdapter extends RecyclerView.Adapter<NodeRecycleAdapter.
                 List<Map<String, String>> datalist = new ArrayList<>();
 
                 for (int i = 0; i < mlist.size(); i++) {
-                    if (mlist.get(i).get("title").contains(constraint)) {
+                    String a = mlist.get(i).get("title");
+                    if (a.contains(constraint) | a.toLowerCase().contains(constraint) | a.toUpperCase().contains(constraint)) {
                         datalist.add(mlist.get(i));
                     }
                 }
@@ -139,7 +140,7 @@ public class NodeRecycleAdapter extends RecyclerView.Adapter<NodeRecycleAdapter.
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
 
-                list=((List<Map<String, String>>) results.values);
+                list = ((List<Map<String, String>>) results.values);
                 notifyDataSetChanged();
 
             }

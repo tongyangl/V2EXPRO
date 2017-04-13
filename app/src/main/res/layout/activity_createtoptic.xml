@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize">
+
+    </android.support.v7.widget.Toolbar>
+
+    <View
+
+        android:id="@+id/shadow_view"
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:background="@drawable/shadow">
+
+    </View>
+
+   <LinearLayout
+       android:orientation="horizontal"
+       android:layout_width="match_parent"
+       android:layout_height="60dp">
+       <ImageView
+           android:layout_width="60dp"
+           android:layout_height="match_parent" />
+       <TextView
+           android:padding="10dp"
+           android:hint="选择节点"
+           android:textSize="18sp"
+           android:id="@+id/node"
+           android:layout_width="match_parent"
+           android:layout_height="60dp"
+           android:layout_marginRight="10dp"
+           android:clickable="true"
+           android:drawableRight="@drawable/ic_arrow_drop_up_black_24dp"
+           android:gravity="center_vertical" />
+
+
+   </LinearLayout>
+    <View
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginLeft="50dp"
+        android:background="#CFCFCF">
+
+    </View>
+
+    <EditText
+        android:id="@+id/topic_add_title"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:gravity="center_vertical"
+        android:hint="请输入主题标题"
+        android:paddingBottom="14dp"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:paddingTop="14dp"
+        android:singleLine="true"
+        android:textSize="16sp" />
+
+    <EditText
+        android:id="@+id/topic_add_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="top"
+        android:hint="如果标题能够表达完整内容，则正文可以为空"
+        android:paddingBottom="14dp"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:paddingTop="14dp"
+        android:textSize="16sp" />
+</LinearLayout>

@@ -41,14 +41,22 @@ public class intertnet {
     File cacheFile;
     Cache cache;
 
+    /**
+     * 初始化
+     *
+     * @param context
+     */
     public intertnet(Context context) {
         this.context = context;
         cookieJar = new PersistentCookieJar(new SetCookieCache(), new SharedPrefsCookiePersistor(context));
 
         cacheFile = new File(context.getCacheDir().getAbsolutePath(), "Cache");
-        cache = new Cache(cacheFile, 1024 * 1024 * 1024);//缓存文件为10MB
+        cache = new Cache(cacheFile, 1024 * 1024 * 1024);//缓存文件为100MB
     }
 
+    /*
+       获取回复的once
+     */
     public static String getrepliceonce(String url) {
 
         Pattern pattern = Pattern.compile("<input type=\"hidden\" value=\"([0-9]+)\" name=\"once\" />");
@@ -59,7 +67,13 @@ public class intertnet {
 
     }
 
-
+    /**
+     * 登录
+     *
+     * @param username
+     * @param password
+     * @return
+     */
     public String login(String username, String password) {
         String args[] = getformat();
         String signinurl = "https://www.v2ex.com/signin";
@@ -92,6 +106,14 @@ public class intertnet {
         return null;
     }
 
+    /**
+     * 回复主题
+     *
+     * @param content
+     * @param topticid
+     * @param once
+     * @return
+     */
     public int replice(String content, String topticid, String once) {
         RequestBody requestBody = new FormBody.Builder().
                 addEncoded("content", content).
@@ -117,6 +139,9 @@ public class intertnet {
         return 0;
     }
 
+    /**
+     * @return 获取登录的once
+     */
     public String[] getformat() {
         String s = "";
         String url = "https://www.v2ex.com/signin";
@@ -152,6 +177,11 @@ public class intertnet {
         return null;
     }
 
+    /**
+     * 获取okhttpcliet
+     *
+     * @return
+     */
     private OkHttpClient getokhttp() {
         OkHttpClient okHttpClient = new OkHttpClient.Builder().cookieJar(cookieJar).followRedirects(false).followSslRedirects(false)
                 .connectTimeout(15, TimeUnit.SECONDS).writeTimeout(15, TimeUnit.SECONDS)
@@ -191,6 +221,12 @@ public class intertnet {
 
     }
 
+    /**
+     * 收藏主题或者节点
+     *
+     * @param
+     * @return
+     */
     public int collection(String string) {
 
 
@@ -200,17 +236,23 @@ public class intertnet {
         try {
             Response response = getokhttp().newCall(request).execute();
 
-                return response.code();
+            return response.code();
 
 
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-    return  0;
+        return 0;
 
     }
 
+    /**
+     * 根据url获取node下主题
+     *
+     * @param
+     * @return
+     */
     public String getNodetoptic(String string) {
 
 
@@ -233,6 +275,64 @@ public class intertnet {
         return null;
     }
 
+    /**
+     * 发布主题
+     *
+     * @param
+     * @return
+     */
+    public int topicCreateWithNodeName(final Context cxt, final String nodeName,
+                                       final String title, final String content) {
+        final String urlString = tyutils.BASE_URL + "new/" + nodeName;
+
+        String s = getNodetoptic(urlString);
+        String once = getOnceStringFromHtmlResponseObject(s);
+
+        RequestBody requestBody = new FormBody.Builder().
+                addEncoded("content", content).
+                addEncoded("once", once).
+                add("title", title).
+                build();
+
+        Log.d("---", urlString);
+        Request request = new Request.Builder().url(urlString)
+                .addHeader("Referer", urlString)
+                .addHeader("Content-Type", "application/x-www-form-urlencoded")
+                .addHeader("Origin", tyutils.BASE_URL)
+                .post(requestBody)
+                .build();
+        try {
+            Response response = getokhttp().newCall(request).execute();
+            return response.code();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    /**
+     * 传入网页的数据
+     * 获取发布主题的once
+     *
+     * @param
+     * @return 返回once
+     */
+    private static String getOnceStringFromHtmlResponseObject(String content) {
+
+
+        Pattern pattern = Pattern.compile("<input type=\"hidden\" value=\"([0-9]+)\" name=\"once\" />");
+        final Matcher matcher = pattern.matcher(content);
+        if (matcher.find())
+            return matcher.group(1);
+        return null;
+    }
+
+    /**
+     * 获取toptic等信息
+     *
+     * @param
+     * @return
+     */
     public String getTopic(String string) {
 
 

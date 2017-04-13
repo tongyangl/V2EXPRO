@@ -140,9 +140,8 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
         MenuItem mMenuItem;
-        //  menuInflater.inflate(R.menu.right_menu, menu);
+         menuInflater.inflate(R.menu.main_right, menu);
 
-        //  mMenuItem = menu.findItem(R.id.release);
 
         return super.onCreateOptionsMenu(menu);
 
@@ -166,8 +165,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.notice) {
-            Intent intent = new Intent(MainActivity.this, NoticeActivity.class);
+        if (item.getItemId() == R.id.replice) {
+            Intent intent = new Intent(MainActivity.this, CreateToptic.class);
             startActivity(intent);
             return true;
         }

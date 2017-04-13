@@ -40,6 +40,9 @@
         <activity android:name=".ui.activity.NoticeActivity">
 
         </activity>
+        <activity android:name=".ui.activity.CreateToptic">
+
+        </activity>
         <activity android:name=".ui.activity.NodeActivity">
             <meta-data
                 android:name="android.app.searchable"
