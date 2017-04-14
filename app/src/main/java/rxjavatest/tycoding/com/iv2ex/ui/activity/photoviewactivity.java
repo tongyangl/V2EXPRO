@@ -9,6 +9,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -24,6 +25,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
 import rxjavatest.tycoding.com.iv2ex.R;
+import rxjavatest.tycoding.com.iv2ex.ui.widget.PhotoView;
 import rxjavatest.tycoding.com.iv2ex.ui.widget.PinchImageView;
 import rxjavatest.tycoding.com.iv2ex.utils.imageloader;
 
@@ -52,25 +54,26 @@ public class photoviewactivity extends AppCompatActivity {
         imageView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                PopupWindow popupWindow = new PopupWindow(photoviewactivity.this);
+                final PopupWindow popupWindow = new PopupWindow(photoviewactivity.this);
                 View view = getLayoutInflater().inflate(R.layout.popu_pic, null);
-                TextView share = (TextView) view.findViewById(R.id.share);
                 TextView save = (TextView) view.findViewById(R.id.save);
                 TextView shibie = (TextView) view.findViewById(R.id.shibie);
 
                 TextView cancel = (TextView) view.findViewById(R.id.cancel);
-               save.setOnClickListener(new View.OnClickListener() {
-                   @Override
-                   public void onClick(View v) {
-                       savepic();
-                   }
-               });
-                 shibie.setOnClickListener(new View.OnClickListener() {
-                     @Override
-                     public void onClick(View v) {
-                         
-                     }
-                 });
+                save.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        savepic();
+                        popupWindow.dismiss();
+
+                    }
+                });
+                shibie.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                    }
+                });
                 ColorDrawable dw = new ColorDrawable(0xffffffff);
                 popupWindow.setBackgroundDrawable(dw);
                 popupWindow.setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -86,23 +89,8 @@ public class photoviewactivity extends AppCompatActivity {
     }
 
     public void savepic() {
-        String path = getExternalFilesDir(Environment.DIRECTORY_PICTURES).getPath();
-        final File file = new File(path + "/iv2ex");
-        String u = list.replace("/", "!");
-        u = u.replace(".", "!");
-        if (!file.exists()) {
-            file.mkdirs();
-        }
-        final File f = new File(file, u);
-        try {
-            FileInputStream fos = new FileInputStream(f);
-            BitmapFactory.decodeStream(fos);
-
-            Toast.makeText(photoviewactivity.this, "保存成功", Toast.LENGTH_SHORT).show();
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            Toast.makeText(photoviewactivity.this, "保存失败", Toast.LENGTH_SHORT).show();
-        }
+        Bitmap image = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
+        MediaStore.Images.Media.insertImage(getContentResolver(), image, list, "v2ex保存的图片");
+        Toast.makeText(photoviewactivity.this, "已保存到系统图库", Toast.LENGTH_SHORT).show();
     }
 }

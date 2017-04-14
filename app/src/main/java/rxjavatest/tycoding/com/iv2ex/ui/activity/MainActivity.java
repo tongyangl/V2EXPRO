@@ -1,6 +1,7 @@
 package rxjavatest.tycoding.com.iv2ex.ui.activity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.NavigationView;
@@ -18,6 +19,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -27,6 +29,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import rxjavatest.tycoding.com.iv2ex.R;
 import rxjavatest.tycoding.com.iv2ex.adatper.MyFragmentPagerAdaptar;
+import rxjavatest.tycoding.com.iv2ex.rxjava.rxjava;
 import rxjavatest.tycoding.com.iv2ex.ui.fragment.AppleFragment;
 import rxjavatest.tycoding.com.iv2ex.ui.fragment.CityFragment;
 import rxjavatest.tycoding.com.iv2ex.ui.fragment.HotFragment;
@@ -40,7 +43,7 @@ import rxjavatest.tycoding.com.iv2ex.ui.fragment.transactionFragment;
 
 public class MainActivity extends AppCompatActivity {
     List<Fragment> fragmentList;
-   private long exitTime=0;
+    private long exitTime = 0;
     @BindView(R.id.Home_viewPager)
     ViewPager HomeViewPager;
 
@@ -62,10 +65,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-
         init();
-        toobarlayout.setTitle("V2EX");
         setSupportActionBar(toolbar);
+        toobarlayout.setTitle("V2EX");
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mydrawToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, 0, 0) {
@@ -84,6 +86,15 @@ public class MainActivity extends AppCompatActivity {
 
         View view = ngv.getHeaderView(0);
         ImageView imageView = (ImageView) view.findViewById(R.id.userimg);
+        TextView textView= (TextView) view.findViewById(R.id.username);
+
+        SharedPreferences sharedPreferences = getSharedPreferences("user", MODE_PRIVATE);
+        if (sharedPreferences.getString("userimg", "").equals("")) {
+
+        } else {
+            rxjava.setImg(sharedPreferences.getString("userimg", ""), imageView, this);
+            textView.setText(sharedPreferences.getString("username", ""));
+        }
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -118,8 +129,7 @@ public class MainActivity extends AppCompatActivity {
                         Intent intent1 = new Intent(MainActivity.this, NodeActivity.class);
                         startActivity(intent1);
                         break;
-                    case R.id.mine:
-                        break;
+
                     case R.id.setting:
                         /*Intent intent = new Intent(MainActivity.this, SettingActivity.class);
                         startActivity(intent);*/
@@ -127,6 +137,8 @@ public class MainActivity extends AppCompatActivity {
                    /* case R.id.more:
                         break;*/
                     case R.id.collection:
+                        Intent intent3 = new Intent(MainActivity.this, CollectionActivity.class);
+                        startActivity(intent3);
                         break;
 
                 }
@@ -140,7 +152,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
         MenuItem mMenuItem;
-         menuInflater.inflate(R.menu.main_right, menu);
+        menuInflater.inflate(R.menu.main_right, menu);
 
 
         return super.onCreateOptionsMenu(menu);
@@ -150,13 +162,13 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if(keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN){
-            if((System.currentTimeMillis()-exitTime) > 2000){
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN) {
+            if ((System.currentTimeMillis() - exitTime) > 2000) {
                 Toast.makeText(getApplicationContext(), "再按一次退出程序", Toast.LENGTH_SHORT).show();
                 exitTime = System.currentTimeMillis();
             } else {
 
-               moveTaskToBack(true);
+                moveTaskToBack(true);
             }
             return true;
         }

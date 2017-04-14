@@ -7,7 +7,7 @@
     <item
         android:id="@+id/replice"
         android:orderInCategory="60"
-        android:title="回复"
+        android:title="创建主题"
         />
 
 </menu>

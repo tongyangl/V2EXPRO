@@ -21,6 +21,7 @@
 
     </uses-permission>
 
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -33,6 +34,10 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
+        </activity>
+        <activity android:name=".ui.activity.CollectionActivity">
+
         </activity>
         <activity android:name=".ui.activity.photoviewactivity">
 
@@ -61,6 +66,9 @@
         </activity>
         <activity android:name=".ui.activity.SiginActivity">
 
+
+        </activity>
+        <activity android:name=".ui.activity.LoadingActivity">
 
         </activity>
     </application>

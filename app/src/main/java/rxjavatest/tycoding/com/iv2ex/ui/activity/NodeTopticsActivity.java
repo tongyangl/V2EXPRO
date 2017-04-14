@@ -50,6 +50,7 @@ public class NodeTopticsActivity extends AppCompatActivity {
         title = getIntent().getStringExtra("title");
         toolbar.setTitle(title);
         setSupportActionBar(toolbar);
+
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -137,7 +138,6 @@ public class NodeTopticsActivity extends AppCompatActivity {
         protected Integer doInBackground(String... params) {
             intertnet net = new intertnet(NodeTopticsActivity.this);
             String url = tyutils.BASE_URL + rxjava.nodetoptics;
-            Log.d("---", url);
             return net.collection(url);
         }
     }

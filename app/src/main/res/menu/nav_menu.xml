@@ -10,14 +10,14 @@
             android:title="首页">
             
         </item>
-        <item
+    <!--    <item
             android:id="@+id/mine"
             android:checkable="true"
             android:title="个人中心"
 
             >
 
-        </item>
+        </item>-->
         <item
             android:id="@+id/notice"
             android:checkable="true"

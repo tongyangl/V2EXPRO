@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -547,10 +548,14 @@ public class rxjava {
                         Document document = Jsoup.parse(s);
                         Elements elements = document.select("div[id=Rightbar]").select("div[class=box]");
                         Log.d("----", elements.size() + "");
-
+                        String userimg = "http://" + elements.get(0).select("img").attr("src").substring(2);
+                        SharedPreferences sharedPreferences=activity.getSharedPreferences("user",Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor= sharedPreferences.edit();
+                        Log.d("===",userimg);
+                        editor.putString("userimg",userimg);
+                        editor.commit();
                         if (elements.size() == 8 | elements.size() == 7) {
                             dialog.dismiss();
-
                             Intent intent = new Intent(activity, MainActivity.class);
                             activity.startActivity(intent);
                             Toast.makeText(activity.getApplicationContext(), "欢迎回来" + username, Toast.LENGTH_SHORT).show();
