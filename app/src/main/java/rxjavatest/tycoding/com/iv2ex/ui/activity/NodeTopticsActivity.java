@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import rxjavatest.tycoding.com.iv2ex.Application;
 import rxjavatest.tycoding.com.iv2ex.R;
 import rxjavatest.tycoding.com.iv2ex.internet.intertnet;
 import rxjavatest.tycoding.com.iv2ex.rxjava.rxjava;
@@ -95,8 +96,15 @@ public class NodeTopticsActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.it_collect) {
-            collecttion cool = new collecttion();
-            cool.execute();
+
+            if (Application.islogin(getApplicationContext())){
+                collecttion cool = new collecttion();
+                cool.execute();
+            }else {
+                Intent intent3 = new Intent(NodeTopticsActivity.this, SiginActivity.class);
+                startActivity(intent3);
+            }
+
             return true;
         }
         return super.onOptionsItemSelected(item);

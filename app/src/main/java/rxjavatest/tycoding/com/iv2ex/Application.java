@@ -1,6 +1,7 @@
 package rxjavatest.tycoding.com.iv2ex;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
@@ -9,10 +10,18 @@ import android.net.NetworkInfo;
  */
 
 public class Application extends android.app.Application {
-    public  static  boolean isnet;
-    public  static  boolean iswifi;
-    public  static  boolean ismobile;
+    public static boolean isnet;
+    public static boolean iswifi;
+    public static boolean ismobile;
 
+    public static boolean islogin(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("user", MODE_PRIVATE);
+        if (!sharedPreferences.getString("userimg", "").equals(""))
+            return true;
+        return false;
+
+
+    }
 
     private static boolean isWifi(Context mContext) {
         ConnectivityManager connectivityManager = (ConnectivityManager) mContext
@@ -24,6 +33,7 @@ public class Application extends android.app.Application {
         }
         return false;
     }
+
     private static boolean isMobile(Context mContext) {
         ConnectivityManager connectivityManager = (ConnectivityManager) mContext
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -40,11 +50,9 @@ public class Application extends android.app.Application {
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
         if (connectivity != null) {
             NetworkInfo info = connectivity.getActiveNetworkInfo();
-            if (info != null && info.isConnected())
-            {
+            if (info != null && info.isConnected()) {
                 // 当前网络是连接的
-                if (info.getState() == NetworkInfo.State.CONNECTED)
-                {
+                if (info.getState() == NetworkInfo.State.CONNECTED) {
                     // 当前所连接的网络可用
                     return true;
                 }

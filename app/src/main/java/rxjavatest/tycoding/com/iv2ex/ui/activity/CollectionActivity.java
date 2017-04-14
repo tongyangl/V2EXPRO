@@ -43,6 +43,7 @@ public class CollectionActivity extends AppCompatActivity {
         setContentView(R.layout.activity_collection);
         ButterKnife.bind(this);
         toolbar.setTitle("收藏");
+
         setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {

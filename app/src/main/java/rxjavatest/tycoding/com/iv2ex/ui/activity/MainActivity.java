@@ -27,6 +27,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import rxjavatest.tycoding.com.iv2ex.Application;
 import rxjavatest.tycoding.com.iv2ex.R;
 import rxjavatest.tycoding.com.iv2ex.adatper.MyFragmentPagerAdaptar;
 import rxjavatest.tycoding.com.iv2ex.rxjava.rxjava;
@@ -122,23 +123,34 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.home:
                         break;
                     case R.id.notice:
-                        Intent intent = new Intent(MainActivity.this, NoticeActivity.class);
-                        startActivity(intent);
+                        if (Application.islogin(getApplicationContext())){
+                            Intent intent = new Intent(MainActivity.this, NoticeActivity.class);
+                            startActivity(intent);
+                        }else {
+                            Intent intent3 = new Intent(MainActivity.this, SiginActivity.class);
+                            startActivity(intent3);
+                        }
                         break;
                     case R.id.node:
-                        Intent intent1 = new Intent(MainActivity.this, NodeActivity.class);
-                        startActivity(intent1);
+                            Intent intent1 = new Intent(MainActivity.this, NodeActivity.class);
+                            startActivity(intent1);
+
                         break;
 
                     case R.id.setting:
                         /*Intent intent = new Intent(MainActivity.this, SettingActivity.class);
                         startActivity(intent);*/
                         break;
-                   /* case R.id.more:
-                        break;*/
+
                     case R.id.collection:
-                        Intent intent3 = new Intent(MainActivity.this, CollectionActivity.class);
-                        startActivity(intent3);
+                        if (Application.islogin(getApplicationContext())){
+                            Intent intent3 = new Intent(MainActivity.this, CollectionActivity.class);
+                            startActivity(intent3);
+                        }else {
+                            Intent intent3 = new Intent(MainActivity.this, SiginActivity.class);
+                            startActivity(intent3);
+                        }
+
                         break;
 
                 }
@@ -178,8 +190,14 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.replice) {
-            Intent intent = new Intent(MainActivity.this, CreateToptic.class);
-            startActivity(intent);
+            if (Application.islogin(getApplicationContext())){
+                Intent intent = new Intent(MainActivity.this, CreateToptic.class);
+                startActivity(intent);
+            }else {
+                Intent intent3 = new Intent(MainActivity.this, SiginActivity.class);
+                startActivity(intent3);
+            }
+
             return true;
         }
         return super.onOptionsItemSelected(item);

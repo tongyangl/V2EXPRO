@@ -63,13 +63,16 @@ import rx.Scheduler;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
+import rxjavatest.tycoding.com.iv2ex.Application;
 import rxjavatest.tycoding.com.iv2ex.R;
 import rxjavatest.tycoding.com.iv2ex.adatper.NodeTopticsAdapter;
 import rxjavatest.tycoding.com.iv2ex.adatper.NoticeLvAdapter;
 import rxjavatest.tycoding.com.iv2ex.adatper.TopicRepliceAdaptar;
 import rxjavatest.tycoding.com.iv2ex.adatper.myrecycleadapter;
 import rxjavatest.tycoding.com.iv2ex.internet.intertnet;
+import rxjavatest.tycoding.com.iv2ex.ui.activity.CreateToptic;
 import rxjavatest.tycoding.com.iv2ex.ui.activity.MainActivity;
+import rxjavatest.tycoding.com.iv2ex.ui.activity.SiginActivity;
 import rxjavatest.tycoding.com.iv2ex.ui.activity.TopicsDetalisActivity;
 import rxjavatest.tycoding.com.iv2ex.ui.activity.photoviewactivity;
 import rxjavatest.tycoding.com.iv2ex.utils.htmlTolist;
@@ -336,12 +339,19 @@ public class rxjava {
                         button.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                repliceToptic(c, editText.getText().toString(),
-                                        topticid, refreshLayout, listView,
-                                        once, img, user, nodetitle,
-                                        t, string, once, editText, button,
-                                        imm
-                                );
+                                if (Application.islogin(c)){
+                                    repliceToptic(c, editText.getText().toString(),
+                                            topticid, refreshLayout, listView,
+                                            once, img, user, nodetitle,
+                                            t, string, once, editText, button,
+                                            imm
+                                    );
+                                }else {
+                                    Intent intent3 = new Intent(c, SiginActivity.class);
+                                    c.startActivity(intent3);
+                                }
+
+
 
                             }
                         });
@@ -579,7 +589,6 @@ public class rxjava {
 
     public static void setImg(final String url, final ImageView imageView, Context context) {
         String path = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES).getPath();
-        imageView.setBackgroundResource(R.drawable.ic_img_load);
         final File file = new File(path + "/iv2ex");
         String u = url.replace("/", "!");
         u = u.replace(".", "!");

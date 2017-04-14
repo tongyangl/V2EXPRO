@@ -2,9 +2,8 @@ package rxjavatest.tycoding.com.iv2ex.ui.activity;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.app.SearchManager;
-import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -20,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -34,6 +34,7 @@ import butterknife.ButterKnife;
 import rxjavatest.tycoding.com.iv2ex.R;
 import rxjavatest.tycoding.com.iv2ex.adatper.NodesArrayAdapter;
 import rxjavatest.tycoding.com.iv2ex.internet.intertnet;
+import rxjavatest.tycoding.com.iv2ex.rxjava.rxjava;
 
 /**
  * Created by 佟杨 on 2017/4/13.
@@ -43,6 +44,8 @@ public class CreateToptic extends AppCompatActivity {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
+    @BindView(R.id.img)
+    ImageView img;
     private ProgressDialog dialog;
     private String nodename;
     @BindView(R.id.topic_add_title)
@@ -82,6 +85,12 @@ public class CreateToptic extends AppCompatActivity {
             model.setName(map.get("name"));
             model.setTitle(map.get("title"));
             arrayList.add(model);
+        }
+        SharedPreferences sharedPreferences = getSharedPreferences("user", MODE_PRIVATE);
+        if (sharedPreferences.getString("userimg", "").equals("")) {
+
+        } else {
+            rxjava.setImg(sharedPreferences.getString("userimg", ""), img, this);
         }
         final NodesArrayAdapter arrayAdapter = new NodesArrayAdapter(this, arrayList);
         popupWindow = new PopupWindow(CreateToptic.this);
@@ -146,7 +155,7 @@ public class CreateToptic extends AppCompatActivity {
             if (mTitle.getText().length() == 0) {
 
             } else {
-                String args[]={
+                String args[] = {
                         mTitle.getText().toString(), mContent.getText().toString()
                 };
                 SendAsynctask asynctask = new SendAsynctask();
@@ -176,7 +185,7 @@ public class CreateToptic extends AppCompatActivity {
             } else {
                 dialog.dismiss();
                 Toast.makeText(CreateToptic.this, "创建失败", Toast.LENGTH_SHORT).show();
-                  finish();
+                finish();
             }
         }
 
@@ -184,7 +193,7 @@ public class CreateToptic extends AppCompatActivity {
         protected Integer doInBackground(String... params) {
             intertnet net = new intertnet(CreateToptic.this);
 
-            int a = net.topicCreateWithNodeName(CreateToptic.this, nodename, params[0],params[1]);
+            int a = net.topicCreateWithNodeName(CreateToptic.this, nodename, params[0], params[1]);
 
 
             return a;

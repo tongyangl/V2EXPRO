@@ -1,5 +1,6 @@
 package rxjavatest.tycoding.com.iv2ex.ui.fragment;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import org.jsoup.Jsoup;
@@ -27,6 +29,7 @@ import rxjavatest.tycoding.com.iv2ex.R;
 import rxjavatest.tycoding.com.iv2ex.adatper.NodeCollectAdapter;
 import rxjavatest.tycoding.com.iv2ex.adatper.NodeTopticsAdapter;
 import rxjavatest.tycoding.com.iv2ex.internet.intertnet;
+import rxjavatest.tycoding.com.iv2ex.ui.activity.TopicsDetalisActivity;
 
 /**
  * Created by 佟杨 on 2017/4/14.
@@ -54,7 +57,7 @@ public class TopticCollectionFragment extends Fragment {
             @Override
             public void onRefresh() {
                 Log.d("---", "onrefresh");
-                getCollectToptic getCollectToptic=new getCollectToptic();
+                getCollectToptic getCollectToptic = new getCollectToptic();
                 getCollectToptic.execute();
 
             }
@@ -120,7 +123,15 @@ public class TopticCollectionFragment extends Fragment {
                 }
                 NodeTopticsAdapter adapter = new NodeTopticsAdapter(list, getActivity());
                 listView.setAdapter(adapter);
-               swipeRefreshLayout.setRefreshing(false);
+                swipeRefreshLayout.setRefreshing(false);
+                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        Intent intent = new Intent(getContext(), TopicsDetalisActivity.class);
+                        intent.putExtra("repliceurl", list.get(position).get("repliceurl"));
+                        startActivity(intent);
+                    }
+                });
             }
         }
 

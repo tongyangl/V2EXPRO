@@ -25,6 +25,7 @@ import android.widget.Toast;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import rxjavatest.tycoding.com.iv2ex.Application;
 import rxjavatest.tycoding.com.iv2ex.R;
 import rxjavatest.tycoding.com.iv2ex.internet.intertnet;
 import rxjavatest.tycoding.com.iv2ex.rxjava.rxjava;
@@ -140,9 +141,13 @@ public class TopicsDetalisActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.it_collect) {
-
-            collecttion cool = new collecttion();
-            cool.execute();
+            if (Application.islogin(getApplicationContext())){
+                collecttion cool = new collecttion();
+                cool.execute();
+            }else {
+                Intent intent3 = new Intent(TopicsDetalisActivity.this, SiginActivity.class);
+                startActivity(intent3);
+            }
 
             return true;
         } else if (item.getItemId() == R.id.share) {
@@ -155,8 +160,14 @@ public class TopicsDetalisActivity extends AppCompatActivity {
             startActivity(Intent.createChooser(shareIntent, "分享到"));//分享的标题
 
         } else if (item.getItemId() == R.id.replice) {
-            InputMethodManager imm = (InputMethodManager) editText.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.toggleSoftInput(0, InputMethodManager.SHOW_FORCED);
+            if (Application.islogin(getApplicationContext())){
+                InputMethodManager imm = (InputMethodManager) editText.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.toggleSoftInput(0, InputMethodManager.SHOW_FORCED);
+            }else {
+                Intent intent3 = new Intent(TopicsDetalisActivity.this, SiginActivity.class);
+                startActivity(intent3);
+            }
+
         }
 
         return super.onOptionsItemSelected(item);
