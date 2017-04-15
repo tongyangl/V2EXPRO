@@ -1,5 +1,9 @@
 package rxjavatest.tycoding.com.iv2ex.ui.activity;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -31,6 +35,7 @@ import rxjavatest.tycoding.com.iv2ex.Application;
 import rxjavatest.tycoding.com.iv2ex.R;
 import rxjavatest.tycoding.com.iv2ex.adatper.MyFragmentPagerAdaptar;
 import rxjavatest.tycoding.com.iv2ex.rxjava.rxjava;
+import rxjavatest.tycoding.com.iv2ex.service.noticeservice;
 import rxjavatest.tycoding.com.iv2ex.ui.fragment.AppleFragment;
 import rxjavatest.tycoding.com.iv2ex.ui.fragment.CityFragment;
 import rxjavatest.tycoding.com.iv2ex.ui.fragment.HotFragment;
@@ -68,6 +73,9 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         init();
         setSupportActionBar(toolbar);
+       /* Intent i = new Intent(this, noticeservice.class);
+        startService(i);*/
+
         toobarlayout.setTitle("V2EX");
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

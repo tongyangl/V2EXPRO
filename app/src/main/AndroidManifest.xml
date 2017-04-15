@@ -48,6 +48,11 @@
         <activity android:name=".ui.activity.CreateToptic">
 
         </activity>
+
+        <service android:name=".service.noticeservice">
+
+        </service>
+
         <activity android:name=".ui.activity.NodeActivity">
             <meta-data
                 android:name="android.app.searchable"
@@ -71,6 +76,12 @@
         <activity android:name=".ui.activity.LoadingActivity">
 
         </activity>
+
+        <receiver
+
+            android:name=".receiver.MyReceiver">
+
+        </receiver>
     </application>
 
 </manifest>

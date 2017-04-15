@@ -1,6 +1,9 @@
 package rxjavatest.tycoding.com.iv2ex.rxjava;
 
 import android.app.Activity;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -72,6 +75,7 @@ import rxjavatest.tycoding.com.iv2ex.adatper.myrecycleadapter;
 import rxjavatest.tycoding.com.iv2ex.internet.intertnet;
 import rxjavatest.tycoding.com.iv2ex.ui.activity.CreateToptic;
 import rxjavatest.tycoding.com.iv2ex.ui.activity.MainActivity;
+import rxjavatest.tycoding.com.iv2ex.ui.activity.NoticeActivity;
 import rxjavatest.tycoding.com.iv2ex.ui.activity.SiginActivity;
 import rxjavatest.tycoding.com.iv2ex.ui.activity.TopicsDetalisActivity;
 import rxjavatest.tycoding.com.iv2ex.ui.activity.photoviewactivity;
@@ -339,18 +343,17 @@ public class rxjava {
                         button.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                if (Application.islogin(c)){
+                                if (Application.islogin(c)) {
                                     repliceToptic(c, editText.getText().toString(),
                                             topticid, refreshLayout, listView,
                                             once, img, user, nodetitle,
                                             t, string, once, editText, button,
                                             imm
                                     );
-                                }else {
+                                } else {
                                     Intent intent3 = new Intent(c, SiginActivity.class);
                                     c.startActivity(intent3);
                                 }
-
 
 
                             }
@@ -508,6 +511,31 @@ public class rxjava {
                             recyclerview.setAdapter(adapter);
 
                         }
+                        String notice = Jsoup.parse(s).select("a[class=fade]").text();
+                        String a="";
+                        for(int i=0;i<notice.length();i++){
+                            if(notice.charAt(i)>=48 && notice.charAt(i)<=57){
+                                a+=notice.charAt(i);
+                            }
+                        }
+                        if (Integer.parseInt(a)>0){
+
+                            Intent intent2=new Intent(c,NoticeActivity.class);
+                            PendingIntent intent1=PendingIntent.getActivity(c,0,intent2,0);
+
+                            NotificationManager manager = (NotificationManager)c. getSystemService(Context.NOTIFICATION_SERVICE);
+                            Notification notification = new Notification.Builder(c)
+                                    .setAutoCancel(true)
+                                    .setContentTitle("提示")
+                                    .setContentText("您有"+a+"条未读提醒")
+                                    .setContentIntent(intent1)
+                                    .setSmallIcon(R.drawable.ic_launcher)
+                                    .setWhen(System.currentTimeMillis())
+                                    .build();
+                            notification.flags=Notification.FLAG_AUTO_CANCEL;
+                            manager.notify(1,notification);
+                        }
+
                         adapter.setOnItemClickListener(new myrecycleadapter.OnRecyclerViewItemClickListener() {
                             @Override
                             public void onItemClick(View view, Map<String, String> data) {
@@ -559,10 +587,10 @@ public class rxjava {
                         Elements elements = document.select("div[id=Rightbar]").select("div[class=box]");
                         Log.d("----", elements.size() + "");
                         String userimg = "http://" + elements.get(0).select("img").attr("src").substring(2);
-                        SharedPreferences sharedPreferences=activity.getSharedPreferences("user",Context.MODE_PRIVATE);
-                        SharedPreferences.Editor editor= sharedPreferences.edit();
-                        Log.d("===",userimg);
-                        editor.putString("userimg",userimg);
+                        SharedPreferences sharedPreferences = activity.getSharedPreferences("user", Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        Log.d("===", userimg);
+                        editor.putString("userimg", userimg);
                         editor.commit();
                         if (elements.size() == 8 | elements.size() == 7) {
                             dialog.dismiss();
