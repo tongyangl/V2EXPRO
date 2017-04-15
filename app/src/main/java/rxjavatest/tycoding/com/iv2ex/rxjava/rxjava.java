@@ -240,7 +240,7 @@ public class rxjava {
                             }
 
                             String contet = document.getElementsByClass("topic_content").toString();
-
+                            SharedPreferences sharedPreferences = c.getSharedPreferences("set", Context.MODE_PRIVATE);
                             RichText.fromHtml(contet).autoFix(true)
                                     .urlClick(new OnUrlClickListener() {
                                         @Override
@@ -253,7 +253,8 @@ public class rxjava {
                                             c.startActivity(intent);
                                             return true;
                                         }
-                                    }).error(drawable1).placeHolder(drawable).clickable(true).fix(new ImageFixCallback() {
+                                    }).error(drawable1).noImage(sharedPreferences.getBoolean("wifi", false)
+                            ).placeHolder(drawable).clickable(true).fix(new ImageFixCallback() {
                                 @Override
                                 public void onInit(ImageHolder holder) {
 
@@ -512,28 +513,28 @@ public class rxjava {
 
                         }
                         String notice = Jsoup.parse(s).select("a[class=fade]").text();
-                        String a="";
-                        for(int i=0;i<notice.length();i++){
-                            if(notice.charAt(i)>=48 && notice.charAt(i)<=57){
-                                a+=notice.charAt(i);
+                        String a = "";
+                        for (int i = 0; i < notice.length(); i++) {
+                            if (notice.charAt(i) >= 48 && notice.charAt(i) <= 57) {
+                                a += notice.charAt(i);
                             }
                         }
-                        if (Integer.parseInt(a)>0){
+                        if (Integer.parseInt(a) > 0) {
 
-                            Intent intent2=new Intent(c,NoticeActivity.class);
-                            PendingIntent intent1=PendingIntent.getActivity(c,0,intent2,0);
+                            Intent intent2 = new Intent(c, NoticeActivity.class);
+                            PendingIntent intent1 = PendingIntent.getActivity(c, 0, intent2, 0);
 
-                            NotificationManager manager = (NotificationManager)c. getSystemService(Context.NOTIFICATION_SERVICE);
+                            NotificationManager manager = (NotificationManager) c.getSystemService(Context.NOTIFICATION_SERVICE);
                             Notification notification = new Notification.Builder(c)
                                     .setAutoCancel(true)
                                     .setContentTitle("提示")
-                                    .setContentText("您有"+a+"条未读提醒")
+                                    .setContentText("您有" + a + "条未读提醒")
                                     .setContentIntent(intent1)
                                     .setSmallIcon(R.drawable.ic_launcher)
                                     .setWhen(System.currentTimeMillis())
                                     .build();
-                            notification.flags=Notification.FLAG_AUTO_CANCEL;
-                            manager.notify(1,notification);
+                            notification.flags = Notification.FLAG_AUTO_CANCEL;
+                            manager.notify(1, notification);
                         }
 
                         adapter.setOnItemClickListener(new myrecycleadapter.OnRecyclerViewItemClickListener() {

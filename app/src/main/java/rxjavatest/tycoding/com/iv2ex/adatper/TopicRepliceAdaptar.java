@@ -5,6 +5,7 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -92,6 +93,7 @@ public class TopicRepliceAdaptar extends BaseAdapter implements OnUrlClickListen
         viewHolder.time.setText(list.get(i).get("time"));
         viewHolder.username.setText(list.get(i).get("username"));
         viewHolder.imageView.setTag(list.get(i).get("img"));
+        SharedPreferences sharedPreferences=context.getSharedPreferences("set",Context.MODE_PRIVATE);
 
         RichText.fromHtml(list.get(i).get("content")).autoFix(true).fix(new ImageFixCallback() {
             @Override
@@ -121,7 +123,7 @@ public class TopicRepliceAdaptar extends BaseAdapter implements OnUrlClickListen
             }
 
 
-        }).urlLongClick(new OnUrlLongClickListener() {
+        }).noImage(sharedPreferences.getBoolean("wifi",false)).urlLongClick(new OnUrlLongClickListener() {
             @Override
             public boolean urlLongClick(String url) {
                 ClipboardManager cmb = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);

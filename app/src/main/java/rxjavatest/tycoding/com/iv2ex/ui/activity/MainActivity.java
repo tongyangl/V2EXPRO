@@ -63,8 +63,6 @@ public class MainActivity extends AppCompatActivity {
     ActionBarDrawerToggle mydrawToggle;
     @BindView(R.id.table)
     TabLayout table;
-    @BindView(R.id.toobarlayout)
-    CollapsingToolbarLayout toobarlayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,11 +70,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         init();
+        toolbar.setTitle("V2EX");
         setSupportActionBar(toolbar);
        /* Intent i = new Intent(this, noticeservice.class);
         startService(i);*/
 
-        toobarlayout.setTitle("V2EX");
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mydrawToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, 0, 0) {
@@ -146,8 +144,8 @@ public class MainActivity extends AppCompatActivity {
                         break;
 
                     case R.id.setting:
-                        /*Intent intent = new Intent(MainActivity.this, SettingActivity.class);
-                        startActivity(intent);*/
+                        Intent intent = new Intent(MainActivity.this, SettingActivity.class);
+                        startActivity(intent);
                         break;
 
                     case R.id.collection:

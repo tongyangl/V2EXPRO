@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+
+        android:key="settings_settings"
+        android:title="常规设置">
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="pref_noimage_nowifi"
+            android:summary="2G/3G/4G网络下不显示图片"
+            android:title="无图模式" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="其他">
+
+        <Preference
+            android:key="pref_cache"
+            android:title="清除缓存"
+            android:summary="0KB"/>
+
+        <Preference
+            android:key="pref_about"
+            android:title="关于我们" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>
