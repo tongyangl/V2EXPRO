@@ -20,6 +20,7 @@ public class tyutils {
     public  static  String NOTIFI_URL="notifications";
     public  static String  DAILY="mission/daily";
     public  static  String BASE_URL="https://www.v2ex.com/";
+
     public static  Boolean isNetworkReachable(Context context) {
         ConnectivityManager cm = (ConnectivityManager) context
                 .getSystemService(Context.CONNECTIVITY_SERVICE);

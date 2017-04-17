@@ -122,6 +122,7 @@ public class CreateToptic extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 node.setText(arrayAdapter.objects.get(position).getTitle());
                 nodename = arrayAdapter.objects.get(position).getName();
+                popupWindow.dismiss();
             }
         });
         node.setOnClickListener(new View.OnClickListener() {

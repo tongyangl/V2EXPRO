@@ -56,6 +56,7 @@ import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -94,6 +95,7 @@ public class rxjava {
     private static int indexpage = -1;
     private static int nowpage = -1;
     public static String nodetoptics = "";
+    private static int topticpage = -1;
 
     public static void repliceToptic(final Activity activity, final String content,
                                      final String topticid, final SwipeRefreshLayout swipeRefreshLayout,
@@ -206,10 +208,15 @@ public class rxjava {
 
                     @Override
                     public void onNext(String s) {
-                        Log.d("----", "next");
                         Drawable drawable = c.getResources().getDrawable(R.drawable.ic_img_load);
                         Drawable drawable1 = c.getResources().getDrawable(R.drawable.ic_load_error);
                         final List<Map<String, String>> list = htmlTolist.getdetals(s);
+
+
+                        final TopicRepliceAdaptar adaper;
+
+
+                        topticpage = 1;
                         if (listView.getHeaderViewsCount() == 0) {
                             View headerview = c.getLayoutInflater().inflate(R.layout.lv_header, null);
                             TextView username = (TextView) headerview.findViewById(R.id.username);
@@ -219,6 +226,7 @@ public class rxjava {
                             TextView toptictitle = (TextView) headerview.findViewById(R.id.topictitle);
                             final TextView content = (TextView) headerview.findViewById(R.id.content);
                             Document document = Jsoup.parse(s);
+
                             if (nodetitle == null) {
                                 String t = document.select("div[class=header]").select("small[class=gray]").get(0).ownText();
                                 String node = document.select("div[class=header]").select("a").get(2).text();
@@ -238,9 +246,13 @@ public class rxjava {
                                 setImg(img, imageView, c);
 
                             }
+                            SharedPreferences sharedPreferences = c.getSharedPreferences("set", Context.MODE_PRIVATE);
+                            boolean noimg = sharedPreferences.getBoolean("wifi", false);
+                            if (noimg) {
+                                noimg = Application.isMobile(c);
+                            }
 
                             String contet = document.getElementsByClass("topic_content").toString();
-                            SharedPreferences sharedPreferences = c.getSharedPreferences("set", Context.MODE_PRIVATE);
                             RichText.fromHtml(contet).autoFix(true)
                                     .urlClick(new OnUrlClickListener() {
                                         @Override
@@ -253,8 +265,8 @@ public class rxjava {
                                             c.startActivity(intent);
                                             return true;
                                         }
-                                    }).error(drawable1).noImage(sharedPreferences.getBoolean("wifi", false)
-                            ).placeHolder(drawable).clickable(true).fix(new ImageFixCallback() {
+                                    }).error(drawable1).noImage(
+                                    noimg).placeHolder(drawable).clickable(true).fix(new ImageFixCallback() {
                                 @Override
                                 public void onInit(ImageHolder holder) {
 
@@ -269,22 +281,19 @@ public class rxjava {
                                 public void onSizeReady(ImageHolder holder, int width, int height) {
                                     WindowManager wm = c.getWindowManager();
                                     imageloader.saveimage(holder.getSource(), c);
-                              /*      int w = wm.getDefaultDisplay().getWidth();
-                                    int h = wm.getDefaultDisplay().getHeight();
-                                    holder.setMaxHeight(h/2);
-                                    holder.setMaxWidth(w);*/
+
                                 }
 
                                 @Override
                                 public void onImageReady(ImageHolder holder, int width, int height) {
                                     holder.setImageType(ImageHolder.ImageType.JPG);
 
-                                    holder.setScale(2.0f);
                                 }
 
                                 @Override
                                 public void onFailure(ImageHolder holder, Exception e) {
-
+                                    holder.setHeight(100);
+                                    holder.setWidth(100);
                                 }
 
                             }).urlLongClick(new OnUrlLongClickListener() {
@@ -313,17 +322,18 @@ public class rxjava {
                                 }
                             }).into(content);
                             listView.addHeaderView(headerview);
-                            TopicRepliceAdaptar adaper = new TopicRepliceAdaptar(c.getLayoutInflater(),
-                                    list, listView, c);
+                            adaper = new TopicRepliceAdaptar(c.getLayoutInflater(),list
+                                    , listView, c);
                             listView.setAdapter(adaper);
                             refreshLayout.setRefreshing(false);
-
 
                         } else {
-                            TopicRepliceAdaptar adaper = new TopicRepliceAdaptar(c.getLayoutInflater(),
+
+                            adaper = new TopicRepliceAdaptar(c.getLayoutInflater(),
                                     list, listView, c);
                             listView.setAdapter(adaper);
                             refreshLayout.setRefreshing(false);
+
                         }
                         final String once = intertnet.getrepliceonce(s);
                         int IndexofA = string.indexOf("/");
@@ -331,15 +341,19 @@ public class rxjava {
                         final String topticid = string.substring(IndexofA + 1, IndexofB);
                         Log.d("----", once + "and" + topticid);
 
+
+                        final List<Map<String, String>> finalList1 = list;
                         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                             @Override
                             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                                 editText.requestFocus();
-                                editText.setText("@" + list.get(position - 1).get("username"));
+                                editText.setText("@" + finalList1.get(position - 1).get("username"));
                                 imm.toggleSoftInput(0, InputMethodManager.SHOW_FORCED);
 
                             }
                         });
+
+
                         editText.setHint("回复楼主/当前已有" + list.size() + "条评论");
                         button.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -365,6 +379,8 @@ public class rxjava {
                 });
 
     }
+
+
 
     public static void getNodetoptics(final Activity activity, final String string,
                                       final SwipeRefreshLayout swipeRefreshLayout,

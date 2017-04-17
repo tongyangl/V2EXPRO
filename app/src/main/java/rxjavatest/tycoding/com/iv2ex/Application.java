@@ -11,7 +11,6 @@ import android.net.NetworkInfo;
 
 public class Application extends android.app.Application {
     public static boolean isnet;
-    public static boolean iswifi;
     public static boolean ismobile;
 
     public static boolean islogin(Context context) {
@@ -23,7 +22,7 @@ public class Application extends android.app.Application {
 
     }
 
-    private static boolean isWifi(Context mContext) {
+    public static boolean isWifi(Context mContext) {
         ConnectivityManager connectivityManager = (ConnectivityManager) mContext
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetInfo = connectivityManager.getActiveNetworkInfo();
@@ -34,7 +33,7 @@ public class Application extends android.app.Application {
         return false;
     }
 
-    private static boolean isMobile(Context mContext) {
+    public static boolean isMobile(Context mContext) {
         ConnectivityManager connectivityManager = (ConnectivityManager) mContext
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetInfo = connectivityManager.getActiveNetworkInfo();

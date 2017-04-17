@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Map;
 
 
+import rxjavatest.tycoding.com.iv2ex.Application;
 import rxjavatest.tycoding.com.iv2ex.R;
 import rxjavatest.tycoding.com.iv2ex.rxjava.rxjava;
 import rxjavatest.tycoding.com.iv2ex.ui.activity.photoviewactivity;
@@ -93,7 +94,12 @@ public class TopicRepliceAdaptar extends BaseAdapter implements OnUrlClickListen
         viewHolder.time.setText(list.get(i).get("time"));
         viewHolder.username.setText(list.get(i).get("username"));
         viewHolder.imageView.setTag(list.get(i).get("img"));
-        SharedPreferences sharedPreferences=context.getSharedPreferences("set",Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = context.getSharedPreferences("set", Context.MODE_PRIVATE);
+
+        boolean noimg = sharedPreferences.getBoolean("wifi", false);
+        if (noimg) {
+            noimg = Application.isMobile(context);
+        }
 
         RichText.fromHtml(list.get(i).get("content")).autoFix(true).fix(new ImageFixCallback() {
             @Override
@@ -114,16 +120,17 @@ public class TopicRepliceAdaptar extends BaseAdapter implements OnUrlClickListen
             @Override
             public void onImageReady(ImageHolder holder, int width, int height) {
                 holder.setImageType(ImageHolder.ImageType.JPG);
-                imageloader.saveimage( holder.getSource(), (Activity) context);
+                imageloader.saveimage(holder.getSource(), (Activity) context);
             }
 
             @Override
             public void onFailure(ImageHolder holder, Exception e) {
-
+                holder.setHeight(100);
+                holder.setWidth(100);
             }
 
 
-        }).noImage(sharedPreferences.getBoolean("wifi",false)).urlLongClick(new OnUrlLongClickListener() {
+        }).noImage(noimg).urlLongClick(new OnUrlLongClickListener() {
             @Override
             public boolean urlLongClick(String url) {
                 ClipboardManager cmb = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
@@ -135,7 +142,7 @@ public class TopicRepliceAdaptar extends BaseAdapter implements OnUrlClickListen
             public void imageClicked(List<String> imageUrls, int position) {
                 Intent intent = new Intent(context, photoviewactivity.class);
                 intent.putExtra("position", position);
-                intent.putExtra("url",  imageUrls.get(position));
+                intent.putExtra("url", imageUrls.get(position));
                 Log.d("---", imageUrls.get(position));
                 context.startActivity(intent);
             }
@@ -166,8 +173,8 @@ public class TopicRepliceAdaptar extends BaseAdapter implements OnUrlClickListen
 
     @Override
     public boolean urlClicked(String url) {
-        if (!url.startsWith("http")){
-            url= tyutils.BASE_URL+url.substring(1,url.length());
+        if (!url.startsWith("http")) {
+            url = tyutils.BASE_URL + url.substring(1, url.length());
         }
         Intent intent = new Intent();
         intent.setAction("android.intent.action.VIEW");
