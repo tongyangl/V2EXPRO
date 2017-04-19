@@ -65,12 +65,9 @@ public class htmlTolist {
                     String img = "http://" + image.substring(2, image.length());
                     map.put("img", img);
                 }
-
-
                 String username = e.get(2).select("strong").text();
                 String time = e.get(2).select("span[class=fade small]").text();
                 String content = e.get(2).select("div[class=reply_content]").toString();
-
                 map.put("username", username);
                 map.put("time", time);
                 map.put("content", content);

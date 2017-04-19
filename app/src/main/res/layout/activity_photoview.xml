@@ -1,16 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:background="#000"
-    android:layout_height="match_parent">
 
-   <rxjavatest.tycoding.com.iv2ex.ui.widget.PinchImageView
-       android:layout_width="match_parent"
-       android:layout_height="match_parent"
-       android:id="@+id/pinchimageView"
+    >
 
-       />
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </android.support.v4.view.ViewPager>
+
+    <TextView
+        android:layout_alignParentBottom="true"
+        android:id="@+id/tv"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="center"
+        android:textColor="#fff" />
 
 
-
-</LinearLayout>
+</RelativeLayout>

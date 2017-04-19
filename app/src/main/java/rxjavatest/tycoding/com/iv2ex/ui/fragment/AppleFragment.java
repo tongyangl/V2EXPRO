@@ -45,14 +45,11 @@ public class AppleFragment extends Fragment {
         swipe.setSize(SwipeRefreshLayout.DEFAULT);
         swipe.setColorSchemeResources(android.R.color.holo_blue_light, android.R.color.holo_red_light, android.R.color.holo_orange_light, android.R.color.holo_green_light);
 
-
         return view;
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-
-
         super.onActivityCreated(savedInstanceState);
         SwipeRefreshLayout.OnRefreshListener listener=new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -80,4 +77,6 @@ public class AppleFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
+
+
 }

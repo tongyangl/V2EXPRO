@@ -310,6 +310,7 @@ public class rxjava {
                                     Intent intent = new Intent(c, photoviewactivity.class);
                                     intent.putExtra("position", position);
                                     intent.putExtra("url", imageUrls.get(position));
+                                    intent.putStringArrayListExtra("list", (ArrayList<String>) imageUrls);
                                     Log.d("---", imageUrls.get(position));
                                     c.startActivity(intent);
                                 }
@@ -565,8 +566,6 @@ public class rxjava {
                                 intent.putExtra("img", data.get("img"));
                                 intent.putExtra("title", data.get("title"));
                                 c.startActivity(intent);
-                                TextView textView = (TextView) view.findViewById(R.id.replice);
-                                textView.setBackgroundResource(R.drawable.list_textview_replice1);
                             }
                         });
 

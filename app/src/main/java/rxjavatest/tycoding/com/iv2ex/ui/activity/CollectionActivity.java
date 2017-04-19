@@ -1,6 +1,7 @@
 package rxjavatest.tycoding.com.iv2ex.ui.activity;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -68,4 +69,5 @@ public class CollectionActivity extends AppCompatActivity {
 
         table.setupWithViewPager(viewPager);
     }
+
 }

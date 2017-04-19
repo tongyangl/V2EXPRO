@@ -13,6 +13,13 @@ public class Application extends android.app.Application {
     public static boolean isnet;
     public static boolean ismobile;
 
+    @Override
+    public void onCreate() {
+        super.onCreate();
+
+
+    }
+
     public static boolean islogin(Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences("user", MODE_PRIVATE);
         if (!sharedPreferences.getString("userimg", "").equals(""))
