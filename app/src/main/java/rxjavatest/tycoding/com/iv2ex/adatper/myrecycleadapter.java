@@ -68,6 +68,8 @@ public class myrecycleadapter extends RecyclerView.Adapter<myrecycleadapter.View
         holder.nodename.setText(list.get(position).get("nodetitle"));
         if (args[position]) {
             holder.replice.setBackgroundResource(R.drawable.list_textview_replice1);
+        }else {
+            holder.replice.setBackgroundResource(R.drawable.list_textview_replice);
         }
         if (list.get(position).get("replies").equals("")) {
             holder.replice.setVisibility(View.GONE);
@@ -95,6 +97,7 @@ public class myrecycleadapter extends RecyclerView.Adapter<myrecycleadapter.View
                 intent.putExtra("title", list.get(position).get("title"));
                 activity.startActivity(intent);
                 args[position]=true;
+                holder.replice.setBackgroundResource(R.drawable.list_textview_replice1);
             }
         });
         rxjava.setImg(imgurl, holder.imageView, activity);
