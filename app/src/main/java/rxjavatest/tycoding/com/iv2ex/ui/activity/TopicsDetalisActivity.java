@@ -179,7 +179,6 @@ public class TopicsDetalisActivity extends AppCompatActivity {
         MenuItem mMenuItem;
         menuInflater.inflate(R.menu.topticdetal, menu);
 
-
         return super.onCreateOptionsMenu(menu);
 
 
