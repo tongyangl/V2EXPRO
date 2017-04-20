@@ -5,18 +5,21 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
+import com.hss01248.pagestate.PageManager;
+
 /**
  * Created by 佟杨 on 2017/4/10.
  */
 
-public class Application extends android.app.Application {
+public class BaseApplication extends android.app.Application {
     public static boolean isnet;
     public static boolean ismobile;
+    public PageManager pageManager;
 
     @Override
     public void onCreate() {
         super.onCreate();
-
+        PageManager.initInApp(getApplicationContext());
 
     }
 

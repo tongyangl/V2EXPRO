@@ -20,11 +20,9 @@ import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.text.DecimalFormat;
 
-import rxjavatest.tycoding.com.iv2ex.Application;
+import rxjavatest.tycoding.com.iv2ex.BaseApplication;
 import rxjavatest.tycoding.com.iv2ex.R;
 
 /**
@@ -60,7 +58,7 @@ public class settingfragment extends PreferenceFragment {
         localViewGroup.setVisibility(View.VISIBLE);
         root.addView(localViewGroup);
         mLogout = (Button) localViewGroup.findViewById(R.id.setting_logout);
-        if (Application.islogin(getActivity())) {
+        if (BaseApplication.islogin(getActivity())) {
             mLogout.setVisibility(View.VISIBLE);
         } else {
             mLogout.setVisibility(View.GONE);

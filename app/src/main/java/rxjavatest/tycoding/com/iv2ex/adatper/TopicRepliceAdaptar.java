@@ -11,7 +11,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -25,12 +24,12 @@ import com.zzhoujay.richtext.callback.OnImageLongClickListener;
 import com.zzhoujay.richtext.callback.OnUrlClickListener;
 import com.zzhoujay.richtext.callback.OnUrlLongClickListener;
 
-import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 
-import rxjavatest.tycoding.com.iv2ex.Application;
+import rxjavatest.tycoding.com.iv2ex.BaseApplication;
 import rxjavatest.tycoding.com.iv2ex.R;
 import rxjavatest.tycoding.com.iv2ex.rxjava.rxjava;
 import rxjavatest.tycoding.com.iv2ex.ui.activity.photoviewactivity;
@@ -98,7 +97,7 @@ public class TopicRepliceAdaptar extends BaseAdapter implements OnUrlClickListen
 
         boolean noimg = sharedPreferences.getBoolean("wifi", false);
         if (noimg) {
-            noimg = Application.isMobile(context);
+            noimg = BaseApplication.isMobile(context);
         }
 
         RichText.fromHtml(list.get(i).get("content")).autoFix(true).fix(new ImageFixCallback() {
@@ -144,6 +143,7 @@ public class TopicRepliceAdaptar extends BaseAdapter implements OnUrlClickListen
                 intent.putExtra("position", position);
                 intent.putExtra("url", imageUrls.get(position));
                 Log.d("---", imageUrls.get(position));
+                intent.putStringArrayListExtra("list", (ArrayList<String>) imageUrls);
                 context.startActivity(intent);
             }
         }).imageLongClick(new OnImageLongClickListener() {

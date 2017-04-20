@@ -66,7 +66,9 @@ public class myrecycleadapter extends RecyclerView.Adapter<myrecycleadapter.View
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         holder.username.setText(list.get(position).get("username"));
         holder.nodename.setText(list.get(position).get("nodetitle"));
-        //holder.imageView;
+        if (args[position]) {
+            holder.replice.setBackgroundResource(R.drawable.list_textview_replice1);
+        }
         if (list.get(position).get("replies").equals("")) {
             holder.replice.setVisibility(View.GONE);
         } else {
@@ -75,9 +77,7 @@ public class myrecycleadapter extends RecyclerView.Adapter<myrecycleadapter.View
 
         }
         holder.lastreplice.setText(list.get(position).get("lastreplice"));
-        if (args[position]) {
-            holder.replice.setBackgroundResource(R.drawable.list_textview_replice1);
-        }
+
         holder.topictitle.setText(list.get(position).get("title"));
         holder.time.setText(list.get(position).get("time"));
         final String imgurl = list.get(position).get("img");

@@ -1,13 +1,11 @@
 package rxjavatest.tycoding.com.iv2ex.ui.activity;
 
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.CollapsingToolbarLayout;
+import android.os.Handler;
+import android.os.Message;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -17,6 +15,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -26,16 +25,18 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.jsoup.Jsoup;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import rxjavatest.tycoding.com.iv2ex.Application;
+import rxjavatest.tycoding.com.iv2ex.BaseApplication;
 import rxjavatest.tycoding.com.iv2ex.R;
 import rxjavatest.tycoding.com.iv2ex.adatper.MyFragmentPagerAdaptar;
+import rxjavatest.tycoding.com.iv2ex.internet.intertnet;
 import rxjavatest.tycoding.com.iv2ex.rxjava.rxjava;
-import rxjavatest.tycoding.com.iv2ex.service.noticeservice;
 import rxjavatest.tycoding.com.iv2ex.ui.fragment.AppleFragment;
 import rxjavatest.tycoding.com.iv2ex.ui.fragment.CityFragment;
 import rxjavatest.tycoding.com.iv2ex.ui.fragment.HotFragment;
@@ -46,6 +47,7 @@ import rxjavatest.tycoding.com.iv2ex.ui.fragment.R2Fragment;
 import rxjavatest.tycoding.com.iv2ex.ui.fragment.allFragment;
 import rxjavatest.tycoding.com.iv2ex.ui.fragment.technologyFragment;
 import rxjavatest.tycoding.com.iv2ex.ui.fragment.transactionFragment;
+import rxjavatest.tycoding.com.iv2ex.utils.tyutils;
 
 public class MainActivity extends AppCompatActivity {
     List<Fragment> fragmentList;
@@ -63,6 +65,13 @@ public class MainActivity extends AppCompatActivity {
     ActionBarDrawerToggle mydrawToggle;
     @BindView(R.id.table)
     TabLayout table;
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            Toast.makeText(getApplicationContext(), "已领取本日奖励", Toast.LENGTH_SHORT).show();
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
 
         View view = ngv.getHeaderView(0);
         ImageView imageView = (ImageView) view.findViewById(R.id.userimg);
-        TextView textView= (TextView) view.findViewById(R.id.username);
+        TextView textView = (TextView) view.findViewById(R.id.username);
 
         SharedPreferences sharedPreferences = getSharedPreferences("user", MODE_PRIVATE);
         if (sharedPreferences.getString("userimg", "").equals("")) {
@@ -129,17 +138,17 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.home:
                         break;
                     case R.id.notice:
-                        if (Application.islogin(getApplicationContext())){
+                        if (BaseApplication.islogin(getApplicationContext())) {
                             Intent intent = new Intent(MainActivity.this, NoticeActivity.class);
                             startActivity(intent);
-                        }else {
+                        } else {
                             Intent intent3 = new Intent(MainActivity.this, SiginActivity.class);
                             startActivity(intent3);
                         }
                         break;
                     case R.id.node:
-                            Intent intent1 = new Intent(MainActivity.this, NodeActivity.class);
-                            startActivity(intent1);
+                        Intent intent1 = new Intent(MainActivity.this, NodeActivity.class);
+                        startActivity(intent1);
 
                         break;
 
@@ -149,10 +158,10 @@ public class MainActivity extends AppCompatActivity {
                         break;
 
                     case R.id.collection:
-                        if (Application.islogin(getApplicationContext())){
+                        if (BaseApplication.islogin(getApplicationContext())) {
                             Intent intent3 = new Intent(MainActivity.this, CollectionActivity.class);
                             startActivity(intent3);
-                        }else {
+                        } else {
                             Intent intent3 = new Intent(MainActivity.this, SiginActivity.class);
                             startActivity(intent3);
                         }
@@ -196,12 +205,60 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.replice) {
-            if (Application.islogin(getApplicationContext())){
+            if (BaseApplication.islogin(getApplicationContext())) {
                 Intent intent = new Intent(MainActivity.this, CreateToptic.class);
                 startActivity(intent);
-            }else {
+            } else {
                 Intent intent3 = new Intent(MainActivity.this, SiginActivity.class);
                 startActivity(intent3);
+            }
+
+            return true;
+        } else if (item.getItemId() == R.id.daily) {
+
+            if (BaseApplication.islogin(getApplicationContext())) {
+                new AsyncTask() {
+                    @Override
+                    protected void onPostExecute(Object o) {
+                        Log.d("===", Jsoup.parse((String) o).select("input[class=super normal button]").attr("onclick"));
+
+                        String a = Jsoup.parse((String) o).select("input[class=super normal button]").attr("onclick");
+                        int left =a.indexOf("'");
+                        int right=a.lastIndexOf("'");
+                        a=a.substring(left+2,right);
+                        final String finalA = a;
+                        new AsyncTask(){
+                            @Override
+                            protected void onPostExecute(Object o) {
+                                super.onPostExecute(o);
+                                Toast.makeText(getApplicationContext(),"已领取奖励",Toast.LENGTH_SHORT).show();
+
+                            }
+
+                            @Override
+                            protected Object doInBackground(Object[] params) {
+
+                                intertnet net = new intertnet(getApplicationContext());
+
+                                return net.getNodetoptic(tyutils.BASE_URL+finalA);
+
+                            }
+                        }.execute();
+                        /*if ((boolean)o){
+                        }*/
+                    }
+
+                    @Override
+                    protected Object doInBackground(Object[] params) {
+                        intertnet net = new intertnet(getApplicationContext());
+
+                        return net.getNodetoptic(tyutils.BASE_URL + "mission/daily");
+                    }
+                }.execute();
+            } else {
+                Intent intent3 = new Intent(MainActivity.this, SiginActivity.class);
+                startActivity(intent3);
+
             }
 
             return true;

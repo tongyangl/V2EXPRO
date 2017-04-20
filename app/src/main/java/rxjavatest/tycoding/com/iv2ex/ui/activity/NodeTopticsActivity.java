@@ -18,7 +18,7 @@ import android.widget.Toast;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import rxjavatest.tycoding.com.iv2ex.Application;
+import rxjavatest.tycoding.com.iv2ex.BaseApplication;
 import rxjavatest.tycoding.com.iv2ex.R;
 import rxjavatest.tycoding.com.iv2ex.internet.intertnet;
 import rxjavatest.tycoding.com.iv2ex.rxjava.rxjava;
@@ -97,7 +97,7 @@ public class NodeTopticsActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.it_collect) {
 
-            if (Application.islogin(getApplicationContext())){
+            if (BaseApplication.islogin(getApplicationContext())){
                 collecttion cool = new collecttion();
                 cool.execute();
             }else {

@@ -9,6 +9,10 @@
         android:orderInCategory="60"
         android:title="创建主题"
         />
-
+    <item
+        android:id="@+id/daily"
+        android:orderInCategory="60"
+        android:title="领取每日奖励"
+        />
 </menu>
 

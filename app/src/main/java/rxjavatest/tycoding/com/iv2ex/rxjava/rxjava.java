@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -31,10 +32,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.hss01248.pagestate.PageManager;
 import com.zzhoujay.richtext.CacheType;
 import com.zzhoujay.richtext.ImageHolder;
 import com.zzhoujay.richtext.RichText;
-import com.zzhoujay.richtext.RichTextConfig;
 import com.zzhoujay.richtext.callback.ImageFixCallback;
 import com.zzhoujay.richtext.callback.OnImageClickListener;
 import com.zzhoujay.richtext.callback.OnImageLongClickListener;
@@ -52,29 +53,24 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import okhttp3.Cache;
 import rx.Observable;
 import rx.Observer;
-import rx.Scheduler;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
-import rxjavatest.tycoding.com.iv2ex.Application;
+import rxjavatest.tycoding.com.iv2ex.BaseApplication;
 import rxjavatest.tycoding.com.iv2ex.R;
 import rxjavatest.tycoding.com.iv2ex.adatper.NodeTopticsAdapter;
 import rxjavatest.tycoding.com.iv2ex.adatper.NoticeLvAdapter;
 import rxjavatest.tycoding.com.iv2ex.adatper.TopicRepliceAdaptar;
 import rxjavatest.tycoding.com.iv2ex.adatper.myrecycleadapter;
 import rxjavatest.tycoding.com.iv2ex.internet.intertnet;
-import rxjavatest.tycoding.com.iv2ex.ui.activity.CreateToptic;
 import rxjavatest.tycoding.com.iv2ex.ui.activity.MainActivity;
 import rxjavatest.tycoding.com.iv2ex.ui.activity.NoticeActivity;
 import rxjavatest.tycoding.com.iv2ex.ui.activity.SiginActivity;
@@ -226,7 +222,8 @@ public class rxjava {
                             TextView toptictitle = (TextView) headerview.findViewById(R.id.topictitle);
                             final TextView content = (TextView) headerview.findViewById(R.id.content);
                             Document document = Jsoup.parse(s);
-
+                            nodename.setBackgroundResource(R.drawable.list_textview_replice);
+                            nodename.setTextColor(Color.WHITE);
                             if (nodetitle == null) {
                                 String t = document.select("div[class=header]").select("small[class=gray]").get(0).ownText();
                                 String node = document.select("div[class=header]").select("a").get(2).text();
@@ -234,6 +231,11 @@ public class rxjava {
                                 String title = document.select("div[class=header]").select("h1").text();
                                 String img = "http:" + document.select("div[class=header]").select("img").attr("src");
                                 username.setText(user);
+                               if (t.contains("来自")){
+                                   t.replace("最后回复来自","");
+
+                               }
+                                Log.d("----",t);
                                 time.setText(t);
                                 nodename.setText(node);
                                 toptictitle.setText(title);
@@ -249,7 +251,7 @@ public class rxjava {
                             SharedPreferences sharedPreferences = c.getSharedPreferences("set", Context.MODE_PRIVATE);
                             boolean noimg = sharedPreferences.getBoolean("wifi", false);
                             if (noimg) {
-                                noimg = Application.isMobile(c);
+                                noimg = BaseApplication.isMobile(c);
                             }
 
                             String contet = document.getElementsByClass("topic_content").toString();
@@ -359,7 +361,7 @@ public class rxjava {
                         button.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                if (Application.islogin(c)) {
+                                if (BaseApplication.islogin(c)) {
                                     repliceToptic(c, editText.getText().toString(),
                                             topticid, refreshLayout, listView,
                                             once, img, user, nodetitle,
@@ -730,50 +732,62 @@ public class rxjava {
                         Elements pages = Jsoup.parse(s).select("div[class=box]").get(2).select("div[class=cell]").get(0).select("td").get(0).select("a");
                         final int page = Integer.parseInt(pages.get(pages.size() - 1).text());
                         final List<Map<String, String>> list = htmlTolist.getNotice(s);
-                        final NoticeLvAdapter adapter = new NoticeLvAdapter(list, activity);
-                        final View v = activity.getLayoutInflater().inflate(R.layout.lv_footer, null);
-                        lstview.addFooterView(v);
-                        lstview.setAdapter(adapter);
+                        if (list.size()==0){
+                            refreshLayout.setRefreshing(false);
+                            PageManager     pageManager= PageManager.init(lstview, "空空如也，什么也没有", false, new Runnable() {
+                                @Override
+                                public void run() {
 
-                        refreshLayout.setRefreshing(false);
-                        if (page > 0)
-                            indexpage = 1;
-                        lstview.setOnScrollListener(new AbsListView.OnScrollListener() {
-                            @Override
-                            public void onScrollStateChanged(AbsListView view, int scrollState) {
+                                }
+                            });
+                            pageManager.showEmpty();
+                        }else {
+                            final NoticeLvAdapter adapter = new NoticeLvAdapter(list, activity);
+                            final View v = activity.getLayoutInflater().inflate(R.layout.lv_footer, null);
+                            lstview.addFooterView(v);
+                            lstview.setAdapter(adapter);
 
-                                switch (scrollState) {
+                            refreshLayout.setRefreshing(false);
+                            if (page > 0)
+                                indexpage = 1;
+                            lstview.setOnScrollListener(new AbsListView.OnScrollListener() {
+                                @Override
+                                public void onScrollStateChanged(AbsListView view, int scrollState) {
 
-                                    case AbsListView.OnScrollListener.SCROLL_STATE_IDLE: // 当不迁移转变时
-                                        if (view.getLastVisiblePosition() == view.getCount() - 1) {
-                                            if (indexpage < page && indexpage != -1) {
-                                                indexpage++;
+                                    switch (scrollState) {
 
-                                                getnoticepage(list, adapter, indexpage, activity);
-                                            } else if (indexpage == page) {
-                                                lstview.removeFooterView(v);
-                                                Toast.makeText(activity, "已经加载全部信息", Toast.LENGTH_SHORT).show();
+                                        case AbsListView.OnScrollListener.SCROLL_STATE_IDLE: // 当不迁移转变时
+                                            if (view.getLastVisiblePosition() == view.getCount() - 1) {
+                                                if (indexpage < page && indexpage != -1) {
+                                                    indexpage++;
+
+                                                    getnoticepage(list, adapter, indexpage, activity);
+                                                } else if (indexpage == page) {
+                                                    lstview.removeFooterView(v);
+                                                    Toast.makeText(activity, "已经加载全部信息", Toast.LENGTH_SHORT).show();
+                                                }
                                             }
-                                        }
+
+                                    }
+
 
                                 }
 
+                                @Override
+                                public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
 
-                            }
+                                }
+                            });
+                            lstview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                @Override
+                                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                    Intent intent = new Intent(activity, TopicsDetalisActivity.class);
+                                    intent.putExtra("repliceurl", list.get(position).get("url"));
+                                    activity.startActivity(intent);
+                                }
+                            });
+                        }
 
-                            @Override
-                            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-
-                            }
-                        });
-                        lstview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                            @Override
-                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                Intent intent = new Intent(activity, TopicsDetalisActivity.class);
-                                intent.putExtra("repliceurl", list.get(position).get("url"));
-                                activity.startActivity(intent);
-                            }
-                        });
                     }
                 });
 

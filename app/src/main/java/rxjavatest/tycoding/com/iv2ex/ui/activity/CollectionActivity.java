@@ -11,6 +11,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
+import com.hss01248.pagestate.PageManager;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,7 +28,6 @@ import rxjavatest.tycoding.com.iv2ex.ui.fragment.TopticCollectionFragment;
  */
 
 public class CollectionActivity extends AppCompatActivity {
-
     private List<Fragment> fragmentList = new ArrayList<>();
     private List<String> titlelist = new ArrayList<>();
     @BindView(R.id.toolbar)
@@ -44,7 +45,6 @@ public class CollectionActivity extends AppCompatActivity {
         setContentView(R.layout.activity_collection);
         ButterKnife.bind(this);
         toolbar.setTitle("收藏");
-
         setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {

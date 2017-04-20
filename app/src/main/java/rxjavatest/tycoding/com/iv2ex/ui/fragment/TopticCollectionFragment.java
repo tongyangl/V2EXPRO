@@ -6,15 +6,15 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+
+import com.hss01248.pagestate.PageManager;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
@@ -26,7 +26,6 @@ import java.util.List;
 import java.util.Map;
 
 import rxjavatest.tycoding.com.iv2ex.R;
-import rxjavatest.tycoding.com.iv2ex.adatper.NodeCollectAdapter;
 import rxjavatest.tycoding.com.iv2ex.adatper.NodeTopticsAdapter;
 import rxjavatest.tycoding.com.iv2ex.internet.intertnet;
 import rxjavatest.tycoding.com.iv2ex.ui.activity.TopicsDetalisActivity;
@@ -39,6 +38,7 @@ public class TopticCollectionFragment extends Fragment {
     private ListView listView;
     private SwipeRefreshLayout swipeRefreshLayout;
     private List<Map<String, String>> list;
+    private PageManager pageManager;
 
     @Nullable
     @Override
@@ -70,6 +70,12 @@ public class TopticCollectionFragment extends Fragment {
             }
         });
         listener.onRefresh();
+        pageManager = PageManager.init(listView, "空空如也，什么也没有", false, new Runnable() {
+            @Override
+            public void run() {
+
+            }
+        });
     }
 
     class getCollectToptic extends AsyncTask<String, Void, String> {
@@ -132,7 +138,11 @@ public class TopticCollectionFragment extends Fragment {
                         startActivity(intent);
                     }
                 });
+            } else {
+                swipeRefreshLayout.setRefreshing(false);
+                pageManager.showEmpty();
             }
+
         }
 
 

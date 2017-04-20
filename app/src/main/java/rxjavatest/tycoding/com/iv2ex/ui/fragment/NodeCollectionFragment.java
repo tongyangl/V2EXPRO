@@ -6,7 +6,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
@@ -14,8 +13,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.hss01248.pagestate.PageManager;
+
 import org.jsoup.Jsoup;
-import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
@@ -23,22 +23,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 import rxjavatest.tycoding.com.iv2ex.R;
 import rxjavatest.tycoding.com.iv2ex.adatper.NodeCollectAdapter;
 import rxjavatest.tycoding.com.iv2ex.internet.intertnet;
-import rxjavatest.tycoding.com.iv2ex.rxjava.rxjava;
-import rxjavatest.tycoding.com.iv2ex.utils.MyDecoration;
-import rxjavatest.tycoding.com.iv2ex.utils.tyutils;
+
 
 /**
  * Created by 佟杨 on 2017/4/14.
  */
 
 public class NodeCollectionFragment extends Fragment {
-
+   private PageManager pageManager;
     private List<Map<String, String>> list;
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView recyclerView;
@@ -74,6 +69,12 @@ public class NodeCollectionFragment extends Fragment {
             }
         });
         listener.onRefresh();
+        pageManager=PageManager.init(recyclerView, "空空如也，什么也没有", false, new Runnable() {
+            @Override
+            public void run() {
+
+            }
+        });
     }
 
     class getCollectNode extends AsyncTask<String, Void, String> {
@@ -99,7 +100,11 @@ public class NodeCollectionFragment extends Fragment {
                 adapter.notifiy(list);
                 recyclerView.setAdapter(adapter);
                 swipeRefreshLayout.setRefreshing(false);
+            }else {
+                swipeRefreshLayout.setRefreshing(false);
+                pageManager.showEmpty();
             }
+
         }
 
 
