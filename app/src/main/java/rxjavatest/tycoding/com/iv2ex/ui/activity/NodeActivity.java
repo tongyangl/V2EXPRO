@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -59,7 +61,15 @@ public class NodeActivity extends AppCompatActivity implements SearchView.OnQuer
     private SearchView searchView;
     private NodeRecycleAdapter adapter;
     private List<Map<String, String>> list;
+   Handler handler=new Handler(){
+       @Override
+       public void handleMessage(Message msg) {
+           super.handleMessage(msg);
 
+           adapter.notifiy(list);
+           recycle.setAdapter(adapter);
+       }
+   };
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,10 +85,16 @@ public class NodeActivity extends AppCompatActivity implements SearchView.OnQuer
         });
         recycle.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         recycle.setItemAnimator(new DefaultItemAnimator());
-        list=getlist(this,list);
-        adapter = new NodeRecycleAdapter(list, this);
-        adapter.notifiy(list);
-        recycle.setAdapter(adapter);
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                list = getlist(NodeActivity.this, list);
+                adapter = new NodeRecycleAdapter(list, NodeActivity.this);
+                handler.sendEmptyMessage(0);
+            }
+        }).start();
+
         swipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
