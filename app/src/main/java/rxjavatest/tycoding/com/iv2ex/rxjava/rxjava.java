@@ -23,6 +23,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethod;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
@@ -97,7 +98,8 @@ public class rxjava {
     private static int topticpage = -1;
     private static List<Map<String, String>> tlist;
     private static List<Map<String, String>> alllist;
-  private static   TopicRepliceAdaptar adaper;
+    private static TopicRepliceAdaptar adaper;
+
     public static void repliceToptic(final Activity activity, final String content,
                                      final String topticid, final SwipeRefreshLayout swipeRefreshLayout,
                                      final ListView listView,
@@ -378,7 +380,6 @@ public class rxjava {
                                 });
 
 
-
                                 button.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
@@ -398,13 +399,22 @@ public class rxjava {
                                     }
                                 });
                                 editText.setHint("回复楼主/当前已有" + alllist.size() + "条评论");
+
+                                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                    @Override
+                                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                        editText.requestFocus();
+                                        imm.toggleSoftInput(0, InputMethod.SHOW_FORCED);
+                                        editText.setText("@"+alllist.get(position-1).get("username"));
+                                    }
+                                });
                             } else {
                                 new AsyncTask<Void, Void, String>() {
                                     @Override
                                     protected void onPostExecute(String s) {
                                         super.onPostExecute(s);
                                         tlist = htmlTolist.getjsondetals(s);
-                                        Log.d("===",tlist.size()+"ss");
+                                        Log.d("===", tlist.size() + "ss");
 
                                         refreshLayout.setRefreshing(false);
                                         final String once = intertnet.getrepliceonce(s);
@@ -451,7 +461,6 @@ public class rxjava {
                                         });
 
 
-
                                         button.setOnClickListener(new View.OnClickListener() {
                                             @Override
                                             public void onClick(View v) {
@@ -470,6 +479,14 @@ public class rxjava {
 
                                             }
                                         });
+                                        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                            @Override
+                                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                                editText.requestFocus();
+                                                imm.toggleSoftInput(0, InputMethod.SHOW_FORCED);
+                                                editText.setText("@"+alllist.get(position-1).get("username"));
+                                            }
+                                        });
                                         editText.setHint("回复楼主/当前已有" + alllist.size() + "条评论");
                                     }
 
@@ -478,7 +495,7 @@ public class rxjava {
 
                                         String url = "https://www.v2ex.com/api/replies/show.json?topic_id=" + string.substring(2, 8);
                                         intertnet net = new intertnet(c);
-                                        Log.d("===",string.substring(2, 8));
+                                        Log.d("===", string.substring(2, 8));
                                         return net.getNodetoptic(url);
                                     }
                                 }.execute();
@@ -487,7 +504,6 @@ public class rxjava {
 
 
                         } else {
-
                             adaper = new TopicRepliceAdaptar(c.getLayoutInflater(), tlist
                                     , listView, c);
                             listView.setAdapter(adaper);
