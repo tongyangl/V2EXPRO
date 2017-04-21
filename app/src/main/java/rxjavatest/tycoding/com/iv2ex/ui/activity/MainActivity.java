@@ -153,8 +153,9 @@ public class MainActivity extends AppCompatActivity {
                         break;
 
                     case R.id.setting:
-                        Intent intent = new Intent(MainActivity.this, SettingActivity.class);
-                        startActivity(intent);
+
+                        Intent intent4 = new Intent(MainActivity.this, SettingActivity.class);
+                        startActivity(intent4);
                         break;
 
                     case R.id.collection:

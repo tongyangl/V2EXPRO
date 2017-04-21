@@ -56,7 +56,10 @@ public class TopicRepliceAdaptar extends BaseAdapter implements OnUrlClickListen
         this.lv = lv;
         this.context = context;
     }
-
+   public  void MyNotify(  List<Map<String, String>> list){
+       this.list=list;
+       notifyDataSetChanged();
+   }
     @Override
     public int getCount() {
         return list.size();

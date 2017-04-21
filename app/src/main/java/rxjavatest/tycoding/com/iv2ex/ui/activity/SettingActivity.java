@@ -27,7 +27,6 @@ public class SettingActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         toolbar.setTitle("设置");
 
-
         setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -36,6 +35,6 @@ public class SettingActivity extends AppCompatActivity {
                 finish();
             }
         });
-        getFragmentManager().beginTransaction().add(R.id.container, new settingfragment()).commitAllowingStateLoss();
+        getFragmentManager().beginTransaction().replace(R.id.container,new settingfragment()).commit();
     }
 }

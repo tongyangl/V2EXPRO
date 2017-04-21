@@ -25,7 +25,7 @@
             android:layout_height="30dp"
             android:layout_toRightOf="@+id/imagView"
             android:gravity="center_vertical"
-            android:textColor="#000000" />
+            android:textColor="#228B22" />
          <TextView
              android:textSize="12sp"
              android:gravity="center"

@@ -15,6 +15,7 @@ import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Environment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
@@ -56,6 +57,8 @@ import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -92,7 +95,9 @@ public class rxjava {
     private static int nowpage = -1;
     public static String nodetoptics = "";
     private static int topticpage = -1;
-
+    private static List<Map<String, String>> tlist;
+    private static List<Map<String, String>> alllist;
+  private static   TopicRepliceAdaptar adaper;
     public static void repliceToptic(final Activity activity, final String content,
                                      final String topticid, final SwipeRefreshLayout swipeRefreshLayout,
                                      final ListView listView,
@@ -138,7 +143,7 @@ public class rxjava {
                                 public void onRefresh() {
                                     rxjava.getTopticDetils(activity, string, swipeRefreshLayout,
                                             listView, title, img, user, nodetitle, t
-                                            , edittext, button
+                                            , edittext, button, true
                                     );
                                     listView.smoothScrollToPosition(listView.getCount() - 1);
                                 }
@@ -171,7 +176,7 @@ public class rxjava {
                                        final ListView listView,
                                        final String title, final String img, final String user,
                                        final String nodetitle, final String t,
-                                       final EditText editText, final ImageButton button
+                                       final EditText editText, final ImageButton button, final boolean isture
     ) {
         final InputMethodManager imm = (InputMethodManager) editText.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
 
@@ -182,7 +187,7 @@ public class rxjava {
             public void call(Subscriber<? super String> subscriber) {
                 intertnet inter = new intertnet(c);
                 String result = inter.getTopic(string);
-
+                Log.d("---", string);
                 subscriber.onNext(result);
                 subscriber.onCompleted();
             }
@@ -206,13 +211,9 @@ public class rxjava {
                     public void onNext(String s) {
                         Drawable drawable = c.getResources().getDrawable(R.drawable.ic_img_load);
                         Drawable drawable1 = c.getResources().getDrawable(R.drawable.ic_load_error);
-                        final List<Map<String, String>> list = htmlTolist.getdetals(s);
 
+                        tlist = Collections.synchronizedList(new ArrayList<Map<String, String>>());
 
-                        final TopicRepliceAdaptar adaper;
-
-
-                        topticpage = 1;
                         if (listView.getHeaderViewsCount() == 0) {
                             View headerview = c.getLayoutInflater().inflate(R.layout.lv_header, null);
                             TextView username = (TextView) headerview.findViewById(R.id.username);
@@ -231,11 +232,8 @@ public class rxjava {
                                 String title = document.select("div[class=header]").select("h1").text();
                                 String img = "http:" + document.select("div[class=header]").select("img").attr("src");
                                 username.setText(user);
-                               if (t.contains("来自")){
-                                   t.replace("最后回复来自","");
 
-                               }
-                                Log.d("----",t);
+                                Log.d("----", t);
                                 time.setText(t);
                                 nodename.setText(node);
                                 toptictitle.setText(title);
@@ -325,57 +323,202 @@ public class rxjava {
                                 }
                             }).into(content);
                             listView.addHeaderView(headerview);
-                            adaper = new TopicRepliceAdaptar(c.getLayoutInflater(),list
-                                    , listView, c);
-                            listView.setAdapter(adaper);
-                            refreshLayout.setRefreshing(false);
+
+
+                        }
+                        Document document1 = Jsoup.parse(s);
+                        Elements elements = document1.select("div[id=Main]").select("div[class=box]");
+                        if (elements.get(1).select("div").hasClass("cell")) {
+                            Elements elements1 = elements.get(1).select("div[class=cell]");
+                            Log.d("---", elements1.get(1).id() + "id");
+                            if (elements1.get(1).id().contains("r")) {
+                                tlist = htmlTolist.getdetals(s);
+                                refreshLayout.setRefreshing(false);
+                                final String once = intertnet.getrepliceonce(s);
+                                int IndexofA = string.indexOf("/");
+                                int IndexofB = string.indexOf("#");
+                                final String topticid = string.substring(IndexofA + 1, IndexofB);
+                                alllist = Collections.synchronizedList(new ArrayList<Map<String, String>>());
+                                alllist = tlist;
+                                if (tlist.size() > 20)
+                                    tlist = tlist.subList(0, 20);
+                                final int page;
+                                if (alllist.size() % 20 == 0) {
+                                    page = alllist.size() / 20;
+                                } else {
+                                    page = (alllist.size() / 20) + 1;
+
+                                }
+
+                                topticpage = 1;
+                                Log.d("---", page + "ddd");
+                                adaper = new TopicRepliceAdaptar(c.getLayoutInflater(), tlist
+                                        , listView, c);
+                                listView.setAdapter(adaper);
+                                listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+                                    @Override
+                                    public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+                                        switch (scrollState) {
+                                            case AbsListView.OnScrollListener.SCROLL_STATE_IDLE: // 当不迁移转变时
+                                                if (view.getLastVisiblePosition() == view.getCount() - 1) {
+                                                    if (topticpage < page) {
+                                                        topticpage++;
+                                                        getTopticNext(alllist, tlist, adaper, page, topticpage);
+                                                        Log.d("---", topticpage + "sad");
+                                                    }
+                                                }
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+
+                                    }
+                                });
+
+
+
+                                button.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        if (BaseApplication.islogin(c)) {
+                                            repliceToptic(c, editText.getText().toString(),
+                                                    topticid, refreshLayout, listView,
+                                                    once, img, user, nodetitle,
+                                                    t, string, once, editText, button,
+                                                    imm
+                                            );
+                                        } else {
+                                            Intent intent3 = new Intent(c, SiginActivity.class);
+                                            c.startActivity(intent3);
+                                        }
+
+
+                                    }
+                                });
+                                editText.setHint("回复楼主/当前已有" + alllist.size() + "条评论");
+                            } else {
+                                new AsyncTask<Void, Void, String>() {
+                                    @Override
+                                    protected void onPostExecute(String s) {
+                                        super.onPostExecute(s);
+                                        tlist = htmlTolist.getjsondetals(s);
+                                        Log.d("===",tlist.size()+"ss");
+
+                                        refreshLayout.setRefreshing(false);
+                                        final String once = intertnet.getrepliceonce(s);
+                                        int IndexofA = string.indexOf("/");
+                                        int IndexofB = string.indexOf("#");
+                                        final String topticid = string.substring(IndexofA + 1, IndexofB);
+                                        alllist = Collections.synchronizedList(new ArrayList<Map<String, String>>());
+                                        alllist = tlist;
+                                        if (tlist.size() > 20)
+                                            tlist = tlist.subList(0, 20);
+                                        final int page;
+                                        if (alllist.size() % 20 == 0) {
+                                            page = alllist.size() / 20;
+                                        } else {
+                                            page = (alllist.size() / 20) + 1;
+
+                                        }
+
+                                        topticpage = 1;
+                                        Log.d("---", page + "ddd");
+                                        adaper = new TopicRepliceAdaptar(c.getLayoutInflater(), tlist
+                                                , listView, c);
+                                        listView.setAdapter(adaper);
+                                        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+                                            @Override
+                                            public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+                                                switch (scrollState) {
+                                                    case AbsListView.OnScrollListener.SCROLL_STATE_IDLE: // 当不迁移转变时
+                                                        if (view.getLastVisiblePosition() == view.getCount() - 1) {
+                                                            if (topticpage < page) {
+                                                                topticpage++;
+                                                                getTopticNext(alllist, tlist, adaper, page, topticpage);
+                                                                Log.d("---", topticpage + "sad");
+                                                            }
+                                                        }
+                                                }
+                                            }
+
+                                            @Override
+                                            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+
+                                            }
+                                        });
+
+
+
+                                        button.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                if (BaseApplication.islogin(c)) {
+                                                    repliceToptic(c, editText.getText().toString(),
+                                                            topticid, refreshLayout, listView,
+                                                            once, img, user, nodetitle,
+                                                            t, string, once, editText, button,
+                                                            imm
+                                                    );
+                                                } else {
+                                                    Intent intent3 = new Intent(c, SiginActivity.class);
+                                                    c.startActivity(intent3);
+                                                }
+
+
+                                            }
+                                        });
+                                        editText.setHint("回复楼主/当前已有" + alllist.size() + "条评论");
+                                    }
+
+                                    @Override
+                                    protected String doInBackground(Void... params) {
+
+                                        String url = "https://www.v2ex.com/api/replies/show.json?topic_id=" + string.substring(2, 8);
+                                        intertnet net = new intertnet(c);
+                                        Log.d("===",string.substring(2, 8));
+                                        return net.getNodetoptic(url);
+                                    }
+                                }.execute();
+
+                            }
+
 
                         } else {
 
-                            adaper = new TopicRepliceAdaptar(c.getLayoutInflater(),
-                                    list, listView, c);
+                            adaper = new TopicRepliceAdaptar(c.getLayoutInflater(), tlist
+                                    , listView, c);
                             listView.setAdapter(adaper);
                             refreshLayout.setRefreshing(false);
+                            final String once = intertnet.getrepliceonce(s);
+                            int IndexofA = string.indexOf("/");
+                            int IndexofB = string.indexOf("#");
+                            final String topticid = string.substring(IndexofA + 1, IndexofB);
 
-                        }
-                        final String once = intertnet.getrepliceonce(s);
-                        int IndexofA = string.indexOf("/");
-                        int IndexofB = string.indexOf("#");
-                        final String topticid = string.substring(IndexofA + 1, IndexofB);
-                        Log.d("----", once + "and" + topticid);
+                            button.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    if (BaseApplication.islogin(c)) {
+                                        repliceToptic(c, editText.getText().toString(),
+                                                topticid, refreshLayout, listView,
+                                                once, img, user, nodetitle,
+                                                t, string, once, editText, button,
+                                                imm
+                                        );
+                                    } else {
+                                        Intent intent3 = new Intent(c, SiginActivity.class);
+                                        c.startActivity(intent3);
+                                    }
 
-
-                        final List<Map<String, String>> finalList1 = list;
-                        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                            @Override
-                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                editText.requestFocus();
-                                editText.setText("@" + finalList1.get(position - 1).get("username"));
-                                imm.toggleSoftInput(0, InputMethodManager.SHOW_FORCED);
-
-                            }
-                        });
-
-
-                        editText.setHint("回复楼主/当前已有" + list.size() + "条评论");
-                        button.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                if (BaseApplication.islogin(c)) {
-                                    repliceToptic(c, editText.getText().toString(),
-                                            topticid, refreshLayout, listView,
-                                            once, img, user, nodetitle,
-                                            t, string, once, editText, button,
-                                            imm
-                                    );
-                                } else {
-                                    Intent intent3 = new Intent(c, SiginActivity.class);
-                                    c.startActivity(intent3);
                                 }
+                            });
+                            editText.setHint("回复楼主/当前已有" + alllist.size() + "条评论");
+                        }
 
-
-                            }
-                        });
+                        if (isture)
+                            listView.setSelection(listView.getCount());
                         topticdetal = Jsoup.parse(s).select("div[class=topic_buttons]").select("a").get(0).attr("href").substring(1);
 
                     }
@@ -383,7 +526,17 @@ public class rxjava {
 
     }
 
+    public static void getTopticNext(List<Map<String, String>> alllist, List<Map<String, String>> list, TopicRepliceAdaptar adaptar, int pages, int now) {
+        Log.d("---", alllist.size() + "aaa");
 
+        if (pages == now) {
+            adaptar.MyNotify(alllist);
+        } else {
+            adaptar.MyNotify(alllist.subList(0, 20 * now));
+        }
+
+
+    }
 
     public static void getNodetoptics(final Activity activity, final String string,
                                       final SwipeRefreshLayout swipeRefreshLayout,
@@ -459,7 +612,6 @@ public class rxjava {
                         listView.setOnScrollListener(new AbsListView.OnScrollListener() {
                             @Override
                             public void onScrollStateChanged(AbsListView view, int scrollState) {
-                                Log.d("----", nowpage + "");
                                 switch (scrollState) {
                                     case AbsListView.OnScrollListener.SCROLL_STATE_IDLE: // 当不迁移转变时
                                         if (view.getLastVisiblePosition() == view.getCount() - 1) {
@@ -732,16 +884,16 @@ public class rxjava {
                         Elements pages = Jsoup.parse(s).select("div[class=box]").get(2).select("div[class=cell]").get(0).select("td").get(0).select("a");
                         final int page = Integer.parseInt(pages.get(pages.size() - 1).text());
                         final List<Map<String, String>> list = htmlTolist.getNotice(s);
-                        if (list.size()==0){
+                        if (list.size() == 0) {
                             refreshLayout.setRefreshing(false);
-                            PageManager     pageManager= PageManager.init(lstview, "空空如也，什么也没有", false, new Runnable() {
+                            PageManager pageManager = PageManager.init(lstview, "空空如也，什么也没有", false, new Runnable() {
                                 @Override
                                 public void run() {
 
                                 }
                             });
                             pageManager.showEmpty();
-                        }else {
+                        } else {
                             final NoticeLvAdapter adapter = new NoticeLvAdapter(list, activity);
                             final View v = activity.getLayoutInflater().inflate(R.layout.lv_footer, null);
                             lstview.addFooterView(v);

@@ -10,6 +10,7 @@ import android.preference.CheckBoxPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
+import android.preference.PreferenceScreen;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,6 +37,9 @@ public class settingfragment extends PreferenceFragment {
     Preference mAbout;
     CheckBoxPreference wifibox;
 
+
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,7 +50,7 @@ public class settingfragment extends PreferenceFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        ViewGroup root = (ViewGroup) getView();
+       /* ViewGroup root = (ViewGroup) getView();
         ListView localListView = (ListView) root.findViewById(android.R.id.list);
         localListView.setBackgroundColor(0);
         localListView.setCacheColorHint(0);
@@ -56,8 +60,8 @@ public class settingfragment extends PreferenceFragment {
         ((ViewGroup) localViewGroup.findViewById(R.id.setting_content))
                 .addView(localListView, -1, -1);
         localViewGroup.setVisibility(View.VISIBLE);
-        root.addView(localViewGroup);
-        mLogout = (Button) localViewGroup.findViewById(R.id.setting_logout);
+        root.addView(localViewGroup);*/
+        mLogout = (Button) getActivity().findViewById(R.id.setting_logout);
         if (BaseApplication.islogin(getActivity())) {
             mLogout.setVisibility(View.VISIBLE);
         } else {
@@ -121,9 +125,9 @@ public class settingfragment extends PreferenceFragment {
         String path = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES).getPath();
         final File file = new File(path + "/iv2ex");
         try {
-            long size = getFileSizes(file);
-            mCache.setSummary(FormetFileSize(size));
-            mCache.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+
+            mCache.setSummary(BaseApplication.cache);
+          mCache.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -132,11 +136,11 @@ public class settingfragment extends PreferenceFragment {
                             .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    deleteAllFiles(file);
+                                   BaseApplication. deleteAllFiles(file);
                                     long size = 0;
                                     try {
-                                        size = getFileSizes(file);
-                                        mCache.setSummary(FormetFileSize(size));
+                                        size =  BaseApplication.getFileSizes(file);
+                                        mCache.setSummary( BaseApplication.FormetFileSize(size));
                                         Toast.makeText(getActivity(), "已清空缓存", Toast.LENGTH_SHORT).show();
                                     } catch (Exception e) {
                                         e.printStackTrace();
@@ -155,71 +159,5 @@ public class settingfragment extends PreferenceFragment {
 
     }
 
-    static void deleteAllFiles(File root) {
-        File files[] = root.listFiles();
-        if (files != null)
-            for (File f : files) {
-                if (f.isDirectory()) { // 判断是否为文件夹
-                    deleteAllFiles(f);
-                    try {
-                        f.delete();
-                    } catch (Exception e) {
-                    }
-                } else {
-                    if (f.exists()) { // 判断是否存在
-                        deleteAllFiles(f);
-                        try {
-                            f.delete();
-                        } catch (Exception e) {
-                        }
-                    }
-                }
-            }
-    }
 
-    private static long getFileSizes(File f) throws Exception {
-        long size = 0;
-        File flist[] = f.listFiles();
-        for (int i = 0; i < flist.length; i++) {
-            if (flist[i].isDirectory()) {
-                size = size + getFileSizes(flist[i]);
-            } else {
-                size = size + getFileSize(flist[i]);
-            }
-        }
-        return size;
-    }
-
-    private static long getFileSize(File file) throws Exception {
-        long size = 0;
-        if (file.exists()) {
-            FileInputStream fis = null;
-            fis = new FileInputStream(file);
-            size = fis.available();
-        } else {
-            file.createNewFile();
-            Log.e("获取文件大小", "文件不存在!");
-        }
-        return size;
-    }
-
-    private static String FormetFileSize(long fileS) {
-        DecimalFormat df = new DecimalFormat("#.00");
-        String fileSizeString = "";
-        String wrongSize = "0B";
-        if (fileS == 0) {
-            return wrongSize;
-        }
-        if (fileS < 1024) {
-            fileSizeString = df.format((double) fileS) + "B";
-        } else if (fileS < 1048576) {
-
-            fileSizeString = df.format((double) fileS / 1024) + "KB";
-        } else if (fileS < 1073741824) {
-            fileSizeString = df.format((double) fileS / 1048576) + "MB";
-        } else {
-            fileSizeString = df.format((double) fileS / 1073741824) + "GB";
-        }
-        return fileSizeString;
-    }
 }

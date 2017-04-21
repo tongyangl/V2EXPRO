@@ -10,16 +10,6 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"/>
 
-    <Button
-        android:id="@+id/setting_logout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="12dp"
-        android:layout_marginRight="12dp"
-        android:layout_marginBottom="12dp"
-        android:background="@drawable/logout_button"
-        android:text="退出登录"
-        android:textStyle="bold"
-        android:textColor="#ffffff" />
+
 
 </LinearLayout>

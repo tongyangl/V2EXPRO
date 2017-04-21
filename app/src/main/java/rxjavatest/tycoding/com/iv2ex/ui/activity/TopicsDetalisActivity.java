@@ -134,7 +134,7 @@ public class TopicsDetalisActivity extends AppCompatActivity {
     public void gettopticdetal() {
         rxjava.getTopticDetils(TopicsDetalisActivity.this, repliceurl, swipe,
                 lv, title, img, Username, nodetitle, time
-                , editText, replice
+                , editText, replice,false
         );
     }
 

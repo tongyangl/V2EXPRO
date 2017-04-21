@@ -2,12 +2,17 @@ package rxjavatest.tycoding.com.iv2ex.utils;
 
 import android.util.Log;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -46,7 +51,33 @@ public class htmlTolist {
         }
         return list;
     }
+    public static List<Map<String,String>> getjsondetals(String s){
+        List<Map<String, String>> list = new ArrayList<>();
+        try {
+            JSONArray array=new JSONArray(s);
+            for (int i=0;i<array.length();i++){
+                JSONObject object=new JSONObject(array.getString(i));
+                Map<String, String> map = new HashMap<>();
+                map.put("content",object.getString("content_rendered"));
+                String time=object.getString("created");
 
+                SimpleDateFormat sdr = new SimpleDateFormat("yyyy年MM月dd日HH时mm分ss秒");
+                @SuppressWarnings("unused")
+                long lcc = Long.valueOf(time);
+                int t = Integer.parseInt(time);
+                String times = sdr.format(new Date(t * 1000L));
+                map.put("time",times);
+                JSONObject object1=new JSONObject(object.getString("member"));
+                map.put("img","http:"+object1.getString("avatar_normal"));
+                map.put("username",object1.getString("username"));
+
+                list.add(map);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
     public static List<Map<String, String>> getdetals(String s) {
         List<Map<String, String>> list = new ArrayList<>();
         Document document = Jsoup.parse(s);
