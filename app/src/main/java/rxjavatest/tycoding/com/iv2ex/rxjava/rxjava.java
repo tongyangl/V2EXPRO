@@ -99,6 +99,7 @@ public class rxjava {
     private static List<Map<String, String>> tlist;
     private static List<Map<String, String>> alllist;
     private static TopicRepliceAdaptar adaper;
+    private static String s;
 
     public static void repliceToptic(final Activity activity, final String content,
                                      final String topticid, final SwipeRefreshLayout swipeRefreshLayout,
@@ -405,7 +406,7 @@ public class rxjava {
                                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                                         editText.requestFocus();
                                         imm.toggleSoftInput(0, InputMethod.SHOW_FORCED);
-                                        editText.setText("@"+alllist.get(position-1).get("username"));
+                                        editText.setText("@" + alllist.get(position - 1).get("username"));
                                     }
                                 });
                             } else {
@@ -484,7 +485,7 @@ public class rxjava {
                                             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                                                 editText.requestFocus();
                                                 imm.toggleSoftInput(0, InputMethod.SHOW_FORCED);
-                                                editText.setText("@"+alllist.get(position-1).get("username"));
+                                                editText.setText("@" + alllist.get(position - 1).get("username"));
                                             }
                                         });
                                         editText.setHint("回复楼主/当前已有" + alllist.size() + "条评论");
@@ -662,20 +663,25 @@ public class rxjava {
     }
 
     public static void getToptics(final Activity c, final String string, final SwipeRefreshLayout refreshLayout, final RecyclerView recyclerview, final boolean isnode) {
-
-        Observable.create(new Observable.OnSubscribe<String>() {
+        s = "";
+        Observable.create(new Observable.OnSubscribe<List<Map<String, String>>>() {
             @Override
-            public void call(Subscriber<? super String> subscriber) {
+            public void call(Subscriber<? super List<Map<String, String>>> subscriber) {
                 intertnet inter = new intertnet(c);
-
                 String result = inter.getTopic(string);
-                subscriber.onNext(result);
-                subscriber.onCompleted();
+                s = result;
+                 if (isnode) {
+                     subscriber.onNext(htmlTolist.NodeTopicsToList(result));
 
+                 }else {
+                     subscriber.onNext(htmlTolist.TopicsToList(result));
+
+                 }
+                subscriber.onCompleted();
             }
         }).subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<String>() {
+                .subscribe(new Observer<List<Map<String, String>>>() {
                     @Override
                     public void onCompleted() {
                         Log.d("----", "onCompleted");
@@ -683,22 +689,22 @@ public class rxjava {
 
                     @Override
                     public void onError(Throwable e) {
-
+                        Log.d("---", e.getMessage());
                         refreshLayout.setRefreshing(false);
                     }
 
                     @Override
-                    public void onNext(String s) {
+                    public void onNext(List<Map<String, String>> list) {
                         refreshLayout.setRefreshing(false);
                         myrecycleadapter adapter;
                         if (isnode) {
-                            adapter = new myrecycleadapter(htmlTolist.NodeTopicsToList(s), c);
+                            adapter = new myrecycleadapter(list, c);
                             recyclerview.setAdapter(adapter);
                         } else {
-                            adapter = new myrecycleadapter(htmlTolist.TopicsToList(s), c);
+                            adapter = new myrecycleadapter(list, c);
                             recyclerview.setAdapter(adapter);
-
                         }
+                        Log.d("---", list.size() + "ddd");
                         String notice = Jsoup.parse(s).select("a[class=fade]").text();
                         String a = "";
                         for (int i = 0; i < notice.length(); i++) {
