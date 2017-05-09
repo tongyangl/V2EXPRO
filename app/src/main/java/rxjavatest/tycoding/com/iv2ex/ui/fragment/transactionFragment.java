@@ -69,4 +69,8 @@ public class transactionFragment extends Fragment {
 
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+    }
 }

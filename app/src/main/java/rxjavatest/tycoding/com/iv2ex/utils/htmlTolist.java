@@ -16,6 +16,19 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.ScheduledFuture;
+
+import rx.Observable;
+import rx.Scheduler;
+import rx.Subscriber;
+import rx.functions.Func1;
+import rx.schedulers.Schedulers;
+
 
 /**
  * Created by tongyang on 16-11-15.
@@ -37,8 +50,8 @@ public class htmlTolist {
         for (int i = 1; i < elements.size() - 1; i++) {
             Map<String, String> map = new HashMap<>();
             String content = elements.get(i).select("div[class=payload]").text();
-            String img = "http://"+ elements.get(i).select("img").attr("src").substring(2);
-            Log.d("---",img);
+            String img = "http://" + elements.get(i).select("img").attr("src").substring(2);
+            Log.d("---", img);
             String notice = elements.get(i).select("span[class=fade]").text();
             String time = elements.get(i).select("span[class=snow]").text();
             String url = elements.get(i).select("span[class=fade]").select("a").get(1).attr("href").substring(1);
@@ -51,25 +64,26 @@ public class htmlTolist {
         }
         return list;
     }
-    public static List<Map<String,String>> getjsondetals(String s){
+
+    public static List<Map<String, String>> getjsondetals(String s) {
         List<Map<String, String>> list = new ArrayList<>();
         try {
-            JSONArray array=new JSONArray(s);
-            for (int i=0;i<array.length();i++){
-                JSONObject object=new JSONObject(array.getString(i));
+            JSONArray array = new JSONArray(s);
+            for (int i = 0; i < array.length(); i++) {
+                JSONObject object = new JSONObject(array.getString(i));
                 Map<String, String> map = new HashMap<>();
-                map.put("content",object.getString("content_rendered"));
-                String time=object.getString("created");
+                map.put("content", object.getString("content_rendered"));
+                String time = object.getString("created");
 
                 SimpleDateFormat sdr = new SimpleDateFormat("yyyy年MM月dd日HH时mm分ss秒");
                 @SuppressWarnings("unused")
                 long lcc = Long.valueOf(time);
                 int t = Integer.parseInt(time);
                 String times = sdr.format(new Date(t * 1000L));
-                map.put("time",times);
-                JSONObject object1=new JSONObject(object.getString("member"));
-                map.put("img","http:"+object1.getString("avatar_normal"));
-                map.put("username",object1.getString("username"));
+                map.put("time", times);
+                JSONObject object1 = new JSONObject(object.getString("member"));
+                map.put("img", "http:" + object1.getString("avatar_normal"));
+                map.put("username", object1.getString("username"));
 
                 list.add(map);
             }
@@ -78,39 +92,60 @@ public class htmlTolist {
         }
         return list;
     }
-    public static List<Map<String, String>> getdetals(String s) {
-        List<Map<String, String>> list = new ArrayList<>();
-        Document document = Jsoup.parse(s);
-        Elements elements = document.select("div[id=Main]").select("div[class=box]");
-        Log.d("lllll", elements.size() + "");
-        if (elements.get(1).select("div").hasClass("cell")) {
-            Elements elements1 = elements.get(1).select("div[class=cell]");
-            for (int i = 1; i < elements1.size(); i++) {
-                Elements e = elements1.get(i).select("td");
-                Map<String, String> map = new HashMap<>();
-                String image = e.get(0).select("img").attr("src");
-                if (image.length() == 0) {
-                    String img = "http:" + "//v2ex.assets.uxengine.net/gravatar/8dc8d210f5b0da01db85f3884c656ec2?s=48&d=retro";
-                    map.put("img", img);
+
+    public static List<Map<String, String>> getdetals(final String s) {
+        ExecutorService threadPool = Executors.newSingleThreadExecutor();
+        Future<List<Map<String, String>>> future = threadPool.submit(new Callable<List<Map<String, String>>>() {
+            @Override
+            public List<Map<String, String>> call() throws Exception {
+
+                List<Map<String, String>> list = new ArrayList<>();
+                Document document = Jsoup.parse(s);
+                Elements elements = document.select("div[id=Main]").select("div[class=box]");
+                Log.d("lllll", elements.size() + "");
+                if (elements.get(1).select("div").hasClass("cell")) {
+                    Elements elements1 = elements.get(1).select("div[class=cell]");
+                    for (int i = 1; i < elements1.size(); i++) {
+                        Elements e = elements1.get(i).select("td");
+                        Map<String, String> map = new HashMap<>();
+                        String image = e.get(0).select("img").attr("src");
+                        if (image.length() == 0) {
+                            String img = "http:" + "//v2ex.assets.uxengine.net/gravatar/8dc8d210f5b0da01db85f3884c656ec2?s=48&d=retro";
+                            map.put("img", img);
+                        } else {
+                            String img = "http://" + image.substring(2, image.length());
+                            map.put("img", img);
+                        }
+                        String username = e.get(2).select("strong").text();
+                        String time = e.get(2).select("span[class=fade small]").text();
+                        String content = e.get(2).select("div[class=reply_content]").toString();
+                        map.put("username", username);
+                        map.put("time", time);
+                        map.put("content", content);
+                        list.add(map);
+
+                    }
+                    return list;
                 } else {
-                    String img = "http://" + image.substring(2, image.length());
-                    map.put("img", img);
+
+                    return list;
+
                 }
-                String username = e.get(2).select("strong").text();
-                String time = e.get(2).select("span[class=fade small]").text();
-                String content = e.get(2).select("div[class=reply_content]").toString();
-                map.put("username", username);
-                map.put("time", time);
-                map.put("content", content);
-                list.add(map);
 
             }
-            return list;
-        } else {
+        });
 
-            return list;
+
+        try {
+            return future.get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
         }
+        return null;
     }
+
 
     public static List<Map<String, String>> NodeTopicsToList(String s) {
         List<Map<String, String>> list = new ArrayList<>();
@@ -163,69 +198,83 @@ public class htmlTolist {
         return list;
     }
 
-    public static List<Map<String, String>> TopicsToList(String string) {
+    public static List<Map<String, String>> TopicsToList(final String string) {
+        ExecutorService threadPool = Executors.newSingleThreadExecutor();
+        Future<List<Map<String, String>>> future = threadPool.submit(new Callable<List<Map<String, String>>>() {
+            @Override
+            public List<Map<String, String>> call() throws Exception {
+                List<Map<String, String>> list = new ArrayList<>();
 
-        List<Map<String, String>> list = new ArrayList<>();
+                Document document = Jsoup.parse(string);
+                Elements elements = document.select("div[class=cell item]");
+                for (int i = 0; i < elements.size(); i++) {
 
-        Document document = Jsoup.parse(string);
-        Elements elements = document.select("div[class=cell item]");
-        for (int i = 0; i < elements.size(); i++) {
+                    Elements tr = elements.get(i).select("tr").select("td");
+                    Map<String, String> map = new HashMap<>();
+                    for (int j = 0; j < tr.size(); j++) {
+                        if (j == 0) {
+                            String image = tr.get(j).select("img").attr("src");
+                            String img = image.substring(2, image.length());
+                            map.put("img", "http://" + img);
+                        } else if (j == 2) {
+                            String lastreplice = "";
+                            String username = "";
+                            String title = tr.get(j).select("span[class=item_title]").select("a").text();
+                            String repliceurl = tr.get(j).select("span[class=item_title]").select("a").attr("href");
 
-            Elements tr = elements.get(i).select("tr").select("td");
-            Map<String, String> map = new HashMap<>();
-            for (int j = 0; j < tr.size(); j++) {
-                if (j == 0) {
-                    String image = tr.get(j).select("img").attr("src");
-                    String img = image.substring(2, image.length());
-                    map.put("img", "http://" + img);
-                } else if (j == 2) {
-                    String lastreplice = "";
-                    String username = "";
-                    String title = tr.get(j).select("span[class=item_title]").select("a").text();
-                    String repliceurl = tr.get(j).select("span[class=item_title]").select("a").attr("href");
+                            String nodetitle = tr.get(j).select("span[class=small fade]").select("a[class=node]").text();
 
-                    String nodetitle = tr.get(j).select("span[class=small fade]").select("a[class=node]").text();
+                            Element t = tr.get(j).select("span[class=small fade]").first();
+                            String ti = t.ownText();
+                            String time = ti.substring(3, ti.length());
 
-                    Element t = tr.get(j).select("span[class=small fade]").first();
-                    String ti = t.ownText();
-                    String time = ti.substring(3, ti.length());
+                            Elements elements1 = tr.get(j).select("span[class=small fade]").select("strong");
+                            if (elements1.size() == 2) {
+                                username = elements1.get(0).select("a").text();
+                                if (elements1.get(1).hasText()) {
+                                    lastreplice = elements1.get(1).select("a").text();
 
-                    Elements elements1 = tr.get(j).select("span[class=small fade]").select("strong");
-                    if (elements1.size() == 2) {
-                        username = elements1.get(0).select("a").text();
-                        if (elements1.get(1).hasText()) {
-                            lastreplice = elements1.get(1).select("a").text();
+                                } else {
+                                    username = elements1.get(0).select("a").text();
+                                    lastreplice = null;
+                                }
+                            } else if (elements1.size() == 1) {
+                                username = elements1.get(0).select("a").text();
+                                lastreplice = null;
 
-                        } else {
-                            username = elements1.get(0).select("a").text();
-                            lastreplice = null;
+                            }
+                            map.put("repliceurl", repliceurl.substring(1, repliceurl.length()));
+                            Log.d("===", repliceurl.substring(1, repliceurl.length()));
+                            map.put("title", title);
+                            map.put("nodetitle", nodetitle);
+                            map.put("time", time);
+                            map.put("username", username);
+                            map.put("lastreplice", lastreplice);
+
+                        } else if (j == 3) {
+                            String replice = "";
+                            if (tr.get(j).hasText()) {
+                                replice = tr.get(j).select("a").text();
+
+                            }
+                            map.put("replies", replice);
+                            Log.d("replies", replice);
                         }
-                    } else if (elements1.size() == 1) {
-                        username = elements1.get(0).select("a").text();
-                        lastreplice = null;
 
                     }
-                    map.put("repliceurl", repliceurl.substring(1, repliceurl.length()));
-                    Log.d("===", repliceurl.substring(1, repliceurl.length()));
-                    map.put("title", title);
-                    map.put("nodetitle", nodetitle);
-                    map.put("time", time);
-                    map.put("username", username);
-                    map.put("lastreplice", lastreplice);
-
-                } else if (j == 3) {
-                    String replice = "";
-                    if (tr.get(j).hasText()) {
-                        replice = tr.get(j).select("a").text();
-
-                    }
-                    map.put("replies", replice);
-                    Log.d("replies", replice);
+                    list.add(map);
                 }
-
+                return list;
             }
-            list.add(map);
+        });
+
+        try {
+            return future.get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
         }
-        return list;
+    return null;
     }
 }

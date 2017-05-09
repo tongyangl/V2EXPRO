@@ -56,6 +56,7 @@ public class photoviewactivity extends AppCompatActivity {
             fragment.setUrl(urllist.get(i));
             fragmentList.add(fragment);
         }
+
         FragmentManager manager = getSupportFragmentManager();
         MyPhotoFragmentPagerAdaptar adaptar = new MyPhotoFragmentPagerAdaptar(manager, fragmentList);
         viewPager.setAdapter(adaptar);

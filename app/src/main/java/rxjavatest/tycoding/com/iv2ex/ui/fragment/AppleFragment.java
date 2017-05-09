@@ -73,10 +73,7 @@ public class AppleFragment extends Fragment {
 
         }
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
+
 
 
 }

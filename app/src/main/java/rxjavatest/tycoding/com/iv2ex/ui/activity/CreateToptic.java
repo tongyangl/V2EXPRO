@@ -153,8 +153,8 @@ public class CreateToptic extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.send) {
-            if (mTitle.getText().length() == 0) {
-
+            if (mTitle.getText().length() == 0|node.getText().length()==0) {
+                 Toast.makeText(getApplicationContext(),"请选择节点或标题",Toast.LENGTH_SHORT).show();
             } else {
                 String args[] = {
                         mTitle.getText().toString(), mContent.getText().toString()

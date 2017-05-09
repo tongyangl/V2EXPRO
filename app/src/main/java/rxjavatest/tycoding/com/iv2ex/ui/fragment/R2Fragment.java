@@ -68,4 +68,9 @@ public class R2Fragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+    }
 }

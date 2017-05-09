@@ -67,4 +67,9 @@ public class QandAFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
     }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+    }
 }

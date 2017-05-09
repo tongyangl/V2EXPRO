@@ -73,4 +73,5 @@ public class JobFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
     }
+
 }

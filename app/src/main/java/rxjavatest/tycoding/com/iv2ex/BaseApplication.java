@@ -21,13 +21,15 @@ public class BaseApplication extends android.app.Application {
     public static boolean isnet;
     public static boolean ismobile;
     public PageManager pageManager;
-  public static   String cache;
-
+    public static  boolean usemobile;
+    public static String cache;
     @Override
     public void onCreate() {
         super.onCreate();
+        SharedPreferences sharedPreferences=getSharedPreferences("set",MODE_PRIVATE);
+        usemobile=  sharedPreferences.getBoolean("wifi",false);
         PageManager.initInApp(getApplicationContext());
-        String path = getApplicationContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES).getPath();
+        String path = getExternalFilesDir(Environment.DIRECTORY_PICTURES).getPath();
         final File file = new File(path + "/iv2ex");
         try {
             long size = getFileSizes(file);
@@ -84,7 +86,7 @@ public class BaseApplication extends android.app.Application {
         return false;
     }
 
-  public   static void deleteAllFiles(File root) {
+    public   static void deleteAllFiles(File root) {
         File files[] = root.listFiles();
         if (files != null)
             for (File f : files) {

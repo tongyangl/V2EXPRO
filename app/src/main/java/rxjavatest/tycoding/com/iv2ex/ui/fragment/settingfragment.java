@@ -6,6 +6,8 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.preference.CheckBoxPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
@@ -26,6 +28,10 @@ import java.text.DecimalFormat;
 import rxjavatest.tycoding.com.iv2ex.BaseApplication;
 import rxjavatest.tycoding.com.iv2ex.R;
 
+import static rxjavatest.tycoding.com.iv2ex.BaseApplication.FormetFileSize;
+import static rxjavatest.tycoding.com.iv2ex.BaseApplication.deleteAllFiles;
+import static rxjavatest.tycoding.com.iv2ex.BaseApplication.getFileSizes;
+
 /**
  * Created by 佟杨 on 2017/4/15.
  */
@@ -36,8 +42,6 @@ public class settingfragment extends PreferenceFragment {
     Button mLogout;
     Preference mAbout;
     CheckBoxPreference wifibox;
-
-
 
 
     @Override
@@ -61,6 +65,7 @@ public class settingfragment extends PreferenceFragment {
                 .addView(localListView, -1, -1);
         localViewGroup.setVisibility(View.VISIBLE);
         root.addView(localViewGroup);*/
+
         mLogout = (Button) getActivity().findViewById(R.id.setting_logout);
         if (BaseApplication.islogin(getActivity())) {
             mLogout.setVisibility(View.VISIBLE);
@@ -83,7 +88,7 @@ public class settingfragment extends PreferenceFragment {
                         .setNegativeButton("取消", null).show();
             }
         });
-        mAbout=findPreference("pref_about");
+        mAbout = findPreference("pref_about");
         mAbout.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
@@ -102,9 +107,9 @@ public class settingfragment extends PreferenceFragment {
         });
         wifibox = (CheckBoxPreference) findPreference("pref_noimage_nowifi");
         // wifibox.setChecked();
-        wifibox.setSummary(wifibox.isChecked()
-                ? "2G/3G/4G不显示图片"
-                : "2G/3G/4G显示图片");
+        wifibox.setSummary(
+               "2G/3G/4G不显示图片"
+              );
         wifibox.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             public boolean onPreferenceClick(Preference preference) {
                 // mApp.setConfigLoadImageInMobileNetwork(!wifibox.isChecked());
@@ -122,12 +127,12 @@ public class settingfragment extends PreferenceFragment {
             }
         });
         mCache = findPreference("pref_cache");
+
         String path = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES).getPath();
         final File file = new File(path + "/iv2ex");
         try {
-
             mCache.setSummary(BaseApplication.cache);
-          mCache.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            mCache.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -136,11 +141,11 @@ public class settingfragment extends PreferenceFragment {
                             .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                   BaseApplication. deleteAllFiles(file);
+                                    deleteAllFiles(file);
                                     long size = 0;
                                     try {
-                                        size =  BaseApplication.getFileSizes(file);
-                                        mCache.setSummary( BaseApplication.FormetFileSize(size));
+                                        size = getFileSizes(file);
+                                        mCache.setSummary(FormetFileSize(size));
                                         Toast.makeText(getActivity(), "已清空缓存", Toast.LENGTH_SHORT).show();
                                     } catch (Exception e) {
                                         e.printStackTrace();
@@ -158,6 +163,8 @@ public class settingfragment extends PreferenceFragment {
         }
 
     }
+
+
 
 
 }

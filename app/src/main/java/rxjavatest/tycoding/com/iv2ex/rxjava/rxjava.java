@@ -20,6 +20,7 @@ import android.os.Environment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
@@ -80,6 +81,7 @@ import rxjavatest.tycoding.com.iv2ex.ui.activity.NoticeActivity;
 import rxjavatest.tycoding.com.iv2ex.ui.activity.SiginActivity;
 import rxjavatest.tycoding.com.iv2ex.ui.activity.TopicsDetalisActivity;
 import rxjavatest.tycoding.com.iv2ex.ui.activity.photoviewactivity;
+import rxjavatest.tycoding.com.iv2ex.ui.widget.RichTextView;
 import rxjavatest.tycoding.com.iv2ex.utils.htmlTolist;
 import rxjavatest.tycoding.com.iv2ex.utils.imageloader;
 import rxjavatest.tycoding.com.iv2ex.utils.tyutils;
@@ -212,6 +214,8 @@ public class rxjava {
 
                     @Override
                     public void onNext(String s) {
+
+
                         Drawable drawable = c.getResources().getDrawable(R.drawable.ic_img_load);
                         Drawable drawable1 = c.getResources().getDrawable(R.drawable.ic_load_error);
 
@@ -224,7 +228,7 @@ public class rxjava {
                             TextView time = (TextView) headerview.findViewById(R.id.time);
                             TextView nodename = (TextView) headerview.findViewById(R.id.nodename);
                             TextView toptictitle = (TextView) headerview.findViewById(R.id.topictitle);
-                            final TextView content = (TextView) headerview.findViewById(R.id.content);
+                            final RichTextView content = (RichTextView) headerview.findViewById(R.id.content);
                             Document document = Jsoup.parse(s);
                             nodename.setBackgroundResource(R.drawable.list_textview_replice);
                             nodename.setTextColor(Color.WHITE);
@@ -249,11 +253,6 @@ public class rxjava {
                                 setImg(img, imageView, c);
 
                             }
-                            SharedPreferences sharedPreferences = c.getSharedPreferences("set", Context.MODE_PRIVATE);
-                            boolean noimg = sharedPreferences.getBoolean("wifi", false);
-                            if (noimg) {
-                                noimg = BaseApplication.isMobile(c);
-                            }
 
                             String contet = document.getElementsByClass("topic_content").toString();
                             RichText.fromHtml(contet).autoFix(true)
@@ -269,7 +268,7 @@ public class rxjava {
                                             return true;
                                         }
                                     }).error(drawable1).noImage(
-                                    noimg).placeHolder(drawable).clickable(true).fix(new ImageFixCallback() {
+                                    BaseApplication.usemobile).placeHolder(drawable).clickable(true).fix(new ImageFixCallback() {
                                 @Override
                                 public void onInit(ImageHolder holder) {
 
@@ -325,10 +324,11 @@ public class rxjava {
                                     return true;
                                 }
                             }).into(content);
+
                             listView.addHeaderView(headerview);
 
-
                         }
+
                         Document document1 = Jsoup.parse(s);
                         Elements elements = document1.select("div[id=Main]").select("div[class=box]");
                         if (elements.get(1).select("div").hasClass("cell")) {
@@ -404,9 +404,13 @@ public class rxjava {
                                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                     @Override
                                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                        editText.requestFocus();
-                                        imm.toggleSoftInput(0, InputMethod.SHOW_FORCED);
-                                        editText.setText("@" + alllist.get(position - 1).get("username"));
+                                        if (position>0){
+                                            editText.requestFocus();
+                                            imm.toggleSoftInput(0, InputMethod.SHOW_FORCED);
+                                            editText.setText("@" + alllist.get(position - 1).get("username"));
+                                        }
+
+
                                     }
                                 });
                             } else {
@@ -415,7 +419,6 @@ public class rxjava {
                                     protected void onPostExecute(String s) {
                                         super.onPostExecute(s);
                                         tlist = htmlTolist.getjsondetals(s);
-                                        Log.d("===", tlist.size() + "ss");
 
                                         refreshLayout.setRefreshing(false);
                                         final String once = intertnet.getrepliceonce(s);
@@ -497,6 +500,7 @@ public class rxjava {
                                         String url = "https://www.v2ex.com/api/replies/show.json?topic_id=" + string.substring(2, 8);
                                         intertnet net = new intertnet(c);
                                         Log.d("===", string.substring(2, 8));
+                                        tlist = htmlTolist.getjsondetals(net.getNodetoptic(url));
                                         return net.getNodetoptic(url);
                                     }
                                 }.execute();
@@ -554,6 +558,7 @@ public class rxjava {
 
 
     }
+
 
     public static void getNodetoptics(final Activity activity, final String string,
                                       final SwipeRefreshLayout swipeRefreshLayout,
@@ -704,7 +709,7 @@ public class rxjava {
                             adapter = new myrecycleadapter(list, c);
                             recyclerview.setAdapter(adapter);
                         }
-                        Log.d("---", list.size() + "ddd");
+
                         String notice = Jsoup.parse(s).select("a[class=fade]").text();
                         String a = "";
                         for (int i = 0; i < notice.length(); i++) {
