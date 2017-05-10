@@ -13,6 +13,8 @@ import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -69,7 +71,7 @@ public class NodeCollectAdapter extends RecyclerView.Adapter<NodeCollectAdapter.
     public void onBindViewHolder(ViewHolder holder, final int position) {
         holder.title.setText(list.get(position).get("title"));
         holder.num.setText(list.get(position).get("num") + "条信息");
-        rxjava.setImg(list.get(position).get("imgurl"),holder.img,activity);
+        ImageLoader.getInstance().displayImage(list.get(position).get("img"), holder.img);
         holder.itemView.setTag(list.get(position));
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

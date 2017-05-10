@@ -20,7 +20,6 @@ import android.os.Environment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
-import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
@@ -36,6 +35,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hss01248.pagestate.PageManager;
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.zzhoujay.richtext.CacheType;
 import com.zzhoujay.richtext.ImageHolder;
 import com.zzhoujay.richtext.RichText;
@@ -59,7 +59,6 @@ import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -244,86 +243,17 @@ public class rxjava {
                                 time.setText(t);
                                 nodename.setText(node);
                                 toptictitle.setText(title);
-                                setImg(img, imageView, c);
+                                ImageLoader.getInstance().displayImage(img, imageView);
                             } else {
                                 username.setText(user);
                                 time.setText(t);
                                 nodename.setText(nodetitle);
                                 toptictitle.setText(title);
-                                setImg(img, imageView, c);
+                                ImageLoader.getInstance().displayImage(img, imageView);
 
                             }
-
                             String contet = document.getElementsByClass("topic_content").toString();
-                            RichText.fromHtml(contet).autoFix(true)
-                                    .urlClick(new OnUrlClickListener() {
-                                        @Override
-                                        public boolean urlClicked(String url) {
-                                            Intent intent = new Intent();
-                                            intent.setAction("android.intent.action.VIEW");
-                                            Uri uri = Uri.parse(url);
-                                            intent.setData(uri);
-                                            intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
-                                            c.startActivity(intent);
-                                            return true;
-                                        }
-                                    }).error(drawable1).noImage(
-                                    BaseApplication.usemobile).placeHolder(drawable).clickable(true).fix(new ImageFixCallback() {
-                                @Override
-                                public void onInit(ImageHolder holder) {
-
-                                }
-
-                                @Override
-                                public void onLoading(ImageHolder holder) {
-
-                                }
-
-                                @Override
-                                public void onSizeReady(ImageHolder holder, int width, int height) {
-                                    WindowManager wm = c.getWindowManager();
-                                    imageloader.saveimage(holder.getSource(), c);
-
-                                }
-
-                                @Override
-                                public void onImageReady(ImageHolder holder, int width, int height) {
-                                    holder.setImageType(ImageHolder.ImageType.JPG);
-
-                                }
-
-                                @Override
-                                public void onFailure(ImageHolder holder, Exception e) {
-                                    holder.setHeight(100);
-                                    holder.setWidth(100);
-                                }
-
-                            }).urlLongClick(new OnUrlLongClickListener() {
-                                @Override
-                                public boolean urlLongClick(String url) {
-                                    ClipboardManager cmb = (ClipboardManager) c.getSystemService(Context.CLIPBOARD_SERVICE);
-                                    cmb.setText(url.trim());
-                                    Toast.makeText(c, "网址已复制到剪贴板", Toast.LENGTH_SHORT).show();
-                                    return true;
-                                }
-                            }).imageClick(new OnImageClickListener() {
-                                @Override
-                                public void imageClicked(List<String> imageUrls, int position) {
-                                    Intent intent = new Intent(c, photoviewactivity.class);
-                                    intent.putExtra("position", position);
-                                    intent.putExtra("url", imageUrls.get(position));
-                                    intent.putStringArrayListExtra("list", (ArrayList<String>) imageUrls);
-                                    Log.d("---", imageUrls.get(position));
-                                    c.startActivity(intent);
-                                }
-                            }).imageGetter(new DefaultImageGetter()).cache(CacheType.ALL).imageLongClick(new OnImageLongClickListener() {
-                                @Override
-                                public boolean imageLongClicked(List<String> imageUrls, int position) {
-
-
-                                    return true;
-                                }
-                            }).into(content);
+                          content.setRichText(contet);
 
                             listView.addHeaderView(headerview);
 
@@ -404,7 +334,7 @@ public class rxjava {
                                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                     @Override
                                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                        if (position>0){
+                                        if (position > 0) {
                                             editText.requestFocus();
                                             imm.toggleSoftInput(0, InputMethod.SHOW_FORCED);
                                             editText.setText("@" + alllist.get(position - 1).get("username"));
@@ -419,7 +349,6 @@ public class rxjava {
                                     protected void onPostExecute(String s) {
                                         super.onPostExecute(s);
                                         tlist = htmlTolist.getjsondetals(s);
-
                                         refreshLayout.setRefreshing(false);
                                         final String once = intertnet.getrepliceonce(s);
                                         int IndexofA = string.indexOf("/");
@@ -675,13 +604,13 @@ public class rxjava {
                 intertnet inter = new intertnet(c);
                 String result = inter.getTopic(string);
                 s = result;
-                 if (isnode) {
-                     subscriber.onNext(htmlTolist.NodeTopicsToList(result));
+                if (isnode) {
+                    subscriber.onNext(htmlTolist.NodeTopicsToList(result));
 
-                 }else {
-                     subscriber.onNext(htmlTolist.TopicsToList(result));
+                } else {
+                    subscriber.onNext(htmlTolist.TopicsToList(result));
 
-                 }
+                }
                 subscriber.onCompleted();
             }
         }).subscribeOn(Schedulers.newThread())
@@ -812,74 +741,7 @@ public class rxjava {
     }
 
 
-    public static void setImg(final String url, final ImageView imageView, Context context) {
-        String path = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES).getPath();
-        final File file = new File(path + "/iv2ex");
-        String u = url.replace("/", "!");
-        u = u.replace(".", "!");
-        if (!file.exists()) {
-            file.mkdirs();
-        }
-        final File f = new File(file, u + ".jpg");
 
-        if (f.exists()) {
-            try {
-                FileInputStream fos = new FileInputStream(f);
-                Bitmap bitmap = BitmapFactory.decodeStream(fos);
-                Drawable drawable = new BitmapDrawable(bitmap);
-                imageView.setImageDrawable(drawable);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-                imageView.setBackgroundResource(R.drawable.ic_person_outline_black_24dp);
-            }
-
-        } else {
-
-            final String finalU = u;
-            Observable.create(new Observable.OnSubscribe<Bitmap>() {
-                @Override
-                public void call(Subscriber<? super Bitmap> subscriber) {
-                    URL picUrl = null;
-                    try {
-                        picUrl = new URL(url);
-
-                        Bitmap bitmap = BitmapFactory.decodeStream(picUrl.openStream());
-                        OutputStream os = new FileOutputStream(f);
-                        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, os);
-                        os.flush();
-                        os.close();
-                        subscriber.onNext(bitmap);
-                        subscriber.onCompleted();
-                    } catch (MalformedURLException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }).subscribeOn(Schedulers.newThread())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Subscriber<Bitmap>() {
-                        @Override
-                        public void onCompleted() {
-
-                        }
-
-                        @Override
-                        public void onError(Throwable e) {
-
-                        }
-
-                        @Override
-                        public void onNext(Bitmap bitmap) {
-                            Drawable drable = new BitmapDrawable(bitmap);
-                            imageView.setImageDrawable(drable);
-
-                        }
-                    });
-
-        }
-
-    }
 
     public static void getNotice(final Activity activity, final String string, final ListView lstview, final SwipeRefreshLayout refreshLayout) {
         Observable.create(new Observable.OnSubscribe<String>() {

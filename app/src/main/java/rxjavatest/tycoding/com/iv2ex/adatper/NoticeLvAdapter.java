@@ -7,6 +7,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.zzhoujay.richtext.RichText;
 
 import java.util.List;
@@ -61,7 +62,7 @@ public class NoticeLvAdapter extends BaseAdapter {
         }
         viewHoder.time.setText(list.get(position).get("time"));
         viewHoder.notice.setText(list.get(position).get("notice"));
-        rxjava.setImg(list.get(position).get("img"), viewHoder.imageView, activity);
+        ImageLoader.getInstance().displayImage(list.get(position).get("img"), viewHoder.imageView);
         viewHoder.content.setText(list.get(position).get("content"));
         return convertView;
     }

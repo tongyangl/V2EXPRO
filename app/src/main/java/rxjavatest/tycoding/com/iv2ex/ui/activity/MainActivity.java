@@ -25,6 +25,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
+
 import org.jsoup.Jsoup;
 
 import java.util.ArrayList;
@@ -108,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
         if (sharedPreferences.getString("userimg", "").equals("")) {
 
         } else {
-            rxjava.setImg(sharedPreferences.getString("userimg", ""), imageView, this);
+            ImageLoader.getInstance().displayImage(sharedPreferences.getString("userimg", ""), imageView);
             textView.setText(sharedPreferences.getString("username", ""));
         }
         imageView.setOnClickListener(new View.OnClickListener() {

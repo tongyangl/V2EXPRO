@@ -2,12 +2,20 @@ package rxjavatest.tycoding.com.iv2ex;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Environment;
 import android.util.Log;
 
 import com.hss01248.pagestate.PageManager;
+import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiscCache;
+import com.nostra13.universalimageloader.cache.memory.impl.WeakMemoryCache;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.assist.ImageScaleType;
+import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -26,6 +34,7 @@ public class BaseApplication extends android.app.Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        initImageLoader();
         SharedPreferences sharedPreferences=getSharedPreferences("set",MODE_PRIVATE);
         usemobile=  sharedPreferences.getBoolean("wifi",false);
         PageManager.initInApp(getApplicationContext());
@@ -38,7 +47,32 @@ public class BaseApplication extends android.app.Application {
             e.printStackTrace();
         }
     }
+    private void initImageLoader() {
+        DisplayImageOptions options = new DisplayImageOptions.Builder()
+                .bitmapConfig(Bitmap.Config.RGB_565)
+                .imageScaleType(ImageScaleType.EXACTLY)
+                .cacheOnDisc(true)
+                .displayer(new FadeInBitmapDisplayer(200))
+                .showImageOnLoading(R.drawable.ic_img_load)
+                .build();
 
+        File cacheDir;
+        if (Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED) {
+            cacheDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        } else {
+            cacheDir = getCacheDir();
+        }
+        ImageLoaderConfiguration.Builder configBuilder = new ImageLoaderConfiguration.Builder(getApplicationContext())
+                .threadPoolSize(2)
+                .memoryCache(new WeakMemoryCache())
+                .denyCacheImageMultipleSizesInMemory()
+                .discCache(new UnlimitedDiscCache(cacheDir))
+                .defaultDisplayImageOptions(options);
+        if (BuildConfig.DEBUG) {
+            configBuilder.writeDebugLogs();
+        }
+        ImageLoader.getInstance().init(configBuilder.build());
+    }
     public static boolean islogin(Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences("user", MODE_PRIVATE);
         if (!sharedPreferences.getString("userimg", "").equals(""))

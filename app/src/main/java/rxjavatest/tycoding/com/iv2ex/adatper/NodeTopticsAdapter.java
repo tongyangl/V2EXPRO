@@ -7,6 +7,8 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
+
 import java.util.List;
 import java.util.Map;
 
@@ -75,11 +77,9 @@ public class NodeTopticsAdapter extends BaseAdapter {
         viewHolder.topictitle.setText(list.get(position).get("title"));
         viewHolder.time.setText(list.get(position).get("time"));
 
-        final String imgurl = list.get(position).get("img");
 
-        viewHolder.imageView.setTag(imgurl);
+        ImageLoader.getInstance().displayImage(list.get(position).get("img"), viewHolder.imageView);
 
-        rxjava.setImg(imgurl, viewHolder.imageView, activity);
         return convertView;
     }
 

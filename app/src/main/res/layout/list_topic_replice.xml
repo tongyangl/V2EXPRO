@@ -48,7 +48,7 @@
 
     </RelativeLayout>
 
-    <TextView
+    <rxjavatest.tycoding.com.iv2ex.ui.widget.RichTextView
         android:textSize="14sp"
         android:layout_marginBottom="20dp"
         android:textColor="#000000"

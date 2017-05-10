@@ -13,6 +13,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
+
 import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
@@ -100,7 +102,8 @@ public class myrecycleadapter extends RecyclerView.Adapter<myrecycleadapter.View
                 holder.replice.setBackgroundResource(R.drawable.list_textview_replice1);
             }
         });
-        rxjava.setImg(imgurl, holder.imageView, activity);
+        ImageLoader.getInstance().displayImage(imgurl, holder.imageView);
+        //rxjava.setImg(, activity);
 
     }
 

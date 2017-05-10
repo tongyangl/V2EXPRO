@@ -1,8 +1,8 @@
 package rxjavatest.tycoding.com.iv2ex.ui.widget;
 
+
 import android.content.Context;
 import android.content.Intent;
-import android.support.annotation.Nullable;
 import android.text.Html;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
@@ -12,75 +12,86 @@ import android.text.style.ImageSpan;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.TextView;
+
+
+
 import java.util.ArrayList;
+
 import rxjavatest.tycoding.com.iv2ex.BaseApplication;
 import rxjavatest.tycoding.com.iv2ex.ui.activity.photoviewactivity;
 
 /**
- * Created by 佟杨 on 2017/5/7.
+ * Created by yw on 2015/5/10.
  */
-
 public class RichTextView extends TextView {
 
     public RichTextView(Context context) {
         super(context);
     }
 
-    public RichTextView(Context context, @Nullable AttributeSet attrs) {
+    public RichTextView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public RichTextView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
+    public RichTextView(Context context, AttributeSet attrs, int defStyle) {
+        super(context, attrs, defStyle);
     }
 
-   public  void  setRichText(String text){
-       super.setTextIsSelectable(true);
+    public void setRichText(String text) {
 
-     if (BaseApplication.isMobile(getContext())&&!BaseApplication.usemobile){
-         super.setText(Html.fromHtml(text));
-         setMovementMethod(LinkMovementMethod.getInstance());
-        return;
-     }
+        setTextIsSelectable(true);
 
-       Spanned spanned=Html.fromHtml(text,new MyImageGetter(getContext(),this),null);
-       SpannableStringBuilder htmlSpannable;
-       if (spanned instanceof SpannableStringBuilder) {
-           htmlSpannable = (SpannableStringBuilder) spanned;
-       } else {
-           htmlSpannable = new SpannableStringBuilder(spanned);
-       }
-       ImageSpan[] span =htmlSpannable.getSpans(0,htmlSpannable.length(),ImageSpan.class);
-   final ArrayList<String>imageUrls=new ArrayList<>();
-       for (ImageSpan s:span){
+        //移动网络情况下如果设置了不显示图片,则遵命
+        if (BaseApplication.isMobile(getContext())&&!BaseApplication.usemobile) {
+            super.setText(Html.fromHtml(text));
+            setMovementMethod(LinkMovementMethod.getInstance());
+            return;
+        }
 
-           imageUrls.add(s.getSource());
-       }
+        Spanned spanned = Html.fromHtml(text, new AsyncImageGetter(getContext(), this),null);
+        SpannableStringBuilder htmlSpannable;
+        if (spanned instanceof SpannableStringBuilder) {
+            htmlSpannable = (SpannableStringBuilder) spanned;
+        } else {
+            htmlSpannable = new SpannableStringBuilder(spanned);
+        }
 
-       for (ImageSpan s:span){
-           final int start = htmlSpannable.getSpanStart(s);
-           final int end   = htmlSpannable.getSpanEnd(s);
-           ClickableSpan clickableSpan=new ClickableSpan() {
-               @Override
-               public void onClick(View widget) {
-                   Intent intent=new Intent(getContext(),photoviewactivity.class);
-                   intent.putStringArrayListExtra("list",  imageUrls);
+        ImageSpan[] spans = htmlSpannable.getSpans(0, htmlSpannable.length(), ImageSpan.class);
+        final ArrayList<String> imageUrls = new ArrayList<String>();
+        final ArrayList<String> imagePositions = new ArrayList<String>();
+        for (ImageSpan span : spans) {
+            final String imageUrl = span.getSource();
+            final int start = htmlSpannable.getSpanStart(span);
+            final int end = htmlSpannable.getSpanEnd(span);
+            imagePositions.add(start + "/" + end);
+            imageUrls.add(imageUrl);
+        }
 
-               }
-           };
+        for(ImageSpan span : spans){
+            final int start = htmlSpannable.getSpanStart(span);
+            final int end   = htmlSpannable.getSpanEnd(span);
 
-           ClickableSpan[] clickSpans = htmlSpannable.getSpans(start, end, ClickableSpan.class);
-           if(clickSpans != null && clickSpans.length != 0) {
+            ClickableSpan clickableSpan = new ClickableSpan() {
+                @Override
+                public void onClick(View widget) {
+                    Intent intent=new Intent(getContext(),photoviewactivity.class);
+                    intent.putStringArrayListExtra("list",imageUrls);
+                    getContext().startActivity(intent);
+                }
+            };
 
-               for(ClickableSpan c_span : clickSpans) {
-                   htmlSpannable.removeSpan(c_span);
-               }
-           }
+            ClickableSpan[] clickSpans = htmlSpannable.getSpans(start, end, ClickableSpan.class);
+            if(clickSpans != null && clickSpans.length != 0) {
 
-           htmlSpannable.setSpan(clickableSpan, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                for(ClickableSpan c_span : clickSpans) {
+                    htmlSpannable.removeSpan(c_span);
+                }
+            }
 
-       }
-       super.setText(htmlSpannable);
-       setMovementMethod(LinkMovementMethod.getInstance());
-   }
+            htmlSpannable.setSpan(clickableSpan, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+
+        super.setText(htmlSpannable);
+        setMovementMethod(LinkMovementMethod.getInstance());
+    }
 }

@@ -25,6 +25,8 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -90,7 +92,7 @@ public class CreateToptic extends AppCompatActivity {
         if (sharedPreferences.getString("userimg", "").equals("")) {
 
         } else {
-            rxjava.setImg(sharedPreferences.getString("userimg", ""), img, this);
+            ImageLoader.getInstance().displayImage(sharedPreferences.getString("userimg", ""), img);
         }
         final NodesArrayAdapter arrayAdapter = new NodesArrayAdapter(this, arrayList);
         popupWindow = new PopupWindow(CreateToptic.this);

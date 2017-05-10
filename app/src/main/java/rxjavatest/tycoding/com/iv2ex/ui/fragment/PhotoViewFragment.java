@@ -3,6 +3,7 @@ package rxjavatest.tycoding.com.iv2ex.ui.fragment;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
@@ -17,9 +18,13 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
+
 import rxjavatest.tycoding.com.iv2ex.R;
 import rxjavatest.tycoding.com.iv2ex.ui.activity.photoviewactivity;
 import rxjavatest.tycoding.com.iv2ex.ui.widget.PinchImageView;
+import rxjavatest.tycoding.com.iv2ex.utils.ScreenUtils;
 import rxjavatest.tycoding.com.iv2ex.utils.imageloader;
 
 /**
@@ -30,12 +35,12 @@ public class PhotoViewFragment extends Fragment {
     private String url;
     private int position;
     private PinchImageView imageView;
-
+     private int mMaxWidth;
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         Log.d("---", "onActivityCreated");
-
+        mMaxWidth = ScreenUtils.getDisplayWidth(getContext()) -  ScreenUtils.dp(getContext(), 100);
     }
 
     public void setUrl(String url) {
@@ -48,6 +53,28 @@ public class PhotoViewFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_photoview, container, false);
         imageView = (PinchImageView) view.findViewById(R.id.pinchimageView);
+
+        ImageLoader.getInstance().loadImage(url, new SimpleImageLoadingListener() {
+            @Override
+            public void onLoadingComplete(String s, View view, Bitmap bitmap) {
+                if (bitmap != null) {
+                    int width;
+                    int height;
+                    if (bitmap.getWidth() > mMaxWidth) {
+                        width = mMaxWidth;
+                        height = mMaxWidth * bitmap.getHeight() / bitmap.getWidth();
+                    } else {
+                        width = bitmap.getWidth();
+                        height = bitmap.getHeight();
+                    }
+                    Drawable drawable = new BitmapDrawable(getContext().getResources(), bitmap);
+                    drawable.setBounds(0, 0, width, height);
+
+                    imageView.setImageDrawable(drawable);
+                }
+            }
+        });
+
         imageloader.dispalyimage(url, getActivity(), imageView);
         imageView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
