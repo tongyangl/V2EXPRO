@@ -3,13 +3,12 @@ package rxjavatest.tycoding.com.iv2ex.adatper;
 import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
-import android.text.Html;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Filter;
-import android.widget.Filterable;
+
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -21,7 +20,6 @@ import java.util.List;
 import java.util.Map;
 
 import rxjavatest.tycoding.com.iv2ex.R;
-import rxjavatest.tycoding.com.iv2ex.rxjava.rxjava;
 import rxjavatest.tycoding.com.iv2ex.ui.activity.NodeTopticsActivity;
 
 /**
@@ -71,7 +69,9 @@ public class NodeCollectAdapter extends RecyclerView.Adapter<NodeCollectAdapter.
     public void onBindViewHolder(ViewHolder holder, final int position) {
         holder.title.setText(list.get(position).get("title"));
         holder.num.setText(list.get(position).get("num") + "条信息");
-        ImageLoader.getInstance().displayImage(list.get(position).get("img"), holder.img);
+        Log.d("====",list.get(position).get("imgurl")+"ss");
+        ImageLoader.getInstance().displayImage(list.get(position).get("imgurl"),holder.img);
+    //    SetImg.setImg(list.get(position).get("img"),holder.img,activity);
         holder.itemView.setTag(list.get(position));
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,7 +80,6 @@ public class NodeCollectAdapter extends RecyclerView.Adapter<NodeCollectAdapter.
                 intent.putExtra("url", list.get(position).get("url"));
                 intent.putExtra("num", list.get(position).get("num"));
                 intent.putExtra("title", list.get(position).get("title"));
-
                 activity.startActivity(intent);
             }
         });

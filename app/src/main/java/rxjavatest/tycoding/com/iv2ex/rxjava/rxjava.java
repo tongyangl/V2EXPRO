@@ -212,14 +212,8 @@ public class rxjava {
                     }
 
                     @Override
-                    public void onNext(String s) {
-
-
-                        Drawable drawable = c.getResources().getDrawable(R.drawable.ic_img_load);
-                        Drawable drawable1 = c.getResources().getDrawable(R.drawable.ic_load_error);
-
+                    public void onNext(final String s) {
                         tlist = Collections.synchronizedList(new ArrayList<Map<String, String>>());
-
                         if (listView.getHeaderViewsCount() == 0) {
                             View headerview = c.getLayoutInflater().inflate(R.layout.lv_header, null);
                             TextView username = (TextView) headerview.findViewById(R.id.username);
@@ -265,162 +259,217 @@ public class rxjava {
                             Elements elements1 = elements.get(1).select("div[class=cell]");
                             Log.d("---", elements1.get(1).id() + "id");
                             if (elements1.get(1).id().contains("r")) {
-                                tlist = htmlTolist.getdetals(s);
-                                refreshLayout.setRefreshing(false);
-                                final String once = intertnet.getrepliceonce(s);
-                                int IndexofA = string.indexOf("/");
-                                int IndexofB = string.indexOf("#");
-                                final String topticid = string.substring(IndexofA + 1, IndexofB);
-                                alllist = Collections.synchronizedList(new ArrayList<Map<String, String>>());
-                                alllist = tlist;
-                                if (tlist.size() > 20)
-                                    tlist = tlist.subList(0, 20);
-                                final int page;
-                                if (alllist.size() % 20 == 0) {
-                                    page = alllist.size() / 20;
-                                } else {
-                                    page = (alllist.size() / 20) + 1;
-
-                                }
-
-                                topticpage = 1;
-                                Log.d("---", page + "ddd");
-                                adaper = new TopicRepliceAdaptar(c.getLayoutInflater(), tlist
-                                        , listView, c);
-                                listView.setAdapter(adaper);
-                                listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+                                Observable.create(new Observable.OnSubscribe<List<Map<String,String>>>() {
                                     @Override
-                                    public void onScrollStateChanged(AbsListView view, int scrollState) {
+                                    public void call(Subscriber<? super List<Map<String, String>>> subscriber) {
+                                        List<Map<String,String>>list=htmlTolist.getdetals(s);
+                                       subscriber.onNext(list);
+                                        subscriber.onCompleted();
+                                    }
+                                }).subscribeOn(Schedulers.computation())
+                                        .observeOn(AndroidSchedulers.mainThread())
+                                        .subscribe(new Subscriber<List<Map<String, String>>>() {
+                                            @Override
+                                            public void onCompleted() {
 
-                                        switch (scrollState) {
-                                            case AbsListView.OnScrollListener.SCROLL_STATE_IDLE: // 当不迁移转变时
-                                                if (view.getLastVisiblePosition() == view.getCount() - 1) {
-                                                    if (topticpage < page) {
-                                                        topticpage++;
-                                                        getTopticNext(alllist, tlist, adaper, page, topticpage);
-                                                        Log.d("---", topticpage + "sad");
-                                                    }
+                                            }
+
+                                            @Override
+                                            public void onError(Throwable e) {
+                                                refreshLayout.setRefreshing(false);
+                                            }
+
+                                            @Override
+                                            public void onNext(List<Map<String, String>> maps) {
+
+                                                tlist=maps;
+                                                final String once = intertnet.getrepliceonce(s);
+                                                int IndexofA = string.indexOf("/");
+                                                int IndexofB = string.indexOf("#");
+                                                final String topticid = string.substring(IndexofA + 1, IndexofB);
+                                                alllist = Collections.synchronizedList(new ArrayList<Map<String, String>>());
+                                                alllist = tlist;
+                                                if (tlist.size() > 20)
+                                                    tlist = tlist.subList(0, 20);
+                                                final int page;
+                                                if (alllist.size() % 20 == 0) {
+                                                    page = alllist.size() / 20;
+                                                } else {
+                                                    page = (alllist.size() / 20) + 1;
                                                 }
-                                        }
-                                    }
 
-                                    @Override
-                                    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                                                topticpage = 1;
+                                                Log.d("---", page + "ddd");
+                                                adaper = new TopicRepliceAdaptar(c.getLayoutInflater(), tlist
+                                                        , listView, c);
+                                                listView.setAdapter(adaper);
+                                                refreshLayout.setRefreshing(false);
+                                                listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+                                                    @Override
+                                                    public void onScrollStateChanged(AbsListView view, int scrollState) {
 
-                                    }
-                                });
+                                                        switch (scrollState) {
+                                                            case AbsListView.OnScrollListener.SCROLL_STATE_IDLE: // 当不迁移转变时
+                                                                if (view.getLastVisiblePosition() == view.getCount() - 1) {
+                                                                    if (topticpage < page) {
+                                                                        topticpage++;
+                                                                        getTopticNext(alllist, tlist, adaper, page, topticpage);
+                                                                        Log.d("---", topticpage + "sad");
+                                                                    }
+                                                                }
+                                                        }
+                                                    }
 
+                                                    @Override
+                                                    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
 
-                                button.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        if (BaseApplication.islogin(c)) {
-                                            repliceToptic(c, editText.getText().toString(),
-                                                    topticid, refreshLayout, listView,
-                                                    once, img, user, nodetitle,
-                                                    t, string, once, editText, button,
-                                                    imm
-                                            );
-                                        } else {
-                                            Intent intent3 = new Intent(c, SiginActivity.class);
-                                            c.startActivity(intent3);
-                                        }
-
-
-                                    }
-                                });
-                                editText.setHint("回复楼主/当前已有" + alllist.size() + "条评论");
-
-                                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                    @Override
-                                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                        if (position > 0) {
-                                            editText.requestFocus();
-                                            imm.toggleSoftInput(0, InputMethod.SHOW_FORCED);
-                                            editText.setText("@" + alllist.get(position - 1).get("username"));
-                                        }
+                                                    }
+                                                });
 
 
-                                    }
-                                });
+                                                button.setOnClickListener(new View.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(View v) {
+                                                        if (BaseApplication.islogin(c)) {
+                                                            repliceToptic(c, editText.getText().toString(),
+                                                                    topticid, refreshLayout, listView,
+                                                                    once, img, user, nodetitle,
+                                                                    t, string, once, editText, button,
+                                                                    imm
+                                                            );
+                                                        } else {
+                                                            Intent intent3 = new Intent(c, SiginActivity.class);
+                                                            c.startActivity(intent3);
+                                                        }
+
+
+                                                    }
+                                                });
+                                                editText.setHint("回复楼主/当前已有" + alllist.size() + "条评论");
+
+                                                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                                    @Override
+                                                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                                        if (position > 0) {
+                                                            editText.requestFocus();
+                                                            imm.toggleSoftInput(0, InputMethod.SHOW_FORCED);
+                                                            editText.setText("@" + alllist.get(position - 1).get("username"));
+                                                        }
+
+
+                                                    }
+                                                });
+                                            }
+                                        });
+
+
                             } else {
                                 new AsyncTask<Void, Void, String>() {
                                     @Override
-                                    protected void onPostExecute(String s) {
+                                    protected void onPostExecute(final String s) {
                                         super.onPostExecute(s);
-                                        tlist = htmlTolist.getjsondetals(s);
-                                        refreshLayout.setRefreshing(false);
-                                        final String once = intertnet.getrepliceonce(s);
-                                        int IndexofA = string.indexOf("/");
-                                        int IndexofB = string.indexOf("#");
-                                        final String topticid = string.substring(IndexofA + 1, IndexofB);
-                                        alllist = Collections.synchronizedList(new ArrayList<Map<String, String>>());
-                                        alllist = tlist;
-                                        if (tlist.size() > 20)
-                                            tlist = tlist.subList(0, 20);
-                                        final int page;
-                                        if (alllist.size() % 20 == 0) {
-                                            page = alllist.size() / 20;
-                                        } else {
-                                            page = (alllist.size() / 20) + 1;
-
-                                        }
-
-                                        topticpage = 1;
-                                        Log.d("---", page + "ddd");
-                                        adaper = new TopicRepliceAdaptar(c.getLayoutInflater(), tlist
-                                                , listView, c);
-                                        listView.setAdapter(adaper);
-                                        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+                                        Observable.create(new Observable.OnSubscribe<List<Map<String,String>>>() {
                                             @Override
-                                            public void onScrollStateChanged(AbsListView view, int scrollState) {
+                                            public void call(Subscriber<? super List<Map<String,String>>> subscriber) {
+                                                List<Map<String,String>>list=htmlTolist.getjsondetals(s);
+                                                subscriber.onNext(list);
+                                                subscriber.onCompleted();
 
-                                                switch (scrollState) {
-                                                    case AbsListView.OnScrollListener.SCROLL_STATE_IDLE: // 当不迁移转变时
-                                                        if (view.getLastVisiblePosition() == view.getCount() - 1) {
-                                                            if (topticpage < page) {
-                                                                topticpage++;
-                                                                getTopticNext(alllist, tlist, adaper, page, topticpage);
-                                                                Log.d("---", topticpage + "sad");
-                                                            }
+                                            }
+                                        }).subscribeOn(Schedulers.computation())
+                                                .observeOn(AndroidSchedulers.mainThread())
+
+                                                .subscribe(new Subscriber<List<Map<String, String>>>() {
+                                                    @Override
+                                                    public void onCompleted() {
+
+                                                    }
+
+                                                    @Override
+                                                    public void onError(Throwable e) {
+
+                                                    }
+
+                                                    @Override
+                                                    public void onNext(List<Map<String, String>> maps) {
+
+                                                        tlist=maps;
+                                                        final String once = intertnet.getrepliceonce(s);
+                                                        int IndexofA = string.indexOf("/");
+                                                        int IndexofB = string.indexOf("#");
+                                                        final String topticid = string.substring(IndexofA + 1, IndexofB);
+                                                        alllist = Collections.synchronizedList(new ArrayList<Map<String, String>>());
+                                                        alllist = tlist;
+                                                        if (tlist.size() > 20)
+                                                            tlist = tlist.subList(0, 20);
+                                                        final int page;
+                                                        if (alllist.size() % 20 == 0) {
+                                                            page = alllist.size() / 20;
+                                                        } else {
+                                                            page = (alllist.size() / 20) + 1;
+
                                                         }
-                                                }
-                                            }
 
-                                            @Override
-                                            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                                                        topticpage = 1;
+                                                        Log.d("---", page + "ddd");
+                                                        adaper = new TopicRepliceAdaptar(c.getLayoutInflater(), tlist
+                                                                , listView, c);
+                                                        listView.setAdapter(adaper);
+                                                        refreshLayout.setRefreshing(false);
+                                                        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+                                                            @Override
+                                                            public void onScrollStateChanged(AbsListView view, int scrollState) {
 
-                                            }
-                                        });
+                                                                switch (scrollState) {
+                                                                    case AbsListView.OnScrollListener.SCROLL_STATE_IDLE: // 当不迁移转变时
+                                                                        if (view.getLastVisiblePosition() == view.getCount() - 1) {
+                                                                            if (topticpage < page) {
+                                                                                topticpage++;
+                                                                                getTopticNext(alllist, tlist, adaper, page, topticpage);
+                                                                                Log.d("---", topticpage + "sad");
+                                                                            }
+                                                                        }
+                                                                }
+                                                            }
+
+                                                            @Override
+                                                            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+
+                                                            }
+                                                        });
 
 
-                                        button.setOnClickListener(new View.OnClickListener() {
-                                            @Override
-                                            public void onClick(View v) {
-                                                if (BaseApplication.islogin(c)) {
-                                                    repliceToptic(c, editText.getText().toString(),
-                                                            topticid, refreshLayout, listView,
-                                                            once, img, user, nodetitle,
-                                                            t, string, once, editText, button,
-                                                            imm
-                                                    );
-                                                } else {
-                                                    Intent intent3 = new Intent(c, SiginActivity.class);
-                                                    c.startActivity(intent3);
-                                                }
+                                                        button.setOnClickListener(new View.OnClickListener() {
+                                                            @Override
+                                                            public void onClick(View v) {
+                                                                if (BaseApplication.islogin(c)) {
+                                                                    repliceToptic(c, editText.getText().toString(),
+                                                                            topticid, refreshLayout, listView,
+                                                                            once, img, user, nodetitle,
+                                                                            t, string, once, editText, button,
+                                                                            imm
+                                                                    );
+                                                                } else {
+                                                                    Intent intent3 = new Intent(c, SiginActivity.class);
+                                                                    c.startActivity(intent3);
+                                                                }
 
 
-                                            }
-                                        });
-                                        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                            @Override
-                                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                                editText.requestFocus();
-                                                imm.toggleSoftInput(0, InputMethod.SHOW_FORCED);
-                                                editText.setText("@" + alllist.get(position - 1).get("username"));
-                                            }
-                                        });
-                                        editText.setHint("回复楼主/当前已有" + alllist.size() + "条评论");
+                                                            }
+                                                        });
+                                                        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                                            @Override
+                                                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                                                editText.requestFocus();
+                                                                imm.toggleSoftInput(0, InputMethod.SHOW_FORCED);
+                                                                editText.setText("@" + alllist.get(position - 1).get("username"));
+                                                            }
+                                                        });
+                                                        editText.setHint("回复楼主/当前已有" + alllist.size() + "条评论");
+                                                    }
+                                                });
+
+
                                     }
 
                                     @Override
