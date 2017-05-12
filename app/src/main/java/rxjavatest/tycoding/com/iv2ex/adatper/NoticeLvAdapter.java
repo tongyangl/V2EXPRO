@@ -67,12 +67,12 @@ public class NoticeLvAdapter extends BaseAdapter {
             viewHoder = (ViewHoder) convertView.getTag();
         }
         viewHoder.time.setText(list.get(position).get("time"));
-        viewHoder.notice.setText(list.get(position).get("notice"));
+        viewHoder.notice.setText(list.get(position).get("notice").trim());
         ImageLoader.getInstance().displayImage(list.get(position).get("img"), viewHoder.imageView);
         Log.d("====", list.get(position).get("content") + "lll");
         if (!list.get(position).get("content").equals("")) {
             viewHoder.content.setVisibility(View.VISIBLE);
-            viewHoder.content.setText(list.get(position).get("content"));
+            viewHoder.content.setText(list.get(position).get("content").trim());
         } else {
             viewHoder.content.setVisibility(View.GONE);
         }

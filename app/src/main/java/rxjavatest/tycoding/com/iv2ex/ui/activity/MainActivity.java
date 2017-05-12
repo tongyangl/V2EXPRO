@@ -83,9 +83,11 @@ public class MainActivity extends AppCompatActivity {
         init();
         toolbar.setTitle("V2EX");
         setSupportActionBar(toolbar);
-       /* Intent i = new Intent(this, noticeservice.class);
-        startService(i);*/
+        Intent i = getIntent();
 
+        if (i != null && i.hasExtra("finishApp")) {
+            this.finish();
+        }
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mydrawToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, 0, 0) {
@@ -226,15 +228,15 @@ public class MainActivity extends AppCompatActivity {
                         Log.d("===", Jsoup.parse((String) o).select("input[class=super normal button]").attr("onclick"));
 
                         String a = Jsoup.parse((String) o).select("input[class=super normal button]").attr("onclick");
-                        int left =a.indexOf("'");
-                        int right=a.lastIndexOf("'");
-                        a=a.substring(left+2,right);
+                        int left = a.indexOf("'");
+                        int right = a.lastIndexOf("'");
+                        a = a.substring(left + 2, right);
                         final String finalA = a;
-                        new AsyncTask(){
+                        new AsyncTask() {
                             @Override
                             protected void onPostExecute(Object o) {
                                 super.onPostExecute(o);
-                                Toast.makeText(getApplicationContext(),"已领取奖励",Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(), "已领取奖励", Toast.LENGTH_SHORT).show();
 
                             }
 
@@ -243,7 +245,7 @@ public class MainActivity extends AppCompatActivity {
 
                                 intertnet net = new intertnet(getApplicationContext());
 
-                                return net.getNodetoptic(tyutils.BASE_URL+finalA);
+                                return net.getNodetoptic(tyutils.BASE_URL + finalA);
 
                             }
                         }.execute();

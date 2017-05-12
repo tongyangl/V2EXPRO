@@ -32,6 +32,8 @@ import java.text.DecimalFormat;
 
 import rxjavatest.tycoding.com.iv2ex.BaseApplication;
 import rxjavatest.tycoding.com.iv2ex.R;
+import rxjavatest.tycoding.com.iv2ex.ui.activity.MainActivity;
+import rxjavatest.tycoding.com.iv2ex.ui.activity.MainActivity_ViewBinding;
 import rxjavatest.tycoding.com.iv2ex.ui.activity.SiginActivity;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -88,14 +90,14 @@ public class settingfragment extends PreferenceFragment {
                         .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                               SharedPreferences sharedPreferences=getActivity().getSharedPreferences("user",MODE_PRIVATE);
-                                SharedPreferences.Editor editor=sharedPreferences.edit();
+                                SharedPreferences sharedPreferences = getActivity().getSharedPreferences("user", MODE_PRIVATE);
+                                SharedPreferences.Editor editor = sharedPreferences.edit();
                                 editor.clear();
                                 editor.commit();
-                              /*  Intent intent=new Intent(getActivity(), SiginActivity.class);
-                                startActivity(intent);*/
-                                android.os.Process.killProcess(android.os.Process.myPid());
-                                System.exit(0);//正常退出App
+                                Intent intent = new Intent(getActivity(), MainActivity.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
+                                intent.putExtra("finishApp", true);
+                                startActivity(intent);
 
                             }
                         })
@@ -131,10 +133,10 @@ public class settingfragment extends PreferenceFragment {
                 SharedPreferences sharedPreferences = getActivity().getSharedPreferences("set", Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 if (wifibox.isChecked()) {
-                    BaseApplication.usemobile=true;
+                    BaseApplication.usemobile = true;
                     editor.putBoolean("wifi", false);
                 } else {
-                    BaseApplication.usemobile=false;
+                    BaseApplication.usemobile = false;
                     editor.putBoolean("wifi", true);
                 }
                 editor.commit();
@@ -161,7 +163,7 @@ public class settingfragment extends PreferenceFragment {
 
                                     long size = 0;
                                     try {
-                                        size = getFileSizes(  ImageLoader.getInstance().getDiskCache().getDirectory());
+                                        size = getFileSizes(ImageLoader.getInstance().getDiskCache().getDirectory());
                                         mCache.setSummary(FormetFileSize(size));
                                         Toast.makeText(getActivity(), "已清空缓存", Toast.LENGTH_SHORT).show();
                                     } catch (Exception e) {

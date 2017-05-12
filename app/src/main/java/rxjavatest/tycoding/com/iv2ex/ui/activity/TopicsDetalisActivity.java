@@ -80,7 +80,7 @@ public class TopicsDetalisActivity extends AppCompatActivity {
         time = intent.getStringExtra("time");
         if (intent.hasExtra("@user")){
 
-            editText.setText("@"+intent.getStringExtra("username"));
+            editText.setText("@"+intent.getStringExtra("@user"));
         }
 
         if (editText.getText().length() != 0) {
