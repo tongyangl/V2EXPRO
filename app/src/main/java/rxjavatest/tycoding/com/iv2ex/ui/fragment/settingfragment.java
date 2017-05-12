@@ -1,8 +1,10 @@
 package rxjavatest.tycoding.com.iv2ex.ui.fragment;
 
+import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Environment;
@@ -21,13 +23,18 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.nostra13.universalimageloader.cache.disc.DiskCache;
+import com.nostra13.universalimageloader.core.ImageLoader;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.text.DecimalFormat;
 
 import rxjavatest.tycoding.com.iv2ex.BaseApplication;
 import rxjavatest.tycoding.com.iv2ex.R;
+import rxjavatest.tycoding.com.iv2ex.ui.activity.SiginActivity;
 
+import static android.content.Context.MODE_PRIVATE;
 import static rxjavatest.tycoding.com.iv2ex.BaseApplication.FormetFileSize;
 import static rxjavatest.tycoding.com.iv2ex.BaseApplication.deleteAllFiles;
 import static rxjavatest.tycoding.com.iv2ex.BaseApplication.getFileSizes;
@@ -77,12 +84,19 @@ public class settingfragment extends PreferenceFragment {
             public void onClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 builder.setTitle("提示")
-                        .setMessage("您将退出应用")
+                        .setMessage("您将退出当前登录状态，并且清空账号信息，是否继续")
                         .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
+                               SharedPreferences sharedPreferences=getActivity().getSharedPreferences("user",MODE_PRIVATE);
+                                SharedPreferences.Editor editor=sharedPreferences.edit();
+                                editor.clear();
+                                editor.commit();
+                              /*  Intent intent=new Intent(getActivity(), SiginActivity.class);
+                                startActivity(intent);*/
+                                android.os.Process.killProcess(android.os.Process.myPid());
+                                System.exit(0);//正常退出App
 
-                                getActivity().finish();
                             }
                         })
                         .setNegativeButton("取消", null).show();
@@ -108,17 +122,19 @@ public class settingfragment extends PreferenceFragment {
         wifibox = (CheckBoxPreference) findPreference("pref_noimage_nowifi");
         // wifibox.setChecked();
         wifibox.setSummary(
-               "2G/3G/4G不显示图片"
-              );
+                "2G/3G/4G显示图片"
+        );
         wifibox.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             public boolean onPreferenceClick(Preference preference) {
                 // mApp.setConfigLoadImageInMobileNetwork(!wifibox.isChecked());
+
                 SharedPreferences sharedPreferences = getActivity().getSharedPreferences("set", Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 if (wifibox.isChecked()) {
-
+                    BaseApplication.usemobile=true;
                     editor.putBoolean("wifi", false);
                 } else {
+                    BaseApplication.usemobile=false;
                     editor.putBoolean("wifi", true);
                 }
                 editor.commit();
@@ -141,10 +157,11 @@ public class settingfragment extends PreferenceFragment {
                             .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    deleteAllFiles(file);
+                                    ImageLoader.getInstance().clearDiskCache();
+
                                     long size = 0;
                                     try {
-                                        size = getFileSizes(file);
+                                        size = getFileSizes(  ImageLoader.getInstance().getDiskCache().getDirectory());
                                         mCache.setSummary(FormetFileSize(size));
                                         Toast.makeText(getActivity(), "已清空缓存", Toast.LENGTH_SHORT).show();
                                     } catch (Exception e) {
@@ -163,8 +180,6 @@ public class settingfragment extends PreferenceFragment {
         }
 
     }
-
-
 
 
 }

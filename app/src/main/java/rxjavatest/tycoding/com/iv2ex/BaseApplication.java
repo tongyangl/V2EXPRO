@@ -9,6 +9,7 @@ import android.os.Environment;
 import android.util.Log;
 
 import com.hss01248.pagestate.PageManager;
+import com.nostra13.universalimageloader.cache.disc.DiskCache;
 import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiscCache;
 import com.nostra13.universalimageloader.cache.memory.impl.WeakMemoryCache;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -38,10 +39,11 @@ public class BaseApplication extends android.app.Application {
         SharedPreferences sharedPreferences=getSharedPreferences("set",MODE_PRIVATE);
         usemobile=  sharedPreferences.getBoolean("wifi",false);
         PageManager.initInApp(getApplicationContext());
-        String path = getExternalFilesDir(Environment.DIRECTORY_PICTURES).getPath();
-        final File file = new File(path + "/iv2ex");
+
+
         try {
-            long size = getFileSizes(file);
+            DiskCache diskCache= ImageLoader.getInstance().getDiskCache();
+            long size = getFileSizes(diskCache.getDirectory());
             cache = FormetFileSize(size);
         } catch (Exception e) {
             e.printStackTrace();
@@ -72,6 +74,8 @@ public class BaseApplication extends android.app.Application {
             configBuilder.writeDebugLogs();
         }
         ImageLoader.getInstance().init(configBuilder.build());
+
+
     }
     public static boolean islogin(Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences("user", MODE_PRIVATE);

@@ -1,40 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="50dp">
 
-        <ImageView
-            android:layout_marginLeft="10dp"
-            android:layout_centerVertical="true"
-            android:id="@+id/imagView"
-            android:layout_width="30dp"
-            android:layout_height="30dp" />
-
-        <TextView
-            android:gravity="center_vertical"
-            android:id="@+id/notice"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="10dp"
-            android:layout_toRightOf="@+id/imagView" />
-
-    </RelativeLayout>
+    <ImageView
+        android:background="@drawable/shape_img"
+        android:id="@+id/imagView"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp" />
+    <TextView
+        android:textColor="#000"
+        android:layout_marginTop="10dp"
+        android:id="@+id/username"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@+id/imagView"
+        android:gravity="center_vertical" />
+    <TextView
+        android:id="@+id/time"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_toRightOf="@+id/imagView"
+        android:layout_below="@+id/username"
+        android:layout_marginLeft="10dp" />
+    <TextView
+        android:clickable="true"
+        android:id="@+id/replice"
+         android:textColor="#000"
+        android:background="@drawable/shape_notic"
+        android:gravity="center"
+        android:text="回复"
+        android:layout_margin="10dp"
+        android:layout_alignParentRight="true"
+        android:layout_width="40dp"
+        android:layout_height="20dp" />
 
     <TextView
+        android:layout_marginRight="20dp"
+        android:layout_below="@+id/imagView"
+        android:id="@+id/notice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:gravity="center_vertical" />
+    <com.cpiz.android.bubbleview.BubbleTextView
+        android:padding="3dp"
+        app:bb_arrowDirection="Up"
+        app:bb_fillColor="@color/grey"
+        app:bb_arrowOffset="30dp"
+        app:bb_cornerRadius="4dp"
+        android:layout_below="@+id/notice"
         android:id="@+id/content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="50dp"
+        android:layout_marginLeft="10dp"
         android:layout_marginRight="20dp" />
-    <TextView
-        android:layout_marginLeft="50dp"
-        android:id="@+id/time"
-        android:layout_width="wrap_content"
-        android:layout_height="30dp"
-        android:layout_alignParentRight="true" />
-</LinearLayout>
+ <View
+     android:layout_below="@+id/content"
+     android:layout_width="match_parent"
+     android:layout_height="5dp">
+
+ </View>
+</RelativeLayout>

@@ -55,11 +55,13 @@ public class htmlTolist {
             String notice = elements.get(i).select("span[class=fade]").text();
             String time = elements.get(i).select("span[class=snow]").text();
             String url = elements.get(i).select("span[class=fade]").select("a").get(1).attr("href").substring(1);
+            String username= elements.get(i).select("span[class=fade]").select("strong").text();
             map.put("content", content);
             map.put("img", img);
             map.put("notice", notice);
             map.put("time", time);
             map.put("url", url);
+            map.put("username", username);
             list.add(map);
         }
         return list;

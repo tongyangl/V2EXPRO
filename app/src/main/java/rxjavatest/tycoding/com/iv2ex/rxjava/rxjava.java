@@ -347,7 +347,7 @@ public class rxjava {
 
                                                     }
                                                 });
-                                                editText.setHint("回复楼主/当前已有" + alllist.size() + "条评论");
+                                                editText.setHint("回复楼主/当前已有" + maps.size() + "条评论");
 
                                                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                                     @Override
@@ -791,6 +791,12 @@ public class rxjava {
                     @Override
                     public void onError(Throwable e) {
                         dialog.dismiss();
+
+                        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+                        builder.setTitle("提示");
+                        builder.setMessage("登陆遇到问题，请检查用户名密码");
+                        builder.setPositiveButton("确定", null);
+                        builder.show();
                     }
 
                     @Override
@@ -810,6 +816,7 @@ public class rxjava {
                             activity.startActivity(intent);
                             Toast.makeText(activity.getApplicationContext(), "欢迎回来" + username, Toast.LENGTH_SHORT).show();
                             activity.finish();
+
                         } else {
                             dialog.dismiss();
 
@@ -898,7 +905,6 @@ public class rxjava {
                                             if (view.getLastVisiblePosition() == view.getCount() - 1) {
                                                 if (indexpage < page && indexpage != -1) {
                                                     indexpage++;
-
                                                     getnoticepage(list, adapter, indexpage, activity);
                                                 } else if (indexpage == page) {
                                                     lstview.removeFooterView(v);

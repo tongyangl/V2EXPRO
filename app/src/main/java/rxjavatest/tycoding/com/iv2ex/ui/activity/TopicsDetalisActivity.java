@@ -78,6 +78,11 @@ public class TopicsDetalisActivity extends AppCompatActivity {
         Username = intent.getStringExtra("username");
         nodetitle = intent.getStringExtra("nodetitle");
         time = intent.getStringExtra("time");
+        if (intent.hasExtra("@user")){
+
+            editText.setText("@"+intent.getStringExtra("username"));
+        }
+
         if (editText.getText().length() != 0) {
             replice.setClickable(true);
             Drawable drawable = getResources().getDrawable(R.drawable.ic_send2_black_24dp);
