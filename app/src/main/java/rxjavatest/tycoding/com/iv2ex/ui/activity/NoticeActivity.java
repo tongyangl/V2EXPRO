@@ -4,20 +4,15 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
-
-import java.util.List;
-import java.util.Map;
+import android.widget.TextView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import rxjavatest.tycoding.com.iv2ex.R;
 import rxjavatest.tycoding.com.iv2ex.rxjava.rxjava;
-import rxjavatest.tycoding.com.iv2ex.utils.MyDecoration;
 import rxjavatest.tycoding.com.iv2ex.utils.tyutils;
 
 /**
@@ -31,6 +26,8 @@ public class NoticeActivity extends AppCompatActivity {
     Toolbar toolbar;
     @BindView(R.id.lv)
     ListView lv;
+    @BindView(R.id.tv)
+    TextView tv;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -48,11 +45,11 @@ public class NoticeActivity extends AppCompatActivity {
                 finish();
             }
         });
-        SwipeRefreshLayout.OnRefreshListener listener=new SwipeRefreshLayout.OnRefreshListener() {
+        SwipeRefreshLayout.OnRefreshListener listener = new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
 
-                rxjava.getNotice(NoticeActivity.this, tyutils.NOTIFI_URL, lv,swipe);
+                rxjava.getNotice(NoticeActivity.this, tyutils.NOTIFI_URL, lv, swipe,tv);
             }
         };
         swipe.setOnRefreshListener(listener);

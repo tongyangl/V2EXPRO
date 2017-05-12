@@ -9,4 +9,8 @@
         <item name="android:listDivider">@drawable/divider</item>
     </style>
 
+    <style name="DarkTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+
+
+    </style>
 </resources>

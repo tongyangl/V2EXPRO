@@ -54,7 +54,7 @@ public class TopicsDetalisActivity extends AppCompatActivity {
     private String nodetitle;
     private String time;
     private String collectionurl;
-
+    private  collecttion cool;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -142,7 +142,7 @@ public class TopicsDetalisActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.it_collect) {
             if (BaseApplication.islogin(getApplicationContext())){
-                collecttion cool = new collecttion();
+                 cool = new collecttion();
                 cool.execute();
             }else {
                 Intent intent3 = new Intent(TopicsDetalisActivity.this, SiginActivity.class);
@@ -223,6 +223,15 @@ public class TopicsDetalisActivity extends AppCompatActivity {
             String url = tyutils.BASE_URL + rxjava.topticdetal;
             Log.d("---", url);
             return net.collection(url);
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (cool!=null){
+            cool.cancel(true);
+
         }
     }
 }

@@ -39,7 +39,7 @@ public class TopticCollectionFragment extends Fragment {
     private SwipeRefreshLayout swipeRefreshLayout;
     private List<Map<String, String>> list;
     private PageManager pageManager;
-
+   private   getCollectToptic getCollectToptic;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -57,7 +57,7 @@ public class TopticCollectionFragment extends Fragment {
             @Override
             public void onRefresh() {
                 Log.d("---", "onrefresh");
-                getCollectToptic getCollectToptic = new getCollectToptic();
+                 getCollectToptic = new getCollectToptic();
                 getCollectToptic.execute();
 
             }
@@ -150,6 +150,15 @@ public class TopticCollectionFragment extends Fragment {
         protected String doInBackground(String... params) {
             intertnet net = new intertnet(getContext());
             return net.getNodetoptic("https://www.v2ex.com/my/topics");
+
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (getCollectToptic!=null){
+            getCollectToptic.cancel(true);
 
         }
     }

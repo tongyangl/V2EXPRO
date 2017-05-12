@@ -63,7 +63,7 @@ public class CreateToptic extends AppCompatActivity {
     @BindView(R.id.view)
     View view;
     private PopupWindow popupWindow;
-
+  private  SendAsynctask asynctask;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -161,7 +161,7 @@ public class CreateToptic extends AppCompatActivity {
                 String args[] = {
                         mTitle.getText().toString(), mContent.getText().toString()
                 };
-                SendAsynctask asynctask = new SendAsynctask();
+                 asynctask = new SendAsynctask();
                 asynctask.execute(args);
             }
 
@@ -250,4 +250,11 @@ public class CreateToptic extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+      if (  asynctask!=null){
+          asynctask.cancel(true);
+      }
+    }
 }

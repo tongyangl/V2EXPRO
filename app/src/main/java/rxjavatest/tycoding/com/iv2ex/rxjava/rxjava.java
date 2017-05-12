@@ -20,6 +20,8 @@ import android.os.Environment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
@@ -392,7 +394,6 @@ public class rxjava {
 
                                                     @Override
                                                     public void onNext(List<Map<String, String>> maps) {
-
                                                         tlist=maps;
                                                         final String once = intertnet.getrepliceonce(s);
                                                         int IndexofA = string.indexOf("/");
@@ -411,7 +412,7 @@ public class rxjava {
                                                         }
 
                                                         topticpage = 1;
-                                                        Log.d("---", page + "ddd");
+
                                                         adaper = new TopicRepliceAdaptar(c.getLayoutInflater(), tlist
                                                                 , listView, c);
                                                         listView.setAdapter(adaper);
@@ -465,6 +466,22 @@ public class rxjava {
                                                                 editText.setText("@" + alllist.get(position - 1).get("username"));
                                                             }
                                                         });
+                                                        editText.addTextChangedListener(new TextWatcher() {
+                                                            @Override
+                                                            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                                                            }
+
+                                                            @Override
+                                                            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                                                                Log.d("----",s.toString()+"onTextChanged");
+                                                            }
+
+                                                            @Override
+                                                            public void afterTextChanged(Editable s) {
+                                                                Log.d("----",s.toString()+"afterTextChanged");
+                                                            }
+                                                        });
                                                         editText.setHint("回复楼主/当前已有" + alllist.size() + "条评论");
                                                     }
                                                 });
@@ -515,7 +532,27 @@ public class rxjava {
                             });
                             editText.setHint("回复楼主/当前已有" + alllist.size() + "条评论");
                         }
+                        editText.addTextChangedListener(new TextWatcher() {
+                            @Override
+                            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
+                            }
+
+                            @Override
+                            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                            }
+
+                            @Override
+                            public void afterTextChanged(Editable s) {
+                              /* if (s.toString().contains("@")){
+                                   AlertDialog.Builder builder=new AlertDialog.Builder(c);
+                                   View view=c.getLayoutInflater().inflate(R.layout.)
+
+
+                               }*/
+                            }
+                        });
                         if (isture)
                             listView.setSelection(listView.getCount());
                         topticdetal = Jsoup.parse(s).select("div[class=topic_buttons]").select("a").get(0).attr("href").substring(1);
@@ -792,7 +829,7 @@ public class rxjava {
 
 
 
-    public static void getNotice(final Activity activity, final String string, final ListView lstview, final SwipeRefreshLayout refreshLayout) {
+    public static void getNotice(final Activity activity, final String string, final ListView lstview, final SwipeRefreshLayout refreshLayout, final TextView textView) {
         Observable.create(new Observable.OnSubscribe<String>() {
             @Override
             public void call(Subscriber<? super String> subscriber) {
@@ -814,11 +851,22 @@ public class rxjava {
                     public void onError(Throwable e) {
                         Toast.makeText(activity, e.getMessage(), Toast.LENGTH_SHORT).show();
                         refreshLayout.setRefreshing(false);
+                        textView.setVisibility(View.VISIBLE);
+                        textView.setText("好像错了了呢,点击重试");
+                        textView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                rxjava.getNotice(activity, tyutils.NOTIFI_URL, lstview,refreshLayout,textView);
 
+                            }
+                        });
                     }
 
                     @Override
                     public void onNext(String s) {
+                        if (textView.isShown()){
+                            textView.setVisibility(View.GONE);
+                        }
                         Elements pages = Jsoup.parse(s).select("div[class=box]").get(2).select("div[class=cell]").get(0).select("td").get(0).select("a");
                         final int page = Integer.parseInt(pages.get(pages.size() - 1).text());
                         final List<Map<String, String>> list = htmlTolist.getNotice(s);

@@ -33,10 +33,11 @@ import rxjavatest.tycoding.com.iv2ex.internet.intertnet;
  */
 
 public class NodeCollectionFragment extends Fragment {
-   private PageManager pageManager;
+    private PageManager pageManager;
     private List<Map<String, String>> list;
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView recyclerView;
+    private getCollectNode getCollectNode;
 
     @Nullable
     @Override
@@ -57,7 +58,7 @@ public class NodeCollectionFragment extends Fragment {
                 Log.d("---", "onrefresh");
                 recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
                 recyclerView.setItemAnimator(new DefaultItemAnimator());
-                getCollectNode getCollectNode = new getCollectNode();
+                getCollectNode = new getCollectNode();
                 getCollectNode.execute();
             }
         };
@@ -69,7 +70,7 @@ public class NodeCollectionFragment extends Fragment {
             }
         });
         listener.onRefresh();
-        pageManager=PageManager.init(recyclerView, "空空如也，什么也没有", false, new Runnable() {
+        pageManager = PageManager.init(recyclerView, "空空如也，什么也没有", false, new Runnable() {
             @Override
             public void run() {
 
@@ -86,7 +87,7 @@ public class NodeCollectionFragment extends Fragment {
             if (elements.size() != 0) {
                 for (int i = 0; i < elements.size(); i++) {
                     Map<String, String> map = new HashMap();
-                    String url = "http://www.v2ex.com/"+ elements.get(i).attr("href").substring(1);
+                    String url = "http://www.v2ex.com/" + elements.get(i).attr("href").substring(1);
                     String imgurl = "http://" + elements.get(i).select("img").attr("src").substring(2);
                     String title = elements.get(i).select("div").get(0).ownText();
                     String num = elements.get(i).select("span[class=fade f12]").text();
@@ -100,7 +101,7 @@ public class NodeCollectionFragment extends Fragment {
                 adapter.notifiy(list);
                 recyclerView.setAdapter(adapter);
                 swipeRefreshLayout.setRefreshing(false);
-            }else {
+            } else {
                 swipeRefreshLayout.setRefreshing(false);
                 pageManager.showEmpty();
             }
@@ -112,6 +113,15 @@ public class NodeCollectionFragment extends Fragment {
         protected String doInBackground(String... params) {
             intertnet net = new intertnet(getContext());
             return net.getNodetoptic("https://www.v2ex.com/my/nodes");
+
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (getCollectNode!=null){
+            getCollectNode.cancel(true);
 
         }
     }
