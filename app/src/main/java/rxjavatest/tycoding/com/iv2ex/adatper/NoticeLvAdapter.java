@@ -16,6 +16,7 @@ import com.zzhoujay.richtext.RichText;
 import java.util.List;
 import java.util.Map;
 
+import rx.Observable;
 import rxjavatest.tycoding.com.iv2ex.R;
 import rxjavatest.tycoding.com.iv2ex.rxjava.rxjava;
 import rxjavatest.tycoding.com.iv2ex.ui.activity.TopicsDetalisActivity;

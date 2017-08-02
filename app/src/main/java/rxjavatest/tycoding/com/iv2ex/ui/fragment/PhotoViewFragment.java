@@ -166,7 +166,7 @@ public class PhotoViewFragment extends Fragment {
                     // request successfully, handle you transactions
 
                 } else {
-            Toast.makeText(getContext(),"保存失败，权限未授予",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(),"保存失败，权限未授予",Toast.LENGTH_SHORT).show();
                     // permission denied
                     // request failed
                 }

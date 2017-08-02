@@ -40,7 +40,6 @@ public class BaseApplication extends android.app.Application {
         usemobile=  sharedPreferences.getBoolean("wifi",false);
         PageManager.initInApp(getApplicationContext());
 
-
         try {
             DiskCache diskCache= ImageLoader.getInstance().getDiskCache();
             long size = getFileSizes(diskCache.getDirectory());

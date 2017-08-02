@@ -31,7 +31,7 @@ import rxjavatest.tycoding.com.iv2ex.utils.MyDecoration;
  * Created by tongyang on 16-11-12.
  */
 
-public class CityFragment extends Fragment {
+public class CityFragment extends BaseFragment {
 
 
     @BindView(R.id.recycle)
@@ -52,30 +52,33 @@ public class CityFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        SwipeRefreshLayout.OnRefreshListener listener=new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                Log.d("---","onrefresh");
-                LinearLayoutManager manager=new LinearLayoutManager(getContext());
-                recycle.setLayoutManager(manager);
-                recycle.addItemDecoration(new MyDecoration(getContext()));
-                rxjava.getToptics(getActivity(),"?tab=city",swipe,recycle,false);
-            }
-        };
-        swipe.setOnRefreshListener(listener);
-        swipe.post(new Runnable() {
-            @Override
-            public void run() {
-                swipe.setRefreshing(true);
-            }
-        });
-        listener.onRefresh();
+
+
     }
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
 
+
+    @Override
+    protected void loadData() {
+
+            SwipeRefreshLayout.OnRefreshListener listener=new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    Log.d("---","onrefresh");
+                    LinearLayoutManager manager=new LinearLayoutManager(getContext());
+                    recycle.setLayoutManager(manager);
+                    recycle.addItemDecoration(new MyDecoration(getContext()));
+                    rxjava.getToptics(getActivity(),"?tab=city",swipe,recycle,false);
+                }
+            };
+            swipe.setOnRefreshListener(listener);
+            swipe.post(new Runnable() {
+                @Override
+                public void run() {
+                    swipe.setRefreshing(true);
+                }
+            });
+            listener.onRefresh();
 
     }
 }

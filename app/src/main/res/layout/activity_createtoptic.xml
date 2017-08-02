@@ -50,7 +50,7 @@
         android:id="@+id/view"
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:layout_marginLeft="50dp"
+        android:layout_marginLeft="60dp"
         android:background="#CFCFCF">
 
     </View>

@@ -23,7 +23,7 @@ import rxjavatest.tycoding.com.iv2ex.utils.MyDecoration;
  * Created by tongyang on 16-11-12.
  */
 
-public class HotFragment extends Fragment {
+public class HotFragment extends BaseFragment {
     @BindView(R.id.recycle)
     RecyclerView recycle;
     @BindView(R.id.swipe)
@@ -35,36 +35,50 @@ public class HotFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_hot, container, false);
         ButterKnife.bind(this, view);
+        swipe.setColorSchemeResources(android.R.color.holo_blue_light,
+                android.R.color.holo_red_light, android.R.color.holo_orange_light,
+                android.R.color.holo_green_light);
         swipe.setSize(SwipeRefreshLayout.DEFAULT);
-        swipe.setColorSchemeResources(android.R.color.holo_blue_light, android.R.color.holo_red_light, android.R.color.holo_orange_light, android.R.color.holo_green_light);
+
         return view;
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        SwipeRefreshLayout.OnRefreshListener listener=new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                Log.d("---","onrefresh");
-                LinearLayoutManager manager=new LinearLayoutManager(getContext());
-                recycle.setLayoutManager(manager);
-                recycle.addItemDecoration(new MyDecoration(getContext()));
-                rxjava.getToptics(getActivity(),"?tab=hot",swipe,recycle,false);
-            }
-        };
-        swipe.setOnRefreshListener(listener);
-        swipe.post(new Runnable() {
-            @Override
-            public void run() {
-                swipe.setRefreshing(true);
-            }
-        });
-        listener.onRefresh();
+
+
     }
 
+
+
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void loadData( ) {
+           Log.d("dddd",String.valueOf(isprepared)+isVisable+"dd");
+
+            SwipeRefreshLayout.OnRefreshListener listener = new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    Log.d("---", "onrefresh");
+                    LinearLayoutManager manager = new LinearLayoutManager(getContext());
+                    recycle.setLayoutManager(manager);
+                    recycle.addItemDecoration(new MyDecoration(getContext()));
+                    rxjava.getToptics(getActivity(), "?tab=hot", swipe, recycle, false);
+                }
+            };
+            swipe.setOnRefreshListener(listener);
+            swipe.post(new Runnable() {
+                @Override
+                public void run() {
+                    swipe.setRefreshing(true);
+                }
+            });
+
+            listener.onRefresh();
+
+
+
+
+
     }
 }

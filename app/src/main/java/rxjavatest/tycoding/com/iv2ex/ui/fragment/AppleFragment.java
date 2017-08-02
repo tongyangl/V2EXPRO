@@ -27,7 +27,7 @@ import rxjavatest.tycoding.com.iv2ex.utils.MyDecoration;
  * Created by tongyang on 16-11-12.
  */
 
-public class AppleFragment extends Fragment {
+public class AppleFragment extends BaseFragment {
 
 
     @BindView(R.id.recycle)
@@ -44,36 +44,42 @@ public class AppleFragment extends Fragment {
 
         swipe.setSize(SwipeRefreshLayout.DEFAULT);
         swipe.setColorSchemeResources(android.R.color.holo_blue_light, android.R.color.holo_red_light, android.R.color.holo_orange_light, android.R.color.holo_green_light);
-
+        isprepared=true;
         return view;
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        SwipeRefreshLayout.OnRefreshListener listener=new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                Log.d("---","onrefresh");
-                LinearLayoutManager manager=new LinearLayoutManager(getContext());
-                recycle.setLayoutManager(manager);
-                recycle.addItemDecoration(new MyDecoration(getContext()));
-                rxjava.getToptics(getActivity(),"?tab=apple",swipe,recycle,false);
-            }
-        };
-        swipe.setOnRefreshListener(listener);
-        swipe.post(new Runnable() {
-            @Override
-            public void run() {
-                swipe.setRefreshing(true);
-            }
-        });
-        listener.onRefresh();
 
 
         }
 
 
+    @Override
+    protected void loadData() {
 
 
+            SwipeRefreshLayout.OnRefreshListener listener=new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    Log.d("---","onrefresh");
+                    LinearLayoutManager manager=new LinearLayoutManager(getContext());
+                    recycle.setLayoutManager(manager);
+                    recycle.addItemDecoration(new MyDecoration(getContext()));
+                    rxjava.getToptics(getActivity(),"?tab=apple",swipe,recycle,false);
+                }
+            };
+            swipe.setOnRefreshListener(listener);
+            swipe.post(new Runnable() {
+                @Override
+                public void run() {
+                    swipe.setRefreshing(true);
+                }
+            });
+            listener.onRefresh();
+
+
+
+    }
 }
