@@ -22,6 +22,7 @@
                 android:layout_height="30dp"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
                 android:clickable="true"
                 android:src="@drawable/ic_arrow_back_black_24dp" />
 
@@ -65,11 +66,11 @@
     </View>
 
     <com.weavey.loading.lib.LoadingLayout
-        android:layout_below="@+id/shadow_view"
-        android:layout_above="@+id/RelativeLayout"
         android:id="@+id/loadingLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_above="@+id/RelativeLayout"
+        android:layout_below="@+id/shadow_view"
         app:isFirstVisible="true">
 
         <com.scwang.smartrefresh.layout.SmartRefreshLayout
@@ -108,23 +109,23 @@
         </View>
 
         <EditText
+
             android:id="@+id/editText"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginRight="10dp"
             android:layout_toLeftOf="@+id/replice"
-            android:hint="评论主题"
+            android:hint="写评论..."
             android:padding="10dp" />
 
-        <ImageButton
+        <TextView
 
             android:id="@+id/replice"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_alignParentRight="true"
-
-            android:layout_marginRight="10dp"
-            android:background="#fff"
-            android:gravity="center" />
+            android:gravity="center"
+            android:text="发布"
+            android:textSize="18sp" />
     </RelativeLayout>
 </RelativeLayout>
