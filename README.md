@@ -1,60 +1,38 @@
 ### v2ex 第三方客户端
 
-自己课余时间做的v站第三方客户端
+自己课余时间做的...可能会有bug，欢迎指正。
 
-现在完成了大部分功能
+传送门：https://www.v2ex.com
 
-- 发帖
+这是最新版本...这个app自己重写过三次。每次自己都会有很大的收获，而且每次修改都见证着我学习Android的历程。
 
-- 回帖
+本次采用ViewPager 嵌套 ViewPager，的布局方式，类似今日头条和网易新闻那样。
 
-- 查看首页的信息
+使用Retorfit+OKhttp+RXJava完成网络封装和请求。
 
-- 查看所有节点的信息
+采用的刷新框架为SmartRefreshLayout
 
-- 回复某个楼层
+图片框架为Glide
 
-- 收藏节点 和帖子
+主题详情页的图文混排为自定义的RichTextView和ImageGetter
 
-  ​
+各个fragment实现懒加载体验很舒服
 
-待完成
+对错误信息进行了封装，以及回显用户信息
 
-- 个人信息，用户信息等。
+很多细致的功能比如缓存清理..分享..等功能就不一一列举了。
 
-<<<<<<< HEAD
-=======
-下载地址：http://7xstld.com1.z0.glb.clouddn.com/v2ex.apk
 
- 测试账号：账户： tongyang
 
-                    密码：a199604220305
 
- 因为站内规则，，，测试最好在沙盒节点测试。而且主题内容不能和之前的重复，所以测试的时候最好
-
-把主题名字写的长一些。
-
->>>>>>> origin/master
-  ​
+![](https://ox.xizero.com/uploads/2017/09/Screenshot_2017_09_09_19_11_57_076_com.example.v2.png)
 
 
 
 
 
 
- 因为站内规则，，，测试最好在沙盒节点测试。而且主题内容不能和之前的重复，所以测试的时候最好
 
-把主题名字写的长一些。
+![](https://ox.xizero.com/uploads/2017/09/Screenshot_2017_09_09_19_12_52_192_com.example.v2.png)
 
-
-![](http://i2.muimg.com/567571/e7488c7644d13602.jpg)![](http://i4.buimg.com/567571/78c8375e496e1663.jpg)
-
-![](http://i4.buimg.com/567571/7c2606fd269ddede.jpg)![](http://i2.muimg.com/567571/bccf09e6b25b0bcf.jpg)
-![](http://i4.buimg.com/567571/52d35d2d8ec379e8.jpg)
-![](http://i4.buimg.com/567571/3d888e2ee0e13a08.jpg)
-
-
-
-
-
-![](http://i2.muimg.com/567571/5ea0bd4df83fc9d8.jpg)
+![](https://ox.xizero.com/uploads/2017/09/Screenshot_2017_09_09_19_12_00_739_com.example.v2.png)![](https://ox.xizero.com/uploads/2017/09/Screenshot_2017_09_09_19_13_07_658_com.example.v2.png)![](https://ox.xizero.com/uploads/2017/09/Screenshot_2017_09_09_19_12_35_342_com.example.v2.png)![](https://ox.xizero.com/uploads/2017/09/Screenshot_2017_09_09_19_11_53_631_com.example.v2.png)
