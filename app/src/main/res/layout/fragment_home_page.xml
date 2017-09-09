@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/theme_barColor">
+
+        <TextView
+            android:id="@+id/my_title"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="20dp"
+            android:gravity="center"
+            android:text="V2EX"
+            android:textColor="#fff"
+            android:textSize="23sp" />
+
+        <android.support.v7.widget.SearchView
+            android:id="@+id/searchView"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="40dp"
+            android:layout_toRightOf="@+id/my_title"
+            android:background="@drawable/shape_searchview"
+            android:iconifiedByDefault="true"
+            app:queryHint="搜你想搜...">
+
+        </android.support.v7.widget.SearchView>
+
+    </RelativeLayout>
+
+
+
+    <android.support.design.widget.TabLayout
+        android:id="@+id/table"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        app:layout_scrollFlags="scroll|enterAlways"
+        app:paddingEnd="10dp"
+        app:paddingStart="10dp"
+        app:tabGravity="fill"
+        app:tabIndicatorColor="@color/theme_barColor"
+        app:tabMode="scrollable"
+        app:tabSelectedTextColor="@color/theme_barColor">
+
+    </android.support.design.widget.TabLayout>
+
+    <com.example.v2ex.widget.NoScrollViewPager
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </com.example.v2ex.widget.NoScrollViewPager>
+
+</LinearLayout>

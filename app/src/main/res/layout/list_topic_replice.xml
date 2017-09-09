@@ -1,70 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:descendantFocusability="blocksDescendants"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:descendantFocusability="blocksDescendants">
+
     <RelativeLayout
         android:id="@+id/relat"
         android:layout_width="match_parent"
         android:layout_height="60dp">
 
-            <ImageView
-                android:layout_marginLeft="15dp"
-                android:layout_marginTop="15dp"
-                android:id="@+id/imagView"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                 />
+        <ImageView
+            android:id="@+id/imagView"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="15dp" />
+
         <TextView
-            android:layout_marginTop="5dp"
-            android:layout_marginLeft="10dp"
             android:id="@+id/username"
             android:layout_width="wrap_content"
             android:layout_height="30dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
             android:layout_toRightOf="@+id/imagView"
             android:gravity="center_vertical"
-            android:textColor="#228B22" />
-         <TextView
-             android:textColor="#282828"
-             android:textSize="12sp"
-             android:gravity="center"
-             android:layout_marginRight="10dp"
-             android:layout_marginTop="5dp"
-             android:layout_alignParentRight="true"
-             android:id="@+id/number"
-             android:layout_width="wrap_content"
-             android:layout_height="30dp" />
+            android:textColor="#000"
+            android:textStyle="bold" />
+
         <TextView
-            android:textSize="12sp"
+            android:id="@+id/number"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
             android:layout_marginTop="5dp"
-            android:layout_marginLeft="10dp"
+            android:gravity="center"
+            android:textColor="#282828"
+            android:textSize="12sp" />
+
+        <TextView
             android:id="@+id/time"
             android:layout_width="wrap_content"
             android:layout_height="20dp"
             android:layout_below="@+id/username"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
             android:layout_toRightOf="@+id/imagView"
-            android:gravity="center_vertical" />
+            android:gravity="center_vertical"
+            android:textSize="12sp" />
 
     </RelativeLayout>
 
     <com.example.v2ex.widget.RichTextView
-        android:textSize="14sp"
-        android:layout_marginBottom="20dp"
-        android:textColor="#000000"
         android:id="@+id/replice_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/relat"
-        android:layout_marginTop="20dp"
         android:layout_marginLeft="65dp"
-        android:layout_marginRight="20dp" />
-    <TextView
-        android:drawableLeft="@drawable/ic_textsms_black_24dp"
-        android:text="评论"
-        android:layout_marginRight="10dp"
-        android:layout_alignParentRight="true"
-        android:textColor="#228B22"
-        android:layout_below="@+id/replice_content"
-        android:layout_width="wrap_content"
-        android:layout_height="20dp" />
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="5dp"
+        android:textColor="#000000"
+        android:textSize="14sp" />
+
+
 </RelativeLayout>

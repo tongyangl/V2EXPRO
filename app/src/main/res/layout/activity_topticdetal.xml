@@ -109,21 +109,22 @@
         </View>
 
         <EditText
-
             android:id="@+id/editText"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:layout_margin="5dp"
             android:layout_marginRight="10dp"
             android:layout_toLeftOf="@+id/replice"
+            android:background="@drawable/edittext_replice"
             android:hint="写评论..."
             android:padding="10dp" />
 
         <TextView
-
             android:id="@+id/replice"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_alignParentRight="true"
+            android:clickable="true"
             android:gravity="center"
             android:text="发布"
             android:textSize="18sp" />
