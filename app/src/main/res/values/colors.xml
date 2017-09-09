@@ -8,8 +8,9 @@
     <color name="photo_crop_dim_color">#cc000000</color>
     <color name="photo_crop_highlight_color">#fff</color>
 
-
     <color name="dark_background">#424242</color>
     <color name="dark_toolbar">#262626</color>
-    
+    <color name="theme_barColor">#363636</color>
+    <color name="theme_radiobutton">#00CD00</color>
+
 </resources>

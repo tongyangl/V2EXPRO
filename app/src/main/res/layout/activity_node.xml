@@ -1,15 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:orientation="vertical"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <android.support.v7.widget.Toolbar
-       android:id="@+id/toolbar"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize">
 
-    </android.support.v7.widget.Toolbar>
+        <android.support.v7.widget.SearchView
+            android:id="@+id/bt_search"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </android.support.v7.widget.SearchView>
+    </RelativeLayout>
     <View
 
         android:id="@+id/shadow_view"
@@ -19,10 +24,11 @@
         android:background="@drawable/shadow">
 
     </View>
-    <android.support.v4.widget.SwipeRefreshLayout
+    <com.scwang.smartrefresh.layout.SmartRefreshLayout
         android:id="@+id/swipe"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycle"
             android:layout_width="match_parent"
@@ -30,5 +36,5 @@
 
         </android.support.v7.widget.RecyclerView>
 
-    </android.support.v4.widget.SwipeRefreshLayout>
+    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
 </LinearLayout>

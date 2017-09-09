@@ -1,68 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/drawer"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
+
+    <com.example.v2ex.widget.NoScrollViewPager
+        android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_above="@+id/radioGroup">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="#FFFAFA"
-            app:contentInsetLeft="0dp"
-            app:contentInsetStart="0dp"
-            app:layout_collapseMode="pin">
+    </com.example.v2ex.widget.NoScrollViewPager>
 
-        </android.support.v7.widget.Toolbar>
+    <View
+        android:layout_below="@+id/viewPager"
+        android:background="#8B7E66"
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="1px">
 
+    </View>
 
-        <android.support.design.widget.TabLayout
-            android:id="@+id/table"
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            app:layout_scrollFlags="scroll|enterAlways"
-            app:paddingEnd="10dp"
-            app:paddingStart="10dp"
-            app:tabGravity="fill"
-            app:tabIndicatorColor="#FF6EB4"
-            app:tabMode="scrollable"
-            app:tabSelectedTextColor="#000000">
+    <RadioGroup
 
-        </android.support.design.widget.TabLayout>
+        android:id="@+id/radioGroup"
+        android:layout_width="match_parent"
+        android:layout_height="49dp"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal">
 
-        <android.support.v4.view.ViewPager
-            android:id="@+id/Home_viewPager"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+        <RadioButton
 
-        </android.support.v4.view.ViewPager>
+            android:id="@+id/home_page"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:button="@null"
+            android:drawableTop="@drawable/home_button"
+            android:gravity="center"
+            android:paddingTop="5dp"
+            android:text="首页"
+            android:textColor="@drawable/text_color"
+            android:textSize="12sp" />
 
-    </LinearLayout>
+        <RadioButton
+            android:id="@+id/collection_page"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:button="@null"
+            android:drawableTop="@drawable/node_button"
 
-    <android.support.design.widget.NavigationView
-        android:id="@+id/ngv"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:layout_marginRight="20dp"
-        android:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        android:scrollbars="none"
-        app:headerLayout="@layout/ngv_headr"
-        app:menu="@menu/nav_menu"
-        app:theme="@style/ThemeOverlay.AppCompat.ActionBar">
+            android:gravity="center"
+            android:paddingTop="5dp"
+            android:text="节点"
+            android:textColor="@drawable/text_color" />
 
-    </android.support.design.widget.NavigationView>
+        <RadioButton
+            android:checked="false"
+            android:id="@+id/createtoptic_button"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
 
-</android.support.v4.widget.DrawerLayout>
+            android:background="@drawable/ic_add_black_24dp"
+            android:button="@null"
+            android:gravity="center"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:textColor="@drawable/text_color" />
 
+        <RadioButton
+            android:id="@+id/notice_page"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:button="@null"
+            android:drawableTop="@drawable/notice_button"
+            android:gravity="center"
+            android:paddingTop="5dp"
+            android:text="消息"
+            android:textColor="@drawable/text_color" />
 
-
-
-
-
+        <RadioButton
+            android:id="@+id/setting_page"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:button="@null"
+            android:drawableTop="@drawable/persion_button"
+            android:gravity="center"
+            android:paddingTop="5dp"
+            android:text="我的"
+            android:textColor="@drawable/text_color" />
+    </RadioGroup>
+</RelativeLayout>

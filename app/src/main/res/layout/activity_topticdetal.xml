@@ -2,15 +2,55 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    >
+    android:layout_height="match_parent">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         app:contentInsetLeft="0dp"
-        app:contentInsetStart="0dp">
+        app:contentInsetStart="0dp"
+        app:paddingStart="0dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/back"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:clickable="true"
+                android:src="@drawable/ic_arrow_back_black_24dp" />
+
+            <ImageView
+                android:id="@+id/titleIcon"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dp"
+                android:layout_toLeftOf="@+id/my_title" />
+
+            <TextView
+                android:id="@+id/my_title"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:textColor="#000"
+                android:textSize="16sp" />
+
+            <ImageView
+                android:id="@+id/bt_menu"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:clickable="true"
+                android:src="@drawable/ic_more_vert_black_24dp" />
+        </RelativeLayout>
 
     </android.support.v7.widget.Toolbar>
 
@@ -24,47 +64,67 @@
 
     </View>
 
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:layout_above="@+id/RelativeLayout"
+    <com.weavey.loading.lib.LoadingLayout
         android:layout_below="@+id/shadow_view"
-        android:id="@+id/swipe"
+        android:layout_above="@+id/RelativeLayout"
+        android:id="@+id/loadingLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        app:isFirstVisible="true">
 
-        <ListView
-            android:id="@+id/lv"
+        <com.scwang.smartrefresh.layout.SmartRefreshLayout
+            android:id="@+id/swipe"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="5dp">
+            android:layout_above="@+id/RelativeLayout"
+            android:layout_below="@+id/shadow_view">
+
+            <ListView
+                android:id="@+id/lv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp">
 
 
-        </ListView>
+            </ListView>
 
-    </android.support.v4.widget.SwipeRefreshLayout>
+        </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+    </com.weavey.loading.lib.LoadingLayout>
+
 
     <RelativeLayout
 
         android:id="@+id/RelativeLayout"
-        android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
-        android:layout_height="50dp">
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true">
+
+        <View
+            android:id="@+id/line"
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="#C5C1AA">
+
+        </View>
 
         <EditText
-            android:padding="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_toLeftOf="@+id/replice"
             android:id="@+id/editText"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:hint="评论主题" />
+            android:layout_marginRight="10dp"
+            android:layout_toLeftOf="@+id/replice"
+            android:hint="评论主题"
+            android:padding="10dp" />
 
         <ImageButton
-            android:background="#fff"
+
             android:id="@+id/replice"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_alignParentRight="true"
-            android:layout_marginBottom="10dp"
-            android:layout_marginRight="10dp" />
+
+            android:layout_marginRight="10dp"
+            android:background="#fff"
+            android:gravity="center" />
     </RelativeLayout>
 </RelativeLayout>

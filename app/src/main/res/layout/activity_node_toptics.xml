@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
@@ -9,6 +10,7 @@
         android:layout_height="?attr/actionBarSize">
 
     </android.support.v7.widget.Toolbar>
+
     <View
 
         android:id="@+id/shadow_view"
@@ -18,17 +20,24 @@
         android:background="@drawable/shadow">
 
     </View>
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/swipe"
+    <com.weavey.loading.lib.LoadingLayout
+        android:id="@+id/loadingLayout"
+        app:isFirstVisible="true"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
-        <ListView
-            android:id="@+id/lv"
+        <com.scwang.smartrefresh.layout.SmartRefreshLayout
+            android:id="@+id/swipe"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-        </ListView>
+            <ListView
+                android:id="@+id/lv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-    </android.support.v4.widget.SwipeRefreshLayout>
+            </ListView>
+
+        </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+    </com.weavey.loading.lib.LoadingLayout>
+
 </LinearLayout>

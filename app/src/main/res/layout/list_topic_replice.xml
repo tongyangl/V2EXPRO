@@ -15,10 +15,8 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                  />
-
         <TextView
             android:layout_marginTop="5dp"
-
             android:layout_marginLeft="10dp"
             android:id="@+id/username"
             android:layout_width="wrap_content"
@@ -27,6 +25,7 @@
             android:gravity="center_vertical"
             android:textColor="#228B22" />
          <TextView
+             android:textColor="#282828"
              android:textSize="12sp"
              android:gravity="center"
              android:layout_marginRight="10dp"
@@ -48,7 +47,7 @@
 
     </RelativeLayout>
 
-    <rxjavatest.tycoding.com.iv2ex.ui.widget.RichTextView
+    <com.example.v2ex.widget.RichTextView
         android:textSize="14sp"
         android:layout_marginBottom="20dp"
         android:textColor="#000000"
