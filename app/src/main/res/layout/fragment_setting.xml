@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:leon="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#CCCCCC"
     android:orientation="vertical">
 
     <RelativeLayout
@@ -43,17 +43,17 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <LinearLayout
+            <RelativeLayout
                 android:id="@+id/linear"
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:background="#fff"
-                android:orientation="horizontal">
+                android:layout_height="wrap_content"
+                android:background="#fff">
 
                 <ImageView
                     android:id="@+id/userIcon"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
+                    android:layout_centerHorizontal="true"
                     android:layout_margin="20dp"
                     android:clickable="true"
                     android:src="@drawable/ic_dislogin" />
@@ -61,62 +61,48 @@
                 <TextView
                     android:id="@+id/userName"
                     android:layout_width="match_parent"
-                    android:layout_height="60dp"
-                    android:layout_margin="20dp"
+                    android:layout_height="30dp"
+                    android:layout_below="@+id/userIcon"
                     android:clickable="true"
-                    android:gravity="center_vertical"
-                    android:padding="20dp"
+                    android:gravity="center"
                     android:text="未登录"
                     android:textSize="18sp" />
-            </LinearLayout>
+            </RelativeLayout>
 
-            <LinearLayout
-                android:id="@+id/linear1"
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:layout_below="@+id/linear"
-                android:layout_marginTop="10dp"
-                android:background="#fff"
-                android:orientation="horizontal"
-                android:weightSum="3">
-
-                <TextView
-                    android:id="@+id/nodeCollect"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:layout_weight="1"
-                    android:clickable="true"
-                    android:gravity="center"
-                    android:text="节点收藏" />
-
-                <TextView
-                    android:id="@+id/topticsCollect"
-
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:layout_weight="1"
-                    android:clickable="true"
-                    android:gravity="center"
-                    android:text="主题搜藏" />
-
-                <TextView
-                    android:id="@+id/special"
-
-                    android:layout_width="80dp"
-
-                    android:layout_height="80dp"
-                    android:layout_weight="1"
-                    android:clickable="true"
-                    android:gravity="center"
-                    android:text="特别关注" />
-
-            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@+id/linear1"
-                android:layout_marginTop="10dp">
+                android:layout_below="@+id/linear"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical">
+
+                <com.leon.lib.settingview.LSettingItem xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/nodeCollect"
+
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+
+                    >
+
+                </com.leon.lib.settingview.LSettingItem>
+
+                <com.leon.lib.settingview.LSettingItem
+                    android:id="@+id/topticsCollect"
+
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp">
+
+                </com.leon.lib.settingview.LSettingItem>
+
+                <com.leon.lib.settingview.LSettingItem
+                    android:id="@+id/special"
+
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp">
+
+                </com.leon.lib.settingview.LSettingItem>
+
 
 
             </LinearLayout>
