@@ -70,7 +70,7 @@ public class Internet_Manager {
                 .addInterceptor(new AddCookiesInterceptor(context))
                 .addInterceptor(new ReceivedCookiesInterceptor(context)).
                 cookieJar(new PersistentCookieJar(new SetCookieCache(), new SharedPrefsCookiePersistor(context)));
-
+        httpClientBuilder.retryOnConnectionFailure(true);
 
         return httpClientBuilder;
     }

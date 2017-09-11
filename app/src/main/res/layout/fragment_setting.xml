@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:leon="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -77,9 +78,10 @@
                 android:layout_marginTop="10dp"
                 android:orientation="vertical">
 
-                <com.leon.lib.settingview.LSettingItem xmlns:app="http://schemas.android.com/apk/res-auto"
+                <com.leon.lib.settingview.LSettingItem
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
                     android:id="@+id/nodeCollect"
-
+                    app:leftIcon="@drawable/ic_node_icon"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
 
@@ -89,7 +91,7 @@
 
                 <com.leon.lib.settingview.LSettingItem
                     android:id="@+id/topticsCollect"
-
+                    app:leftIcon="@drawable/ic_toptic_icon"
                     android:layout_width="match_parent"
                     android:layout_height="50dp">
 
@@ -97,13 +99,47 @@
 
                 <com.leon.lib.settingview.LSettingItem
                     android:id="@+id/special"
-
                     android:layout_width="match_parent"
+                    app:leftIcon="@drawable/ic_special"
                     android:layout_height="50dp">
 
                 </com.leon.lib.settingview.LSettingItem>
 
+                <com.leon.lib.settingview.LSettingItem
+                    android:id="@+id/noImg"
+                    app:leftIcon="@drawable/ic_mobile"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    app:rightStyle="iconSwitch">
 
+                </com.leon.lib.settingview.LSettingItem>
+
+                <com.leon.lib.settingview.LSettingItem
+                    android:id="@+id/night"
+                    app:leftIcon="@drawable/ic_night_icon"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    app:rightStyle="iconSwitch">
+
+                </com.leon.lib.settingview.LSettingItem>
+
+                <com.leon.lib.settingview.LSettingItem
+                    app:leftIcon="@drawable/ic_clearcache_icon"
+                    android:id="@+id/clearcache"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    app:rightStyle="iconHide">
+
+                </com.leon.lib.settingview.LSettingItem>
+
+                <com.leon.lib.settingview.LSettingItem
+                    app:leftIcon="@drawable/ic_about_icon"
+                    android:id="@+id/about"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    app:rightStyle="iconHide">
+
+                </com.leon.lib.settingview.LSettingItem>
 
             </LinearLayout>
         </RelativeLayout>

@@ -3,6 +3,10 @@ package com.example.v2ex.widget;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.telephony.TelephonyManager;
 import android.text.Html;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
@@ -13,9 +17,12 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.TextView;
 
+import com.example.v2ex.MyApplication;
 import com.example.v2ex.ui.activity.photoviewactivity;
 
 import java.util.ArrayList;
+
+import static android.content.Context.TELEPHONY_SERVICE;
 
 
 /**
@@ -39,14 +46,15 @@ public class RichTextView extends TextView {
 
         setTextIsSelectable(true);
 
-        //移动网络情况下如果设置了不显示图片,则遵命
-        /*if (BaseApplication.isMobile(getContext())&&!BaseApplication.usemobile) {
+
+
+        /*if (MyApplication.noImg && netType != ConnectivityManager.TYPE_WIFI) {
             super.setText(Html.fromHtml(text));
             setMovementMethod(LinkMovementMethod.getInstance());
             return;
         }*/
 
-        Spanned spanned = Html.fromHtml(text, new AsyncImageGetter(getContext(), this),null);
+        Spanned spanned = Html.fromHtml(text, new AsyncImageGetter(getContext(), this), null);
         SpannableStringBuilder htmlSpannable;
         if (spanned instanceof SpannableStringBuilder) {
             htmlSpannable = (SpannableStringBuilder) spanned;
@@ -65,23 +73,23 @@ public class RichTextView extends TextView {
             imageUrls.add(imageUrl);
         }
 
-        for(ImageSpan span : spans){
+        for (ImageSpan span : spans) {
             final int start = htmlSpannable.getSpanStart(span);
-            final int end   = htmlSpannable.getSpanEnd(span);
+            final int end = htmlSpannable.getSpanEnd(span);
 
             ClickableSpan clickableSpan = new ClickableSpan() {
                 @Override
                 public void onClick(View widget) {
-                    Intent intent=new Intent(getContext(),photoviewactivity.class);
-                    intent.putStringArrayListExtra("list",imageUrls);
+                    Intent intent = new Intent(getContext(), photoviewactivity.class);
+                    intent.putStringArrayListExtra("list", imageUrls);
                     getContext().startActivity(intent);
                 }
             };
 
             ClickableSpan[] clickSpans = htmlSpannable.getSpans(start, end, ClickableSpan.class);
-            if(clickSpans != null && clickSpans.length != 0) {
+            if (clickSpans != null && clickSpans.length != 0) {
 
-                for(ClickableSpan c_span : clickSpans) {
+                for (ClickableSpan c_span : clickSpans) {
                     htmlSpannable.removeSpan(c_span);
                 }
             }

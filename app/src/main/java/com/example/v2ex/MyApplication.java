@@ -1,7 +1,11 @@
 package com.example.v2ex;
 
 import android.app.Application;
+import android.content.Context;
+import android.content.SharedPreferences;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.MemoryCategory;
 import com.weavey.loading.lib.LoadingLayout;
 
 /**
@@ -9,12 +13,16 @@ import com.weavey.loading.lib.LoadingLayout;
  */
 
 public class MyApplication extends Application {
-
+    public static boolean noImg;
+    public static boolean isNight;
 
     @Override
     public void onCreate() {
         super.onCreate();
-
+        SharedPreferences sharedPreferences = getSharedPreferences("setting", Context.MODE_PRIVATE);
+        noImg = sharedPreferences.getBoolean("noImg", false);
+        isNight = sharedPreferences.getBoolean("isNight", false);
+        Glide.get(getApplicationContext()).setMemoryCategory(MemoryCategory.HIGH);
         LoadingLayout.getConfig()
                 .setErrorText("出错啦~请稍后重试！")
                 .setEmptyText("抱歉，暂无数据")

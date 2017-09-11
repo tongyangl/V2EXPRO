@@ -77,9 +77,8 @@ public class MainActivity extends AppCompatActivity {
         Collection_PageFragment collection_pageFragment = new Collection_PageFragment();
         Setting_PageFragment setting_pageFragment = new Setting_PageFragment();
         fragmentList.add(home_pageFragment);
-        fragmentList.add(notice_pageFragment);
-
         fragmentList.add(collection_pageFragment);
+        fragmentList.add(notice_pageFragment);
         fragmentList.add(setting_pageFragment);
         FragmentManager fragmentManager = getSupportFragmentManager();
         MyFragment1PagerAdaptar myFragmentPagerAdaptar = new MyFragment1PagerAdaptar(fragmentManager, fragmentList);
@@ -87,7 +86,29 @@ public class MainActivity extends AppCompatActivity {
         viewPager.setCurrentItem(0);
         viewPager.setOffscreenPageLimit(3);
         radioGroup.check(R.id.home_page);
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                switch (position){
+
+                    case 0:radioGroup.check(R.id.home_page);break;
+                    case 1:radioGroup.check(R.id.collection_page);break;
+                    case 2:radioGroup.check(R.id.notice_page);break;
+                    case 3:radioGroup.check(R.id.setting_page);break;
+
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
@@ -99,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
                         id = R.id.home_page;
                         break;
                     case R.id.collection_page:
-                        viewPager.setCurrentItem(2);
+                        viewPager.setCurrentItem(1);
                         radioGroup.check(R.id.collection_page);
                         id = R.id.collection_page;
                         break;
@@ -109,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
                         radioGroup.check(R.id.setting_page);
                         break;
                     case R.id.notice_page:
-                        viewPager.setCurrentItem(1);
+                        viewPager.setCurrentItem(2);
                         radioGroup.check(R.id.notice_page);
                         id = R.id.notice_page;
                         break;
