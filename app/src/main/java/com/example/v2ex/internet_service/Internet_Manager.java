@@ -161,4 +161,10 @@ public class Internet_Manager {
 
         return service.repliceToptic(url, map);
     }
+
+    public Call<String> creatToptic(String url, Map<String, String> map) {
+
+
+        return service.creatToptoc(url, map);
+    }
 }

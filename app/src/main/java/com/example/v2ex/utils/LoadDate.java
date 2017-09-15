@@ -6,7 +6,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,6 +36,7 @@ import com.example.v2ex.model.NoticeModel;
 import com.example.v2ex.model.TopticModel;
 import com.example.v2ex.model.TopticdetalisModel;
 import com.example.v2ex.ui.activity.TopicsDetalisActivity;
+import com.example.v2ex.ui.activity.UsersActivity;
 import com.example.v2ex.widget.RichTextView;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -48,6 +52,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -1094,8 +1099,8 @@ public class LoadDate {
                     @Override
                     public String[] call(String s) {
                         Document document = Jsoup.parse(s);
-                        Elements elements = document.select("div[class=box]");
-                        Elements tr = elements.get(1).select("form").select("table").select("tr");
+                        Elements elements1 = document.select("div[class=box]");
+                        Elements tr = elements1.get(1).select("form").select("table").select("tr");
                         String name = tr.get(0).select("td").get(1).select("input").attr("name");
                         String pass = tr.get(1).select("td").get(1).select("input").attr("name");
                         String once = tr.get(2).select("td").get(1).select("input").attr("value");
@@ -1177,6 +1182,17 @@ public class LoadDate {
                                                         if (elements.contains("条未读提醒")) {
                                                             Toast.makeText(context, "登录成功", Toast.LENGTH_LONG).show();
                                                             //context.sendBroadcast();
+
+                                                            Elements elements1 = document.select("div[id=Rightbar]").select("div[class=box]");
+                                                            Log.d("----", elements1.size() + "");
+                                                            String userimg = "http://" + elements1.get(0).select("img").attr("src").substring(2);
+                                                            SharedPreferences sharedPreferences = context.getSharedPreferences("user", Context.MODE_PRIVATE);
+                                                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                                                            context.setResult(2);
+
+                                                            Log.d("===", userimg);
+                                                            editor.putString("userimg", userimg);
+                                                            editor.commit();
                                                             context.finish();
                                                             dialog.dismiss();
 
@@ -1294,6 +1310,7 @@ public class LoadDate {
                                          final LayoutInflater inflater,
                                          final Context Context
 
+
     ) {
         if (!isRefresh) {
             loadingLayout.setStatus(LoadingLayout.Loading);
@@ -1344,6 +1361,7 @@ public class LoadDate {
 
                     @Override
                     public void onNext(List<TopticdetalisModel> topticdetalisModels) {
+                        TopicsDetalisActivity.list = topticdetalisModels;
 
                         if (Integer.parseInt(url.substring(url.indexOf("y") + 1, url.length())) > 100) {
                             Internet_Manager.getInstance()
@@ -1370,8 +1388,9 @@ public class LoadDate {
                                         }
 
                                         @Override
-                                        public void onNext(List<TopticdetalisModel> topticdetalisModels) {
+                                        public void onNext(final List<TopticdetalisModel> topticdetalisModels) {
                                             loadingLayout.setStatus(LoadingLayout.Success);
+                                            TopicsDetalisActivity.list = topticdetalisModels;
 
                                             if (listView.getHeaderViewsCount() == 0) {
                                                 View headerview = inflater.inflate(R.layout.lv_header, null);
@@ -1398,7 +1417,6 @@ public class LoadDate {
 
                                             }
                                             smartRefreshLayout.finishRefresh(100);
-
                                             listView.setAdapter(new TopicRepliceAdaptar(inflater, topticdetalisModels, listView, Context));
 
 

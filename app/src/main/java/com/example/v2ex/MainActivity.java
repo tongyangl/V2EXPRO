@@ -1,5 +1,6 @@
 package com.example.v2ex;
 
+import android.content.Intent;
 import android.support.annotation.IdRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -21,6 +22,7 @@ import com.example.v2ex.internet_service.AddCookiesInterceptor;
 import com.example.v2ex.internet_service.Internet_Manager;
 import com.example.v2ex.internet_service.ReceivedCookiesInterceptor;
 import com.example.v2ex.model.TopticModel;
+import com.example.v2ex.ui.activity.CreateTopticActivity;
 import com.example.v2ex.ui.fragment.Collection_PageFragment;
 import com.example.v2ex.ui.fragment.Home_PageFragment;
 import com.example.v2ex.ui.fragment.Notice_PageFragment;
@@ -72,6 +74,10 @@ public class MainActivity extends AppCompatActivity {
         //  setSupportActionBar(toolbar);
         // toolbar.setTitle("V2EX");
         fragmentList = new ArrayList<>();
+        Intent i = getIntent();
+        if (i != null && i.hasExtra("finishApp")) {
+            this.finish();
+        }
         Home_PageFragment home_pageFragment = new Home_PageFragment();
         Notice_PageFragment notice_pageFragment = new Notice_PageFragment();
         Collection_PageFragment collection_pageFragment = new Collection_PageFragment();
@@ -94,12 +100,20 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onPageSelected(int position) {
-                switch (position){
+                switch (position) {
 
-                    case 0:radioGroup.check(R.id.home_page);break;
-                    case 1:radioGroup.check(R.id.collection_page);break;
-                    case 2:radioGroup.check(R.id.notice_page);break;
-                    case 3:radioGroup.check(R.id.setting_page);break;
+                    case 0:
+                        radioGroup.check(R.id.home_page);
+                        break;
+                    case 1:
+                        radioGroup.check(R.id.collection_page);
+                        break;
+                    case 2:
+                        radioGroup.check(R.id.notice_page);
+                        break;
+                    case 3:
+                        radioGroup.check(R.id.setting_page);
+                        break;
 
                 }
             }
@@ -107,6 +121,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onPageScrollStateChanged(int state) {
 
+            }
+        });
+        createToptic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, CreateTopticActivity.class);
+                startActivity(intent);
             }
         });
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {

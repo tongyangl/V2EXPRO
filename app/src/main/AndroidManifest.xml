@@ -34,6 +34,9 @@
         <activity android:name=".ui.activity.SiginActivity">
 
         </activity>
+        <activity android:name=".ui.activity.UsersActivity">
+
+        </activity>
         <activity android:name=".ui.activity.NodeTopticsActivity">
 
         </activity>
@@ -44,6 +47,9 @@
 
         </activity>
         <activity android:name=".ui.activity.SpecialActivity">
+
+        </activity>
+        <activity android:name=".ui.activity.CreateTopticActivity">
 
         </activity>
 

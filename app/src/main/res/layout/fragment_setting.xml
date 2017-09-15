@@ -78,12 +78,11 @@
                 android:layout_marginTop="10dp"
                 android:orientation="vertical">
 
-                <com.leon.lib.settingview.LSettingItem
-                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                <com.leon.lib.settingview.LSettingItem xmlns:app="http://schemas.android.com/apk/res-auto"
                     android:id="@+id/nodeCollect"
-                    app:leftIcon="@drawable/ic_node_icon"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
+                    app:leftIcon="@drawable/ic_node_icon"
 
                     >
 
@@ -91,57 +90,75 @@
 
                 <com.leon.lib.settingview.LSettingItem
                     android:id="@+id/topticsCollect"
-                    app:leftIcon="@drawable/ic_toptic_icon"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp">
+                    android:layout_height="50dp"
+                    app:leftIcon="@drawable/ic_toptic_icon">
 
                 </com.leon.lib.settingview.LSettingItem>
 
                 <com.leon.lib.settingview.LSettingItem
                     android:id="@+id/special"
                     android:layout_width="match_parent"
-                    app:leftIcon="@drawable/ic_special"
-                    android:layout_height="50dp">
+                    android:layout_height="50dp"
+                    app:leftIcon="@drawable/ic_special">
 
                 </com.leon.lib.settingview.LSettingItem>
 
                 <com.leon.lib.settingview.LSettingItem
                     android:id="@+id/noImg"
-                    app:leftIcon="@drawable/ic_mobile"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
+                    app:leftIcon="@drawable/ic_mobile"
                     app:rightStyle="iconSwitch">
 
                 </com.leon.lib.settingview.LSettingItem>
 
                 <com.leon.lib.settingview.LSettingItem
                     android:id="@+id/night"
-                    app:leftIcon="@drawable/ic_night_icon"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
+                    app:leftIcon="@drawable/ic_night_icon"
                     app:rightStyle="iconSwitch">
 
                 </com.leon.lib.settingview.LSettingItem>
 
                 <com.leon.lib.settingview.LSettingItem
-                    app:leftIcon="@drawable/ic_clearcache_icon"
+                    app:rightTextSize="16sp"
+
+                    app:isShowRightText="true"
                     android:id="@+id/clearcache"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
+                    app:leftIcon="@drawable/ic_clearcache_icon"
                     app:rightStyle="iconHide">
 
                 </com.leon.lib.settingview.LSettingItem>
 
                 <com.leon.lib.settingview.LSettingItem
-                    app:leftIcon="@drawable/ic_about_icon"
                     android:id="@+id/about"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
+                    app:leftIcon="@drawable/ic_about_icon"
                     app:rightStyle="iconHide">
 
                 </com.leon.lib.settingview.LSettingItem>
 
+                <Button
+                    android:visibility="gone"
+                    android:id="@+id/setting_logout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginRight="12dp"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/logout_button"
+                    android:text="退出登录"
+                    android:textColor="#ffffff"
+                    android:textStyle="bold" />
             </LinearLayout>
+
+
         </RelativeLayout>
 
 

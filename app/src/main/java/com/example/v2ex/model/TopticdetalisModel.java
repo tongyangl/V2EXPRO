@@ -1,10 +1,12 @@
 package com.example.v2ex.model;
 
+import java.io.Serializable;
+
 /**
  * Created by 佟杨 on 2017/9/4.
  */
 
-public class TopticdetalisModel {
+public class TopticdetalisModel implements Serializable {
     private String title;
     private String img;
     private String username;

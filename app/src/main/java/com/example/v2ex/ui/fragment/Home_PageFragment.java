@@ -1,6 +1,8 @@
 package com.example.v2ex.ui.fragment;
 
+import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -90,11 +92,27 @@ public class Home_PageFragment extends Fragment {
         list.add("r2");
         list.add("好玩");
         MyViewPageradapter myFragmentPagerAdaptar = new MyViewPageradapter(getChildFragmentManager(), fragmentList, list);
-
         viewPager.setAdapter(myFragmentPagerAdaptar);
         tabLayout.setupWithViewPager(viewPager);
-
         viewPager.setOffscreenPageLimit(9);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+
+                Intent intent = new Intent();
+                intent.setAction("android.intent.action.VIEW");
+                Uri content_url = Uri.parse("http://www.baidu.com/s?wd="+query);
+                intent.setData(content_url);
+                intent.setClassName("com.android.browser", "com.android.browser.BrowserActivity");
+                startActivity(intent);
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
     }
 
 

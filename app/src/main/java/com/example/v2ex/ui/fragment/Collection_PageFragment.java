@@ -1,5 +1,6 @@
 package com.example.v2ex.ui.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -92,7 +93,7 @@ public class Collection_PageFragment extends BaseFragment implements SearchView.
         }).map(new Func1<String, List<NodesModel>>() {
             @Override
             public List<NodesModel> call(String s) {
-                return getNodesList();
+                return getNodesList(getContext());
             }
         }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -119,9 +120,9 @@ public class Collection_PageFragment extends BaseFragment implements SearchView.
 
     }
 
-    private List<NodesModel> getNodesList() {
+    public static List<NodesModel> getNodesList(Context context) {
 
-        InputStream inputStream = getActivity().getResources().openRawResource(R.raw.nodejson);
+        InputStream inputStream =context .getResources().openRawResource(R.raw.nodejson);
         InputStreamReader inputStreamReader = null;
         try {
             inputStreamReader = new InputStreamReader(inputStream, "utf-8");

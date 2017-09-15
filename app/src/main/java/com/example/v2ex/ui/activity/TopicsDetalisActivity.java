@@ -16,6 +16,7 @@ import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -26,12 +27,16 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.v2ex.R;
+import com.example.v2ex.model.TopticdetalisModel;
 import com.example.v2ex.utils.LoadDate;
 import com.example.v2ex.utils.LoadImg;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.weavey.loading.lib.LoadingLayout;
+
+import java.io.Serializable;
+import java.util.List;
 
 /**
  * Created by 佟杨 on 2017/4/6.
@@ -50,6 +55,8 @@ public class TopicsDetalisActivity extends AppCompatActivity {
     private EditText editText;
     private TextView replice;
     private ProgressDialog progressDialog;
+    public static List<TopticdetalisModel> list;
+    private int editLength;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -134,13 +141,22 @@ public class TopicsDetalisActivity extends AppCompatActivity {
         smartRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(RefreshLayout refreshlayout) {
-                Log.d("ddd", url);
+
                 LoadDate.LoadTopticdetalis(true, loadingLayout, url, listView, smartRefreshLayout, getLayoutInflater(), getApplicationContext());
 
             }
         });
         LoadDate.LoadTopticdetalis(false, loadingLayout, url, listView, smartRefreshLayout, getLayoutInflater(), getApplicationContext());
 
+
+        replice.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                progressDialog = new ProgressDialog(TopicsDetalisActivity.this);
+
+                LoadDate.repliceToptic(smartRefreshLayout, loadingLayout, editText, url.substring(2, 8), getApplicationContext(), progressDialog);
+            }
+        });
         editText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -150,10 +166,21 @@ public class TopicsDetalisActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
+
             }
 
             @Override
             public void afterTextChanged(Editable s) {
+                if (s.length() > editLength) {
+                    if (s.toString().length() > 0 && s.toString().charAt(s.toString().length() - 1) == '@') {
+
+                        Intent intent = new Intent(TopicsDetalisActivity.this, UsersActivity.class);
+                        intent.putExtra("list", (Serializable) list);
+                        startActivityForResult(intent, 3);
+                    }
+                }
+                editLength = s.length();
+
                 if (editText.getText().length() != 0) {
                     replice.setClickable(true);
                     replice.setTextColor(Color.parseColor("#1E90FF"));
@@ -165,16 +192,16 @@ public class TopicsDetalisActivity extends AppCompatActivity {
                 }
             }
         });
-
-        replice.setOnClickListener(new View.OnClickListener() {
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onClick(View v) {
-                progressDialog = new ProgressDialog(TopicsDetalisActivity.this);
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (position>=0){
+                    editText.setText(editText.getText().toString() +"@"+list.get(position).getUsername());
+                    editText.setSelection(editText.getText().length());
+                }
 
-                LoadDate.repliceToptic(smartRefreshLayout, loadingLayout, editText, url.substring(2, 8), getApplicationContext(), progressDialog);
             }
         });
-
     }
 
     @Override
@@ -187,5 +214,17 @@ public class TopicsDetalisActivity extends AppCompatActivity {
 
 
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == 1) {
+            if (data.hasExtra("name"))
+                editText.setText(editText.getText().toString() + data.getStringExtra("name"));
+            editText.setSelection(editText.getText().length());
+        }
+
+
     }
 }

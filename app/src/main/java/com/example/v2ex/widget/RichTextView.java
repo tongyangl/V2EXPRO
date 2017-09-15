@@ -28,10 +28,11 @@ import static android.content.Context.TELEPHONY_SERVICE;
 /**
  * Created by yw on 2015/5/10.
  */
-public class RichTextView extends TextView {
+public class RichTextView extends TextView  {
 
     public RichTextView(Context context) {
         super(context);
+
     }
 
     public RichTextView(Context context, AttributeSet attrs) {
@@ -45,8 +46,6 @@ public class RichTextView extends TextView {
     public void setRichText(String text) {
 
         setTextIsSelectable(true);
-
-
 
         /*if (MyApplication.noImg && netType != ConnectivityManager.TYPE_WIFI) {
             super.setText(Html.fromHtml(text));

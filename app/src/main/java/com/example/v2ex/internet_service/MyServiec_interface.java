@@ -74,4 +74,15 @@ public interface MyServiec_interface {
 
     @GET
     Observable<String> getNodeCollect(@Url String t);
+    @Headers({
+
+            "Origin: https://www.v2ex.com/",
+
+            "Content-Type:application/x-www-form-urlencoded"
+    })
+    @FormUrlEncoded
+    @POST
+    Call<String> creatToptoc(@Url String url, @FieldMap Map<String, String> map);
+
+
 }
