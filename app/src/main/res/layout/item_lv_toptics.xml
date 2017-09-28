@@ -27,6 +27,7 @@
             android:layout_height="match_parent">
 
             <TextView
+                android:layout_marginLeft="10dp"
                 android:id="@+id/username"
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
@@ -36,7 +37,7 @@
                 android:textStyle="bold" />
 
             <ImageView
-                android:src="@drawable/ic_pin_drop_black_24dp"
+                android:src="@drawable/ic_trending_flat_black_24dp"
                 android:id="@+id/nodeimg"
                 android:layout_width="20dp"
                 android:layout_height="13dp"
@@ -46,13 +47,14 @@
                />
 
             <TextView
+
+                android:textStyle="bold"
                 android:id="@+id/nodename"
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
                 android:layout_marginLeft="10dp"
                 android:layout_toRightOf="@+id/nodeimg"
                 android:gravity="center_vertical"
-                android:textColor="#00EE00"
                 android:textSize="14sp" />
 
             <TextView

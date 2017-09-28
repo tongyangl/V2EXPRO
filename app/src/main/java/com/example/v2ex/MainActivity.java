@@ -1,61 +1,57 @@
 package com.example.v2ex;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.annotation.IdRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.v2ex.adapter.MyFragment1PagerAdaptar;
-import com.example.v2ex.adapter.MyFragmentPagerAdaptar;
-import com.example.v2ex.internet_service.AddCookiesInterceptor;
 import com.example.v2ex.internet_service.Internet_Manager;
-import com.example.v2ex.internet_service.ReceivedCookiesInterceptor;
-import com.example.v2ex.model.TopticModel;
 import com.example.v2ex.ui.activity.CreateTopticActivity;
+import com.example.v2ex.ui.activity.search_activity;
 import com.example.v2ex.ui.fragment.Collection_PageFragment;
 import com.example.v2ex.ui.fragment.Home_PageFragment;
 import com.example.v2ex.ui.fragment.Notice_PageFragment;
 import com.example.v2ex.ui.fragment.Setting_PageFragment;
-import com.example.v2ex.utils.HtmlToList;
-import com.example.v2ex.widget.NoScrollViewPager;
-import com.franmontiel.persistentcookiejar.ClearableCookieJar;
-import com.franmontiel.persistentcookiejar.PersistentCookieJar;
-import com.franmontiel.persistentcookiejar.cache.SetCookieCache;
-import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor;
-import com.google.gson.JsonObject;
+import com.miguelcatalan.materialsearchview.MaterialSearchView;
+
 
 import java.util.ArrayList;
 import java.util.List;
 
-import rx.Observable;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Func1;
-import rx.schedulers.Schedulers;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MaterialSearchView.OnQueryTextListener {
     private ViewPager viewPager;
-    private RadioGroup radioGroup;
+   // private RadioGroup radioGroup;
     private RadioButton Home_Page_Button;
     private RadioButton setting_page_Button;
     private RadioButton notice_page_Button;
     private RadioButton colliection_page_Button;
-    private RadioButton createToptic;
+    private ImageButton createToptic;
     private List<Fragment> fragmentList;
     private Toolbar toolbar;
     private long exitTime = 0;
     private int id = 0;
+    private MaterialSearchView searchView;
+    // private TextView mTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,15 +60,20 @@ public class MainActivity extends AppCompatActivity {
         Internet_Manager.context = this;
 
         viewPager = (ViewPager) findViewById(R.id.viewPager);
-        radioGroup = (RadioGroup) findViewById(R.id.radioGroup);
+      //  radioGroup = (RadioGroup) findViewById(R.id.radioGroup);
         Home_Page_Button = (RadioButton) findViewById(R.id.home_page);
         setting_page_Button = (RadioButton) findViewById(R.id.setting_page);
         notice_page_Button = (RadioButton) findViewById(R.id.notice_page);
         colliection_page_Button = (RadioButton) findViewById(R.id.collection_page);
-        createToptic = (RadioButton) findViewById(R.id.createtoptic_button);
-        // toolbar = (Toolbar) findViewById(R.id.toolBar);
-        //  setSupportActionBar(toolbar);
-        // toolbar.setTitle("V2EX");
+        createToptic = (ImageButton) findViewById(R.id.createtoptic_button);
+        // mTitle = (TextView) findViewById(R.id.mTitle);
+        //  searchView= (MaterialSearchView) findViewById(R.id.search_view);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle("V2EX");
+        //toolbar.setSubtitle("首页");
+        //toolbar.setLogo(R.drawable.v2ex);
+        setSupportActionBar(toolbar);
+        //   mTitle.setText("V2EX");
         fragmentList = new ArrayList<>();
         Intent i = getIntent();
         if (i != null && i.hasExtra("finishApp")) {
@@ -91,7 +92,8 @@ public class MainActivity extends AppCompatActivity {
         viewPager.setAdapter(myFragmentPagerAdaptar);
         viewPager.setCurrentItem(0);
         viewPager.setOffscreenPageLimit(3);
-        radioGroup.check(R.id.home_page);
+        Home_Page_Button.setChecked(true);
+
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -103,16 +105,29 @@ public class MainActivity extends AppCompatActivity {
                 switch (position) {
 
                     case 0:
-                        radioGroup.check(R.id.home_page);
+                        Home_Page_Button.setChecked(true);
+                        colliection_page_Button.setChecked(false);
+                        setting_page_Button.setChecked(false);
+                        notice_page_Button.setChecked(false);
                         break;
                     case 1:
-                        radioGroup.check(R.id.collection_page);
+
+                        Home_Page_Button.setChecked(false);
+                        colliection_page_Button.setChecked(true);
+                        setting_page_Button.setChecked(false);
+                        notice_page_Button.setChecked(false);
                         break;
                     case 2:
-                        radioGroup.check(R.id.notice_page);
+                        Home_Page_Button.setChecked(false);
+                        colliection_page_Button.setChecked(false);
+                        setting_page_Button.setChecked(false);
+                        notice_page_Button.setChecked(true);
                         break;
                     case 3:
-                        radioGroup.check(R.id.setting_page);
+                        Home_Page_Button.setChecked(false);
+                        colliection_page_Button.setChecked(false);
+                        setting_page_Button.setChecked(true);
+                        notice_page_Button.setChecked(false);
                         break;
 
                 }
@@ -130,39 +145,69 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+        Home_Page_Button.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
-                switch (checkedId) {
-
-                    case R.id.home_page:
-                        viewPager.setCurrentItem(0);
-                        radioGroup.check(R.id.home_page);
-                        id = R.id.home_page;
-                        break;
-                    case R.id.collection_page:
-                        viewPager.setCurrentItem(1);
-                        radioGroup.check(R.id.collection_page);
-                        id = R.id.collection_page;
-                        break;
-                    case R.id.setting_page:
-                        viewPager.setCurrentItem(3);
-                        id = R.id.setting_page;
-                        radioGroup.check(R.id.setting_page);
-                        break;
-                    case R.id.notice_page:
-                        viewPager.setCurrentItem(2);
-                        radioGroup.check(R.id.notice_page);
-                        id = R.id.notice_page;
-                        break;
-                    case R.id.createtoptic_button:
-
-                        radioGroup.check(id);
-                        break;
-
-                }
+            public void onClick(View v) {
+                viewPager.setCurrentItem(0);
+                Home_Page_Button.setChecked(true);
+                colliection_page_Button.setChecked(false);
+                setting_page_Button.setChecked(false);
+                notice_page_Button.setChecked(false);
             }
         });
+        colliection_page_Button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                viewPager.setCurrentItem(1);
+                Home_Page_Button.setChecked(false);
+                colliection_page_Button.setChecked(true);
+                setting_page_Button.setChecked(false);
+                notice_page_Button.setChecked(false);
+            }
+        });
+        setting_page_Button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                viewPager.setCurrentItem(3);
+                Home_Page_Button.setChecked(false);
+                colliection_page_Button.setChecked(false);
+                setting_page_Button.setChecked(true);
+                notice_page_Button.setChecked(false);
+            }
+        });
+        notice_page_Button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                viewPager.setCurrentItem(2);
+                Home_Page_Button.setChecked(false);
+                colliection_page_Button.setChecked(false);
+                setting_page_Button.setChecked(false);
+                notice_page_Button.setChecked(true);
+            }
+        });
+
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                Intent intent = new Intent(getApplicationContext(), search_activity.class);
+                startActivity(intent);
+
+                return true;
+            }
+        });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        getMenuInflater().inflate(R.menu.search, menu);
+
+
+        MenuItem item = menu.findItem(R.id.ab_search);
+
+
+        return super.onCreateOptionsMenu(menu);
+
     }
 
     @Override
@@ -178,5 +223,23 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+
+
+        Intent intent = new Intent();
+        intent.setAction("android.intent.action.VIEW");
+        Uri content_url = Uri.parse("http://www.baidu.com/s?wd=" + query);
+        intent.setData(content_url);
+        intent.setClassName("com.android.browser", "com.android.browser.BrowserActivity");
+        startActivity(intent);
+        return true;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        return false;
     }
 }

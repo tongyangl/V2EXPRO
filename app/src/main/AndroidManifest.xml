@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.v2ex">
 
-    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"></uses-permission>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:name=".MyApplication"
@@ -15,6 +15,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         <activity
+            android:theme="@style/ActivityTheme"
+
             android:name=".MainActivity"
             android:windowSoftInputMode="adjustPan">
             <intent-filter>
@@ -24,35 +26,31 @@
             </intent-filter>
         </activity>
         <activity
+            android:theme="@style/ActivityTheme"
             android:name=".ui.activity.TopicsDetalisActivity"
-            android:windowSoftInputMode="stateHidden">
+            android:windowSoftInputMode="stateHidden"></activity>
+        <activity android:name=".ui.activity.photoviewactivity"></activity>
+        <activity android:name=".ui.activity.SiginActivity"></activity>
+        <activity android:name=".ui.activity.UsersActivity"></activity>
+        <activity android:name=".ui.activity.NodeTopticsActivity"></activity>
+        <activity android:name=".ui.activity.NodeCollectActivity"></activity>
+        <activity android:name=".ui.activity.TopticCollectActivity"></activity>
+        <activity android:name=".ui.activity.SpecialActivity"></activity>
+        <activity android:name=".ui.activity.CreateTopticActivity"></activity>
+        <activity
 
+            android:name=".ui.activity.ScrollingActivity"
+            android:label="@string/title_activity_scrolling"
+            android:parentActivityName=".ui.activity.NodeTopticsActivity"
+            android:theme="@style/ActivityTheme"
+            >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.v2ex.ui.activity.NodeTopticsActivity" />
         </activity>
-        <activity android:name=".ui.activity.photoviewactivity">
-
-        </activity>
-        <activity android:name=".ui.activity.SiginActivity">
-
-        </activity>
-        <activity android:name=".ui.activity.UsersActivity">
-
-        </activity>
-        <activity android:name=".ui.activity.NodeTopticsActivity">
-
-        </activity>
-        <activity android:name=".ui.activity.NodeCollectActivity">
-
-        </activity>
-        <activity android:name=".ui.activity.TopticCollectActivity">
-
-        </activity>
-        <activity android:name=".ui.activity.SpecialActivity">
-
-        </activity>
-        <activity android:name=".ui.activity.CreateTopticActivity">
-
-        </activity>
-
+        <activity
+            android:theme="@style/ActivityTheme"
+            android:name=".ui.activity.search_activity"></activity>
     </application>
 
 </manifest>

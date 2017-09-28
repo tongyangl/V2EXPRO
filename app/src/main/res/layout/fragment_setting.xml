@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <RelativeLayout
+   <!-- <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="#fff">
@@ -22,7 +22,7 @@
             />
 
 
-    </RelativeLayout>
+    </RelativeLayout>-->
 
     <View
 

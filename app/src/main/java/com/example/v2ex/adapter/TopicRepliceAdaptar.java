@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.v2ex.R;
 import com.example.v2ex.model.TopticdetalisModel;
+import com.example.v2ex.utils.LoadImg;
 import com.example.v2ex.widget.RichTextView;
 
 import java.util.List;
@@ -80,9 +81,8 @@ public class TopicRepliceAdaptar extends BaseAdapter {
         viewHolder.username.setText(list.get(i).getUsername());
 
         viewHolder.replice.setRichText(list.get(i).getContent());
-        Glide.with(context)
-                .load(list.get(i).getImg())
-                .into(viewHolder.imageView);
+        LoadImg.LoadCircleImageView(list.get(i).getImg(),viewHolder.imageView,context);
+
         return view;
 
 

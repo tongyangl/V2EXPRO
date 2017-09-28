@@ -101,7 +101,7 @@ public class TopticsListViewAdapter extends BaseAdapter {
 
         viewHoder.topictitle.setText(list.get(position).getTitle());
         viewHoder.time.setText(list.get(position).getTime());
-        LoadImg.LoadImage(list.get(position).getImg(), viewHoder.imageView, context);
+        LoadImg.LoadCircleImageView(list.get(position).getImg(), viewHoder.imageView, context);
         return convertView;
     }
 

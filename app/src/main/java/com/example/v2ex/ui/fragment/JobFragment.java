@@ -44,7 +44,7 @@ public class JobFragment extends BaseFragment {
     @Override
     protected void loadData() {
         loadingLayout.setStatus(LoadingLayout.Loading);
-        smartRefreshLayout.autoRefresh(0);
+
         smartRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(RefreshLayout refreshlayout) {

@@ -42,12 +42,12 @@ public class HotFragment extends BaseFragment {
             @Override
             public void onRefresh(RefreshLayout refreshlayout) {
 
-                LoadDate.loadTopticsData(false,"hot", listView, smartRefreshLayout,
+                LoadDate.loadTopticsData(true,"hot", listView, smartRefreshLayout,
                         getActivity().getLayoutInflater(),getActivity(),loadingLayout);
 
             }
         });
-        LoadDate.loadTopticsData(true,"hot", listView, smartRefreshLayout,
+        LoadDate.loadTopticsData(false,"hot", listView, smartRefreshLayout,
                 getActivity().getLayoutInflater(),getActivity(),loadingLayout);
     }
 }

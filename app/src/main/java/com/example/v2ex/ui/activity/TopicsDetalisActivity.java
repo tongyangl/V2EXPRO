@@ -58,6 +58,8 @@ public class TopicsDetalisActivity extends AppCompatActivity {
     public static List<TopticdetalisModel> list;
     private int editLength;
 
+
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,20 +70,23 @@ public class TopicsDetalisActivity extends AppCompatActivity {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         editText = (EditText) findViewById(R.id.editText);
         replice = (TextView) findViewById(R.id.replice);
-        final ImageView imageView = (ImageView) toolbar.findViewById(R.id.titleIcon);
-        final TextView title = (TextView) toolbar.findViewById(R.id.my_title);
-        ImageView back = (ImageView) toolbar.findViewById(R.id.back);
-        ImageView menu = (ImageView) toolbar.findViewById(R.id.bt_menu);
 
-        back.setOnClickListener(new View.OnClickListener() {
+        setSupportActionBar(toolbar);
+
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
         });
-        popupWindow = new PopupWindow(this);
 
-        menu.setOnClickListener(new View.OnClickListener() {
+        popupWindow = new PopupWindow(this);
+        ImageView imageView = (ImageView) toolbar.findViewById(R.id.bt_menu);
+
+        TextView textView = (TextView) toolbar.findViewById(R.id.my_title);
+        textView.setText("话题详情");
+        imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (popupWindow.isShowing()) {
@@ -127,16 +132,6 @@ public class TopicsDetalisActivity extends AppCompatActivity {
         url = intent.getStringExtra("url");
 
 
-        if (intent.hasExtra("icon")) {
-            titleicon = intent.getStringExtra("icon");
-            userName = intent.getStringExtra("username");
-            title.setText(userName);
-            LoadImg.LoadImage(titleicon, imageView, getApplicationContext());
-        } else {
-            title.setText("主题详情");
-        }
-
-        // smartRefreshLayout.autoRefresh(0);
         loadingLayout.setStatus(LoadingLayout.Loading);
         smartRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
@@ -195,13 +190,14 @@ public class TopicsDetalisActivity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (position>=0){
-                    editText.setText(editText.getText().toString() +"@"+list.get(position).getUsername());
+                if (position >= 0&&position<=list.size()) {
+                    editText.setText(editText.getText().toString() + "@" + list.get(position-1).getUsername());
                     editText.setSelection(editText.getText().length());
                 }
 
             }
         });
+
     }
 
     @Override

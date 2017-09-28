@@ -146,7 +146,7 @@ public class Setting_PageFragment extends BaseFragment {
         });
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("user", Context.MODE_PRIVATE);
         if (!sharedPreferences.getString("userimg", "").equals("")) {
-            LoadImg.LoadImage(sharedPreferences.getString("userimg", ""), userIcon, getContext());
+            LoadImg.LoadCircleImageView(sharedPreferences.getString("userimg", ""), userIcon, getContext());
             userName.setText(sharedPreferences.getString("username", ""));
             set_bt.setVisibility(View.VISIBLE);
 

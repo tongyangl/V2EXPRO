@@ -18,12 +18,10 @@
             app:srlEnablePreviewInEditMode="true"
             app:srlPrimaryColor="#444444">
 
-            <com.scwang.smartrefresh.layout.header.BezierRadarHeader
-                android:layout_width="match_parent"
-
-                android:layout_height="wrap_content" />
+           
 
             <ListView
+                android:layoutAnimation="@anim/anim_listview_item"
                 android:id="@+id/recycle"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">

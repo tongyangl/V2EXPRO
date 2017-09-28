@@ -136,7 +136,7 @@ public class HtmlToList {
 
                     Element t = tr.get(j).select("span[class=small fade]").first();
                     String ti = t.ownText();
-                    String time = ti.substring(3, ti.length());
+                    String time = ti.substring(3, ti.length()).replace("•","");
 
                     Elements elements1 = tr.get(j).select("span[class=small fade]").select("strong");
                     if (elements1.size() == 2) {

@@ -5,15 +5,19 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.os.Bundle;
+import android.graphics.Rect;
+
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
-import android.text.TextWatcher;
+import android.support.v7.widget.Toolbar;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -22,10 +26,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.example.v2ex.MyException;
 import com.example.v2ex.R;
 import com.example.v2ex.adapter.NodeCollectAdapter;
 import com.example.v2ex.adapter.NodeRecycleAdapter;
+import com.example.v2ex.adapter.NodesTopticAdapter;
 import com.example.v2ex.adapter.NoticeLvAdapter;
 import com.example.v2ex.adapter.TopicRepliceAdaptar;
 import com.example.v2ex.adapter.TopticsListViewAdapter;
@@ -36,8 +44,12 @@ import com.example.v2ex.model.NoticeModel;
 import com.example.v2ex.model.TopticModel;
 import com.example.v2ex.model.TopticdetalisModel;
 import com.example.v2ex.ui.activity.TopicsDetalisActivity;
-import com.example.v2ex.ui.activity.UsersActivity;
 import com.example.v2ex.widget.RichTextView;
+import com.github.jdsjlzx.ItemDecoration.DividerDecoration;
+import com.github.jdsjlzx.interfaces.OnItemClickListener;
+import com.github.jdsjlzx.interfaces.OnLoadMoreListener;
+import com.github.jdsjlzx.recyclerview.LRecyclerView;
+import com.github.jdsjlzx.recyclerview.LRecyclerViewAdapter;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadmoreListener;
@@ -51,8 +63,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import java.io.IOException;
-import java.io.Serializable;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -865,27 +876,30 @@ public class LoadDate {
      * 获取节点下的主题
      *
      * @param isFrefresh
-     * @param loadingLayout
      * @param url
-     * @param smart
      * @param listView
      * @param layoutInflater
      * @param c
      * @param num
      */
     public static void getNodeToptics(
+            final ImageView iv,
+            final Toolbar toolbar,
+            //final LoadingLayout loadingLayout,
+            final ImageView collapsingToolbarLayout,
             boolean isFrefresh,
-            final LoadingLayout loadingLayout, final String url,
-            final SmartRefreshLayout smart,
-            final ListView listView,
+            final String url,
+
+            final LRecyclerView listView,
             final LayoutInflater layoutInflater,
             final Context c,
             final int num
 
     ) {
-        if (!isFrefresh) {
-            loadingLayout.setStatus(LoadingLayout.Loading);
-        }
+
+        //   loadingLayout.setStatus(LoadingLayout.Loading);
+        final String[] imgUrl = new String[1];
+
         page = 1;
         Internet_Manager.getInstance()
                 .getNodeToptics("go/" + url + nodesUrl + page)
@@ -894,6 +908,15 @@ public class LoadDate {
                 .map(new Func1<String, List<TopticModel>>() {
                     @Override
                     public List<TopticModel> call(String s) {
+                        Element els = Jsoup.parse(s).select("div[class=header]").get(0);
+
+                        imgUrl[0] = "http:" + els.select("img").attr("src");
+                        String des = els.select("span[class=f12 gray]").text();
+                        String node_title = els.ownText();
+
+                        String top_num = els.select("strong[class=gray]").text();
+
+                        Log.d("ddd", imgUrl[0] + des + node_title + top_num);
                         if (num > 20) {
                             Elements elements;
                             elements = Jsoup.parse(s).select("div[class=cell]").get(4).select("a");
@@ -921,95 +944,135 @@ public class LoadDate {
 
             @Override
             public void onError(Throwable e) {
-                smart.finishRefresh(0);
+
                 Toast.makeText(c, e.getMessage(), Toast.LENGTH_LONG).show();
-                MyException.onError(e, loadingLayout);
+              /*  MyException.onError(e, loadingLayout);
                 loadingLayout.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
 
-                        LoadDate.getNodeToptics(false, loadingLayout, url.replace("http://www.v2ex.com/go/", "")
-                                , smart, listView, layoutInflater, c, num);
+                        LoadDate.getNodeToptics(loadingLayout, false, url.replace("http://www.v2ex.com/go/", "")
+                                , listView, layoutInflater, c, num);
                     }
-                });
+                });*/
             }
 
             @Override
             public void onNext(final List<TopticModel> topticModels) {
+                String urls;
+                toolbar.setSubtitle("主题总数" + num);
+                Log.d("---", imgUrl[0]);
+                if (imgUrl[0].length() < 10) {
 
-                final TopticsListViewAdapter adapter = new TopticsListViewAdapter(topticModels, layoutInflater, c);
-                listView.setAdapter(adapter);
-                smart.finishRefresh(0);
-                loadingLayout.setStatus(LoadingLayout.Success);
-                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    urls = "http:////v2ex.assets.uxengine.net/site/logo@2x.png?m=1346064962";
+                } else {
+                    urls = imgUrl[0];
+                }
+                LoadImg.LoadCircleImageView(urls, iv, c);
+                Glide.with(c).load(urls).asBitmap().into(new SimpleTarget<Bitmap>() {
                     @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        Intent i = new Intent(c, TopicsDetalisActivity.class);
-                        i.putExtra("url", topticModels.get(position).getRepliceurl());
-                        i.putExtra("icon", topticModels.get(position).getImg());
-                        i.putExtra("username", topticModels.get(position).getUserName());
-                        c.startActivity(i);
-                        adapter.isTouch.set(position, true);
-                        TextView lastreplice = (TextView) view.findViewById(R.id.replice);
+                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
 
-                        lastreplice.setBackgroundResource(R.drawable.list_textview_replice1);
+                        collapsingToolbarLayout.setImageBitmap(BlurBitmapUtil.blurBitmap(c, resource, 24));
 
                     }
                 });
-                smart.setOnLoadmoreListener(new OnLoadmoreListener() {
+
+                listView.setLayoutManager(new LinearLayoutManager(c));
+                final NodesTopticAdapter adapter = new NodesTopticAdapter(topticModels, c);
+
+                final LRecyclerViewAdapter adapter1 = new LRecyclerViewAdapter(adapter);
+                listView.setPullRefreshEnabled(false);
+                adapter1.setOnItemClickListener(new OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        Intent intent = new Intent(c, TopicsDetalisActivity.class);
+                        intent.putExtra("url", topticModels.get(position).getRepliceurl());
+                        c.startActivity(intent);
+                    }
+                });
+                DividerDecoration divider = new DividerDecoration.Builder(c)
+                        .setHeight(R.dimen.lv)
+                        .setPadding(R.dimen.lv)
+                        .setColorResource(R.color.dark_background)
+                        .build();
+                listView.addItemDecoration(divider);
+                listView.setAdapter(adapter1);
+                listView.setLoadMoreEnabled(true);
+                listView.setOnLoadMoreListener(new OnLoadMoreListener() {
                     int nowPage = 1;
 
                     @Override
-                    public void onLoadmore(RefreshLayout refreshlayout) {
-                        Log.d("page", nowPage + "d");
-                        if (nowPage >= page) {
-                            Log.d("page", nowPage + "d");
-                            smart.finishLoadmore();
+                    public void onLoadMore() {
+                        Log.d("asdsad", "asdsad" + nowPage);
+                        nowPage++;
+                        Internet_Manager.getInstance()
+                                .getNodeToptics("go/" + url + nodesUrl + nowPage)
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribeOn(Schedulers.io())
+                                .map(new Func1<String, List<TopticModel>>() {
+                                    @Override
+                                    public List<TopticModel> call(String s) {
 
-                        } else {
-                            nowPage++;
-                            Internet_Manager.getInstance()
-                                    .getNodeToptics("go/" + url + nodesUrl + nowPage)
-                                    .observeOn(AndroidSchedulers.mainThread())
-                                    .subscribeOn(Schedulers.io())
-                                    .map(new Func1<String, List<TopticModel>>() {
-                                        @Override
-                                        public List<TopticModel> call(String s) {
+                                        return HtmlToList.NodeTopicsToList(s);
+                                    }
+                                }).subscribe(new Subscriber<List<TopticModel>>() {
+                            @Override
+                            public void onCompleted() {
 
-                                            return HtmlToList.NodeTopicsToList(s);
-                                        }
-                                    }).subscribe(new Subscriber<List<TopticModel>>() {
-                                @Override
-                                public void onCompleted() {
+                            }
 
-                                }
+                            @Override
+                            public void onError(Throwable e) {
+                                nowPage--;
+                                Toast.makeText(c, e.getMessage(), Toast.LENGTH_LONG).show();
+                                //   MyException.onError(e, loadingLayout);
+                                Toast.makeText(c, "出错啦...", Toast.LENGTH_LONG).show();
 
-                                @Override
-                                public void onError(Throwable e) {
-                                    smart.finishRefresh(0);
-                                    nowPage--;
-                                    Toast.makeText(c, e.getMessage(), Toast.LENGTH_LONG).show();
-                                    //  MyException.onError(e, loadingLayout);
-                                    Toast.makeText(c, "出错啦...", Toast.LENGTH_LONG).show();
+                            }
 
-                                }
+                            @Override
+                            public void onNext(List<TopticModel> toptic) {
+                                listView.refreshComplete(toptic.size());
+                                if (topticModels.get(topticModels.size() - 1).getTitle().contains(toptic.get(toptic.size() - 1).getTitle())) {
+                                    listView.setNoMore(true);
 
-                                @Override
-                                public void onNext(List<TopticModel> toptic) {
+                                } else {
+
                                     topticModels.addAll(toptic);
-                                    smart.finishLoadmore();
-                                    adapter.notifyDataSetChanged();
+                                    adapter1.notifyDataSetChanged();
+
                                 }
-                            });
 
-                        }
-
+                            }
+                        });
                     }
                 });
+
             }
         });
 
 
+    }
+
+    public static class SpacesItemDecoration extends RecyclerView.ItemDecoration {
+        private int space;
+
+        public SpacesItemDecoration(int space) {
+            this.space = space;
+        }
+
+        @Override
+        public void getItemOffsets(Rect outRect, View view,
+                                   RecyclerView parent, RecyclerView.State state) {
+            outRect.left = space;
+            outRect.right = space;
+            outRect.bottom = space;
+
+            // Add top margin only for the first item to avoid double space between items
+            if (parent.getChildPosition(view) == 0)
+                outRect.top = space;
+        }
     }
 
     /**
@@ -1229,6 +1292,10 @@ public class LoadDate {
                                        final LoadingLayout loadingLayout
 
     ) {
+        View view = layoutInflater.inflate(R.layout.layout_recyclerview_list_footer_end, null);
+
+        listView.addFooterView(view);
+        listView.setDividerHeight(1);
         if (!isRefresh) {
             loadingLayout.setStatus(LoadingLayout.Loading);
         }
@@ -1279,15 +1346,19 @@ public class LoadDate {
                         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                             @Override
                             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                Intent i = new Intent(context, TopicsDetalisActivity.class);
-                                i.putExtra("url", topticModels.get(position).getRepliceurl());
-                                i.putExtra("icon", topticModels.get(position).getImg());
-                                i.putExtra("username", topticModels.get(position).getUserName());
-                                context.startActivity(i);
-                                adapter.isTouch.set(position, true);
-                                TextView lastreplice = (TextView) view.findViewById(R.id.replice);
 
-                                lastreplice.setBackgroundResource(R.drawable.list_textview_replice1);
+                                if (position < topticModels.size()) {
+                                    Intent i = new Intent(context, TopicsDetalisActivity.class);
+                                    i.putExtra("url", topticModels.get(position).getRepliceurl());
+                                    i.putExtra("icon", topticModels.get(position).getImg());
+                                    i.putExtra("username", topticModels.get(position).getUserName());
+                                    context.startActivity(i);
+                                    adapter.isTouch.set(position, true);
+                                    TextView lastreplice = (TextView) view.findViewById(R.id.replice);
+
+                                    lastreplice.setBackgroundResource(R.drawable.list_textview_replice1);
+                                }
+
                             }
                         });
                     }
@@ -1305,13 +1376,19 @@ public class LoadDate {
      * @param inflater
      * @param Context
      */
-    public static void LoadTopticdetalis(boolean isRefresh, final LoadingLayout loadingLayout, final String url, final ListView listView,
-                                         final SmartRefreshLayout smartRefreshLayout,
-                                         final LayoutInflater inflater,
-                                         final Context Context
+    public static void LoadTopticdetalis(
+
+            boolean isRefresh, final LoadingLayout loadingLayout, final String url, final ListView listView,
+            final SmartRefreshLayout smartRefreshLayout,
+            final LayoutInflater inflater,
+            final Context Context
 
 
     ) {
+
+        View view = inflater.inflate(R.layout.layout_recyclerview_list_footer_end, null);
+
+        listView.addFooterView(view);
         if (!isRefresh) {
             loadingLayout.setStatus(LoadingLayout.Loading);
         }
@@ -1408,8 +1485,8 @@ public class LoadDate {
                                                 nodename.setText(node[0]);
                                                 toptictitle.setText(title[0]);
 
-                                                Glide.with(Context).load(img[0])
-                                                        .into(imageView);
+                                                LoadImg.LoadCircleImageView(img[0], imageView, Context);
+
 
                                                 content.setRichText(Content[0]);
 
@@ -1443,6 +1520,7 @@ public class LoadDate {
                                 nodename.setText(node[0]);
                                 toptictitle.setText(title[0]);
 
+                                LoadImg.LoadCircleImageView(img[0], imageView, Context);
                                 Glide.with(Context).load(img[0])
                                         .into(imageView);
 

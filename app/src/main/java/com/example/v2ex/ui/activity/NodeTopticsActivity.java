@@ -2,23 +2,30 @@ package com.example.v2ex.ui.activity;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.annotation.RequiresApi;
+import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AppCompatActivity;
+
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
+
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.ListView;
+import android.widget.ImageView;
 
 import com.example.v2ex.R;
 import com.example.v2ex.utils.LoadDate;
-import com.scwang.smartrefresh.layout.SmartRefreshLayout;
-import com.scwang.smartrefresh.layout.api.RefreshLayout;
-import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
+import com.github.jdsjlzx.recyclerview.LRecyclerView;
 import com.weavey.loading.lib.LoadingLayout;
 
 
@@ -29,28 +36,53 @@ import com.weavey.loading.lib.LoadingLayout;
 public class NodeTopticsActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
-    private ListView listView;
-    private SmartRefreshLayout swipe;
+    private LRecyclerView listView;
+    // private SmartRefreshLayout swipe;
     private String url;
     private String num;
     private String title;
     private ProgressDialog dialog;
     private LoadingLayout loadingLayout;
+    private CoordinatorLayout mParent;
+    private CollapsingToolbarLayout toolbarLayout;
+    private ImageView imageView;
+    private ImageView iv;
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_node_toptics);
+        setContentView(R.layout.activity_scrolling);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        listView = (ListView) findViewById(R.id.lv);
-        loadingLayout = (LoadingLayout) findViewById(R.id.loadingLayout);
-        swipe = (SmartRefreshLayout) findViewById(R.id.swipe);
+        listView = (LRecyclerView) findViewById(R.id.lv);
+        imageView = (ImageView) findViewById(R.id.iv);
+        iv = (ImageView) findViewById(R.id.Iv);
+        toolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar_layout);
+        //loadingLayout = (LoadingLayout) findViewById(R.id.loadingLayout);
+        // swipe = (SmartRefreshLayout) findViewById(R.id.swape);
+
         url = getIntent().getStringExtra("url");
         num = getIntent().getStringExtra("num");
         title = getIntent().getStringExtra("title");
+
         toolbar.setTitle(title);
+        toolbar.setSubtitle(num + "个主题");
         setSupportActionBar(toolbar);
 
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+
+                Intent shareIntent = new Intent();
+                shareIntent.setAction(Intent.ACTION_SEND);
+                shareIntent.putExtra(Intent.EXTRA_TEXT, "我在v2ex找到个不错的主题！" + "https://www.v2ex.com/" + url);
+                shareIntent.setType("text/plain");
+
+                //设置分享列表的标题，并且每次都显示分享列表
+                startActivity(Intent.createChooser(shareIntent, "分享主题到"));
+                return true;
+            }
+        });
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,34 +91,25 @@ public class NodeTopticsActivity extends AppCompatActivity {
             }
         });
 
-        // swipe.autoRefresh(0);
-        swipe.setOnRefreshListener(new OnRefreshListener() {
-            @Override
-            public void onRefresh(RefreshLayout refreshlayout) {
 
 
-                LoadDate.getNodeToptics(true, loadingLayout, url.replace("http://www.v2ex.com/go/", "")
-                        , swipe, listView, getLayoutInflater(), NodeTopticsActivity.this, Integer.parseInt(num));
-
-            }
-        });
-
-        LoadDate.getNodeToptics(false, loadingLayout, url.replace("http://www.v2ex.com/go/", "")
-                , swipe, listView, getLayoutInflater(), NodeTopticsActivity.this, Integer.parseInt(num));
+        LoadDate.getNodeToptics(iv,toolbar, imageView, false, url.replace("http://www.v2ex.com/go/", "")
+                , listView,
+                getLayoutInflater(), NodeTopticsActivity.this, Integer.parseInt(num));
 
     }
 
-  /*  @Override
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
         MenuItem mMenuItem;
-        menuInflater.inflate(R.menu.collection, menu);
+        menuInflater.inflate(R.menu.node, menu);
 
-        mMenuItem = menu.findItem(R.id.it_collect);
 
         return super.onCreateOptionsMenu(menu);
 
-    }*/
+    }
 
    /* @Override
     public boolean onOptionsItemSelected(MenuItem item) {

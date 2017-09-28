@@ -13,32 +13,17 @@
         app:paddingStart="0dp">
 
         <RelativeLayout
-            android:layout_width="match_parent"
+
+            android:layout_width="wrap_content"
             android:layout_height="match_parent">
 
-            <ImageView
-                android:id="@+id/back"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_alignParentLeft="true"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="10dp"
-                android:clickable="true"
-                android:src="@drawable/ic_arrow_back_black_24dp" />
-
-            <ImageView
-                android:id="@+id/titleIcon"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="10dp"
-                android:layout_toLeftOf="@+id/my_title" />
-
             <TextView
+
                 android:id="@+id/my_title"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_centerInParent="true"
+                android:layout_centerVertical="true"
+
                 android:gravity="center"
                 android:textColor="#000"
                 android:textSize="16sp" />
@@ -81,6 +66,7 @@
             android:layout_below="@+id/shadow_view">
 
             <ListView
+                android:footerDividersEnabled="false"
                 android:id="@+id/lv"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

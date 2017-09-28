@@ -31,7 +31,7 @@ import java.util.List;
  */
 
 public class Home_PageFragment extends Fragment {
-    private SearchView searchView;
+   // private SearchView searchView;
     private NoScrollViewPager viewPager;
     private TabLayout tabLayout;
     private List<Fragment> fragmentList;
@@ -44,13 +44,13 @@ public class Home_PageFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_home_page, container, false);
         Log.d("---", "ddd");
         viewPager = (NoScrollViewPager) view.findViewById(R.id.viewPager);
-        searchView = (SearchView) view.findViewById(R.id.searchView);
+     //   searchView = (SearchView) view.findViewById(R.id.searchView);
         //tabs = (PagerSlidingTabStrip) view.findViewById(R.id.my_tab);
         tabLayout = (TabLayout) view.findViewById(R.id.table);
         dm = getResources().getDisplayMetrics();
-        searchView.setIconifiedByDefault(true);
+    //    searchView.setIconifiedByDefault(true);
         //searchView.setFocusable(true);
-        searchView.setIconified(false);
+    //    searchView.setIconified(false);
 
         //searchView.requestFocusFromTouch();
         return view;
@@ -95,7 +95,7 @@ public class Home_PageFragment extends Fragment {
         viewPager.setAdapter(myFragmentPagerAdaptar);
         tabLayout.setupWithViewPager(viewPager);
         viewPager.setOffscreenPageLimit(9);
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+       /* searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
 
@@ -112,7 +112,7 @@ public class Home_PageFragment extends Fragment {
             public boolean onQueryTextChange(String newText) {
                 return false;
             }
-        });
+        });*/
     }
 
 

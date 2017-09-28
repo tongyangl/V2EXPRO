@@ -124,7 +124,7 @@ public class CreateTopticActivity extends AppCompatActivity {
         if (sharedPreferences.getString("userimg", "").equals("")) {
 
         } else {
-            LoadImg.LoadImage(sharedPreferences.getString("userimg", ""), img, getApplicationContext());
+            LoadImg.LoadCircleImageView(sharedPreferences.getString("userimg", ""), img, getApplicationContext());
         }
         Observable.create(new Observable.OnSubscribe<Object>() {
             @Override
@@ -211,6 +211,17 @@ public class CreateTopticActivity extends AppCompatActivity {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                if (mTitle.getText().toString().length() != 0) {
+                    dialog = new ProgressDialog(CreateTopticActivity.this);
+                    dialog.setTitle("发表中...");
+                    dialog.show();
+                } else {
+
+                    Toast.makeText(getApplicationContext(), "请填写Title", Toast.LENGTH_LONG).show();
+                }
+
+
                 Internet_Manager.getInstance()
                         .getNodeToptics("new/" + nodename)
                         .subscribeOn(Schedulers.io())
@@ -222,7 +233,9 @@ public class CreateTopticActivity extends AppCompatActivity {
 
                             @Override
                             public void onError(Throwable e) {
+                                Toast.makeText(CreateTopticActivity.this, "创建失败", Toast.LENGTH_SHORT).show();
 
+                                dialog.dismiss();
                             }
 
                             @Override
@@ -238,8 +251,9 @@ public class CreateTopticActivity extends AppCompatActivity {
                                             @Override
                                             public void onResponse(Call<String> call, Response<String> response) {
                                                 int code = response.code();
-                                                Log.d("once",code+nodename);
 
+                                                dialog.dismiss();
+                                                Log.d("----", "onResponse:");
                                                 if (code == 302) {
                                                     Toast.makeText(getApplicationContext(), "创建成功", Toast.LENGTH_SHORT).show();
                                                     finish();
@@ -275,6 +289,7 @@ public class CreateTopticActivity extends AppCompatActivity {
             return matcher.group(1);
         return null;
     }
+
     @Override
     public void onBackPressed() {
         if (popupWindow.isShowing()) {

@@ -62,7 +62,7 @@ public class UserListAdapter extends BaseAdapter {
             viewHoder = (ViewHoder) convertView.getTag();
         }
 
-        LoadImg.LoadImage(list.get(position).getImg(), viewHoder.img, context);
+        LoadImg.LoadCircleImageView(list.get(position).getImg(), viewHoder.img, context);
         viewHoder.username.setText(list.get(position).getUsername());
         return convertView;
     }

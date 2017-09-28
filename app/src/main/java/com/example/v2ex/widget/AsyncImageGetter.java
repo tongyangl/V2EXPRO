@@ -36,7 +36,7 @@ public class AsyncImageGetter implements Html.ImageGetter {
     public Drawable getDrawable(String source) {
         final URLDrawable urlDrawable = new URLDrawable();
 
-        Glide.with(mContext).load(source).asBitmap().into(new SimpleTarget<Bitmap>() {
+        Glide.with(mContext).load(source).asBitmap().error(R.drawable.ic_error).placeholder(R.drawable.ic_loading).into(new SimpleTarget<Bitmap>() {
             @Override
             public void onResourceReady(Bitmap bitmap, GlideAnimation<? super Bitmap> glideAnimation) {
 
