@@ -38,20 +38,20 @@ public class HtmlToList {
         List<NoticeModel> list = new ArrayList<>();
         Elements elements = Jsoup.parse(string).select("div[class=box]").get(2).select("div[class=cell]");
         for (int i = 1; i < elements.size() - 1; i++) {
-            NoticeModel nodesModel=new NoticeModel();
+            NoticeModel nodesModel = new NoticeModel();
             String content = elements.get(i).select("div[class=payload]").text();
             String img = "http://" + elements.get(i).select("img").attr("src").substring(2);
             Log.d("---", img);
             String notice = elements.get(i).select("span[class=fade]").text();
             String time = elements.get(i).select("span[class=snow]").text();
             String url = elements.get(i).select("span[class=fade]").select("a").get(1).attr("href").substring(1);
-            String username= elements.get(i).select("span[class=fade]").select("strong").text();
-            nodesModel.setContent( content);
-            nodesModel.setImg( img);
+            String username = elements.get(i).select("span[class=fade]").select("strong").text();
+            nodesModel.setContent(content);
+            nodesModel.setImg(img);
             nodesModel.setNotice(notice);
             nodesModel.setTime(time);
             nodesModel.setUrl(url);
-            nodesModel.setUsername( username);
+            nodesModel.setUsername(username);
             list.add(nodesModel);
         }
         return list;
@@ -68,6 +68,8 @@ public class HtmlToList {
             TopticModel topticModel = new TopticModel();
             Elements tr = element.select("tr").select("td");
             String image = tr.get(0).select("img").attr("src");
+            String userUrl = "https://www.v2ex.com" + tr.get(0).select("a").attr("href");
+            topticModel.setUserUrl(userUrl);
             String img = image.substring(2, image.length());
             topticModel.setImg("http://" + img);
             String replice = "";
@@ -126,6 +128,8 @@ public class HtmlToList {
                     String image = tr.get(j).select("img").attr("src");
                     String img = image.substring(2, image.length());
                     model.setImg("http://" + img);
+                    String nodeUrl = tr.get(j).select("a").attr("href");
+                    model.setUserUrl("https://www.v2ex.com" + nodeUrl);
                 } else if (j == 2) {
                     String lastreplice = "";
                     String username = "";
@@ -136,7 +140,7 @@ public class HtmlToList {
 
                     Element t = tr.get(j).select("span[class=small fade]").first();
                     String ti = t.ownText();
-                    String time = ti.substring(3, ti.length()).replace("•","");
+                    String time = ti.substring(3, ti.length()).replace("•", "");
 
                     Elements elements1 = tr.get(j).select("span[class=small fade]").select("strong");
                     if (elements1.size() == 2) {

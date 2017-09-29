@@ -53,7 +53,8 @@ dependencies {
     compile 'com.github.cpiz:BubbleView:0.9.2'
     compile 'com.leon:lsettingviewlibrary:1.4.0'
     compile 'com.miguelcatalan:materialsearchview:1.4.0'
-
-
+    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
+    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
+    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
     compile files('libs/classes.jar')
 }

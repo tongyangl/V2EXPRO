@@ -1,12 +1,10 @@
 package com.example.v2ex;
 
-import android.app.SearchManager;
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.support.annotation.IdRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,17 +14,16 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.PopupWindow;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.v2ex.adapter.MyFragment1PagerAdaptar;
 import com.example.v2ex.internet_service.Internet_Manager;
 import com.example.v2ex.ui.activity.CreateTopticActivity;
-import com.example.v2ex.ui.activity.search_activity;
+
+import com.example.v2ex.ui.activity.WebViewActivity;
 import com.example.v2ex.ui.fragment.Collection_PageFragment;
 import com.example.v2ex.ui.fragment.Home_PageFragment;
 import com.example.v2ex.ui.fragment.Notice_PageFragment;
@@ -40,7 +37,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements MaterialSearchView.OnQueryTextListener {
     private ViewPager viewPager;
-   // private RadioGroup radioGroup;
+    // private RadioGroup radioGroup;
     private RadioButton Home_Page_Button;
     private RadioButton setting_page_Button;
     private RadioButton notice_page_Button;
@@ -50,8 +47,8 @@ public class MainActivity extends AppCompatActivity implements MaterialSearchVie
     private Toolbar toolbar;
     private long exitTime = 0;
     private int id = 0;
-    private MaterialSearchView searchView;
     // private TextView mTitle;
+    private PopupWindow popupWindow;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements MaterialSearchVie
         Internet_Manager.context = this;
 
         viewPager = (ViewPager) findViewById(R.id.viewPager);
-      //  radioGroup = (RadioGroup) findViewById(R.id.radioGroup);
+        //  radioGroup = (RadioGroup) findViewById(R.id.radioGroup);
         Home_Page_Button = (RadioButton) findViewById(R.id.home_page);
         setting_page_Button = (RadioButton) findViewById(R.id.setting_page);
         notice_page_Button = (RadioButton) findViewById(R.id.notice_page);
@@ -186,15 +183,43 @@ public class MainActivity extends AppCompatActivity implements MaterialSearchVie
             }
         });
 
-        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+       /* toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                Intent intent = new Intent(getApplicationContext(), search_activity.class);
-                startActivity(intent);
+                popupWindow = new PopupWindow(MainActivity.this);
+                View view = getLayoutInflater().inflate(R.layout.popu_searchview, null);
+
+                SearchView search = (SearchView) view.findViewById(R.id.searchView);
+                search.setIconifiedByDefault(true);
+                search.setFocusable(true);
+                search.setIconified(false);
+                search.requestFocusFromTouch();
+                search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                    @Override
+                    public boolean onQueryTextSubmit(String query) {
+                        Intent intent = new Intent(MainActivity.this, WebViewActivity.class);
+                        intent.putExtra("intent","http://www.baidu.com/s?ie=UTF-8&wd="+query+"site:www.v2ex.com");
+                        startActivity(intent);
+                        return true;
+                    }
+
+                    @Override
+                    public boolean onQueryTextChange(String newText) {
+                        return false;
+                    }
+                });
+                ColorDrawable dw = new ColorDrawable(0xffffffff);
+                popupWindow.setBackgroundDrawable(dw);
+
+                popupWindow.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
+                popupWindow.setWidth(LinearLayout.LayoutParams.MATCH_PARENT);
+                popupWindow.setContentView(view);
+                popupWindow.setAnimationStyle(R.style.popu_style);
+                popupWindow.showAtLocation(getLayoutInflater().inflate(R.layout.activity_topticdetal, null), Gravity.TOP, 0, 0);
 
                 return true;
             }
-        });
+        });*/
     }
 
     @Override
@@ -202,16 +227,35 @@ public class MainActivity extends AppCompatActivity implements MaterialSearchVie
 
         getMenuInflater().inflate(R.menu.search, menu);
 
+       MenuItem item = menu.findItem(R.id.ab_search);
 
-        MenuItem item = menu.findItem(R.id.ab_search);
+        android.widget.SearchView searchView = (android.widget.SearchView) MenuItemCompat.getActionView(item);
+        searchView.setIconifiedByDefault(true);
+        searchView.setFocusable(true);
+        searchView.setQueryHint("搜索");
+        searchView.setIconified(false);
+        searchView.requestFocusFromTouch();
+        searchView.setOnQueryTextListener(new android.widget.SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                Intent intent = new Intent(MainActivity.this, WebViewActivity.class);
+                intent.putExtra("intent","http://www.baidu.com/s?ie=UTF-8&wd="+query+"site:www.v2ex.com");
+                startActivity(intent);
+                return true;
+            }
 
-
-        return super.onCreateOptionsMenu(menu);
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+        return true;
 
     }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
+
         if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN) {
             if ((System.currentTimeMillis() - exitTime) > 2000) {
                 Toast.makeText(getApplicationContext(), "再按一次退出程序", Toast.LENGTH_SHORT).show();
@@ -222,6 +266,7 @@ public class MainActivity extends AppCompatActivity implements MaterialSearchVie
             }
             return true;
         }
+
         return super.onKeyDown(keyCode, event);
     }
 

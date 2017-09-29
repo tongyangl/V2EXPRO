@@ -34,7 +34,7 @@ public class LoadImg {
     }
 
     public static void LoadCircleImageView(String url, final ImageView imageView, final Context context) {
-        Glide.with(context).load(url).centerCrop().placeholder(R.drawable.ic_loading)
+        Glide.with(context).load(url).centerCrop().placeholder(R.drawable.ic_loading).error(R.drawable.ic_error)
                 .transform(new GlideCircleTransform(context))
                 .into(imageView);
 

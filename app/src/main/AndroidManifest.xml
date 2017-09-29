@@ -51,6 +51,9 @@
         <activity
             android:theme="@style/ActivityTheme"
             android:name=".ui.activity.search_activity"></activity>
+        <activity android:name=".ui.activity.WebViewActivity">
+
+        </activity>
     </application>
 
 </manifest>

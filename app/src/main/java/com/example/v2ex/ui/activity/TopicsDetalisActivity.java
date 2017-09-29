@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -13,6 +14,8 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +27,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.v2ex.R;
@@ -59,7 +63,6 @@ public class TopicsDetalisActivity extends AppCompatActivity {
     private int editLength;
 
 
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,7 +75,7 @@ public class TopicsDetalisActivity extends AppCompatActivity {
         replice = (TextView) findViewById(R.id.replice);
 
         setSupportActionBar(toolbar);
-
+        toolbar.setTitle("主题回复");
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,13 +85,11 @@ public class TopicsDetalisActivity extends AppCompatActivity {
         });
 
         popupWindow = new PopupWindow(this);
-        ImageView imageView = (ImageView) toolbar.findViewById(R.id.bt_menu);
 
-        TextView textView = (TextView) toolbar.findViewById(R.id.my_title);
-        textView.setText("话题详情");
-        imageView.setOnClickListener(new View.OnClickListener() {
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
-            public void onClick(View v) {
+            public boolean onMenuItemClick(MenuItem item) {
+
                 if (popupWindow.isShowing()) {
                     popupWindow.dismiss();
                 } else {
@@ -125,23 +126,25 @@ public class TopicsDetalisActivity extends AppCompatActivity {
                     popupWindow.showAtLocation(getLayoutInflater().inflate(R.layout.activity_topticdetal, null), Gravity.BOTTOM, 0, 0);
 
                 }
-
+                return true;
             }
         });
+
         Intent intent = getIntent();
         url = intent.getStringExtra("url");
 
 
+        Log.d("urlrul", url);
         loadingLayout.setStatus(LoadingLayout.Loading);
         smartRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(RefreshLayout refreshlayout) {
 
-                LoadDate.LoadTopticdetalis(true, loadingLayout, url, listView, smartRefreshLayout, getLayoutInflater(), getApplicationContext());
+                LoadDate.LoadTopticdetalis(true, loadingLayout, url, listView, smartRefreshLayout, getLayoutInflater(), TopicsDetalisActivity.this, toolbar);
 
             }
         });
-        LoadDate.LoadTopticdetalis(false, loadingLayout, url, listView, smartRefreshLayout, getLayoutInflater(), getApplicationContext());
+        LoadDate.LoadTopticdetalis(false, loadingLayout, url, listView, smartRefreshLayout, getLayoutInflater(), TopicsDetalisActivity.this, toolbar);
 
 
         replice.setOnClickListener(new View.OnClickListener() {
@@ -190,8 +193,8 @@ public class TopicsDetalisActivity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (position >= 0&&position<=list.size()) {
-                    editText.setText(editText.getText().toString() + "@" + list.get(position-1).getUsername());
+                if (position >= 0 && position <= list.size()) {
+                    editText.setText(editText.getText().toString() + "@" + list.get(position - 1).getUsername());
                     editText.setSelection(editText.getText().length());
                 }
 
@@ -223,4 +226,15 @@ public class TopicsDetalisActivity extends AppCompatActivity {
 
 
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        MenuItem mMenuItem;
+        menuInflater.inflate(R.menu.topticdetal, menu);
+
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
 }

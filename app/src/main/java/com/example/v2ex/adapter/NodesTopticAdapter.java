@@ -1,6 +1,7 @@
 package com.example.v2ex.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 
 import com.example.v2ex.R;
 import com.example.v2ex.model.TopticModel;
+import com.example.v2ex.ui.activity.WebViewActivity;
 import com.example.v2ex.utils.LoadImg;
 
 import java.util.List;
@@ -83,7 +85,7 @@ public class NodesTopticAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             topictitle = (TextView) convertView.findViewById(R.id.topictitle);
         }
 
-        public void setData(int position) {
+        public void setData(final int position) {
             username.setText(list.get(position).getUserName());
             nodename.setText(list.get(position).getNodeTitle());
 
@@ -98,6 +100,14 @@ public class NodesTopticAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
             topictitle.setText(list.get(position).getTitle());
             time.setText(list.get(position).getTime());
+            imageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(context, WebViewActivity.class);
+                    intent.putExtra("intent", list.get(position).getUserUrl());
+                    context.startActivity(intent);
+                }
+            });
             LoadImg.LoadCircleImageView(list.get(position).getImg(), imageView, context);
         }
     }

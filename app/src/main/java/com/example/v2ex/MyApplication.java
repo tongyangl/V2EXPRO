@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.MemoryCategory;
+import com.squareup.leakcanary.LeakCanary;
 import com.weavey.loading.lib.LoadingLayout;
 
 /**
@@ -19,6 +20,14 @@ public class MyApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        if (LeakCanary.isInAnalyzerProcess(this)) {
+            // This process is dedicated to LeakCanary for heap analysis.
+            // You should not init your app in this process.
+            return;
+        }
+        LeakCanary.install(this);
+        // Normal app init code...
+
         SharedPreferences sharedPreferences = getSharedPreferences("setting", Context.MODE_PRIVATE);
         noImg = sharedPreferences.getBoolean("noImg", false);
         isNight = sharedPreferences.getBoolean("isNight", false);

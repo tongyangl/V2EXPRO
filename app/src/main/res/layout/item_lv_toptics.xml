@@ -19,7 +19,8 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true" />
+                android:layout_centerVertical="true"
+                android:clickable="true" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -27,35 +28,34 @@
             android:layout_height="match_parent">
 
             <TextView
-                android:layout_marginLeft="10dp"
                 android:id="@+id/username"
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
+                android:layout_marginLeft="10dp"
                 android:gravity="center_vertical"
                 android:textColor="#000000"
                 android:textSize="14sp"
                 android:textStyle="bold" />
 
             <ImageView
-                android:src="@drawable/ic_trending_flat_black_24dp"
                 android:id="@+id/nodeimg"
                 android:layout_width="20dp"
                 android:layout_height="13dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="10dp"
                 android:layout_toRightOf="@+id/username"
-               />
+                android:src="@drawable/ic_trending_flat_black_24dp" />
 
             <TextView
 
-                android:textStyle="bold"
                 android:id="@+id/nodename"
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
                 android:layout_marginLeft="10dp"
                 android:layout_toRightOf="@+id/nodeimg"
                 android:gravity="center_vertical"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                android:textStyle="bold" />
 
             <TextView
 
@@ -71,16 +71,15 @@
                 android:textSize="12sp" />
 
             <TextView
-                android:textSize="10sp"
                 android:id="@+id/time"
                 android:layout_width="wrap_content"
                 android:layout_height="20dp"
                 android:layout_alignParentBottom="true"
                 android:gravity="center_vertical"
-                android:textColor="#B5B5B5" />
+                android:textColor="#B5B5B5"
+                android:textSize="10sp" />
 
             <TextView
-                android:textSize="10sp"
                 android:id="@+id/lastreplice"
                 android:layout_width="wrap_content"
                 android:layout_height="20dp"
@@ -88,7 +87,8 @@
                 android:layout_marginLeft="10dp"
                 android:layout_toRightOf="@+id/time"
                 android:gravity="center_vertical"
-                android:textColor="#B5B5B5" />
+                android:textColor="#B5B5B5"
+                android:textSize="10sp" />
         </RelativeLayout>
     </LinearLayout>
 

@@ -1,6 +1,7 @@
 package com.example.v2ex.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 import com.example.v2ex.MyApplication;
 import com.example.v2ex.R;
 import com.example.v2ex.model.TopticModel;
+import com.example.v2ex.ui.activity.WebViewActivity;
 import com.example.v2ex.utils.LoadImg;
 
 import java.util.ArrayList;
@@ -46,7 +48,7 @@ public class TopticsListViewAdapter extends BaseAdapter {
 
 
         for (int i = istouchlength; i < list.size(); i++) {
-            isTouch.add(false) ;
+            isTouch.add(false);
         }
     }
 
@@ -66,7 +68,7 @@ public class TopticsListViewAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         viewHoder = new ViewHoder();
         if (convertView == null) {
             convertView = layoutInflater.inflate(R.layout.item_lv_toptics, null);
@@ -101,6 +103,14 @@ public class TopticsListViewAdapter extends BaseAdapter {
 
         viewHoder.topictitle.setText(list.get(position).getTitle());
         viewHoder.time.setText(list.get(position).getTime());
+        viewHoder.imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, WebViewActivity.class);
+                intent.putExtra("intent", list.get(position).getUserUrl());
+                context.startActivity(intent);
+            }
+        });
         LoadImg.LoadCircleImageView(list.get(position).getImg(), viewHoder.imageView, context);
         return convertView;
     }

@@ -1,9 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
     android:id="@+id/linear"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize">
+
+    </android.support.v7.widget.Toolbar>
 
     <TextView
         android:layout_width="match_parent"
@@ -27,8 +34,7 @@
         android:id="@+id/textinput_number"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="帐号"
-     >
+        android:hint="帐号">
 
         <EditText
             android:id="@+id/username"
@@ -63,15 +69,31 @@
             android:singleLine="true"
             android:text="" />
     </android.support.design.widget.TextInputLayout>
-    <Button
-        android:background="@drawable/button_login2"
-        android:textColor="#ffff"
-        android:textSize="18sp"
+
+    <TextView
+
+        android:id="@+id/login"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginLeft="280dp"
+        android:layout_marginRight="50dp"
+        android:layout_marginTop="10dp"
+        android:clickable="true"
+        android:gravity="center"
         android:text="登陆"
-        android:layout_marginLeft="30dp"
+        android:textSize="18sp" />
+
+    <TextView
+
+
+        android:id="@+id/signup"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginLeft="280dp"
         android:layout_marginRight="30dp"
         android:layout_marginTop="10dp"
-        android:id="@+id/login"
-        android:layout_width="match_parent"
-        android:layout_height="50dp" />
+        android:clickable="true"
+        android:gravity="center"
+        android:text="注册"
+        android:textSize="18sp" />
 </LinearLayout>

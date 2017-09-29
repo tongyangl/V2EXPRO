@@ -12,31 +12,7 @@
         app:contentInsetStart="0dp"
         app:paddingStart="0dp">
 
-        <RelativeLayout
 
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent">
-
-            <TextView
-
-                android:id="@+id/my_title"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_centerVertical="true"
-
-                android:gravity="center"
-                android:textColor="#000"
-                android:textSize="16sp" />
-
-            <ImageView
-                android:id="@+id/bt_menu"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:clickable="true"
-                android:src="@drawable/ic_more_vert_black_24dp" />
-        </RelativeLayout>
 
     </android.support.v7.widget.Toolbar>
 

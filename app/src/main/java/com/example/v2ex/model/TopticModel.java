@@ -14,6 +14,15 @@ public class TopticModel {
     private String time;
     private String repliceurl;
     private String nodeTitle;
+    private String userUrl;
+
+    public String getUserUrl() {
+        return userUrl;
+    }
+
+    public void setUserUrl(String userUrl) {
+        this.userUrl = userUrl;
+    }
 
     public String getNodeTitle() {
         return nodeTitle;

@@ -54,23 +54,34 @@
     </LinearLayout>
 
     <TextView
+
         android:layout_below="@+id/top"
         android:id="@+id/topictitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
+        android:layout_margin="@dimen/dp_10"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="15dp"
         android:gravity="center_vertical"
         android:textColor="#000000"
         android:textSize="15sp"
         />
-    <com.example.v2ex.widget.RichTextView
+
+    <View
+        android:background="#BEBEBE"
+        android:id="@+id/view"
         android:layout_below="@+id/topictitle"
+        android:layout_margin="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="1px">
+
+    </View>
+    <com.example.v2ex.widget.RichTextView
+        android:layout_below="@+id/view"
         android:id="@+id/content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
+        android:layout_marginBottom="10dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="15dp"
         android:gravity="center_vertical"

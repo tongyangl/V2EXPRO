@@ -2,13 +2,18 @@ package com.example.v2ex.ui.activity;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.example.v2ex.R;
 import com.example.v2ex.utils.LoadDate;
@@ -18,18 +23,32 @@ import com.example.v2ex.utils.LoadDate;
  * Created by tongyang on 16-11-22.
  */
 
-public class SiginActivity extends Activity {
+public class SiginActivity extends AppCompatActivity {
+    private Toolbar toolbar;
     EditText username;
     EditText password;
-    Button signin;
+    TextView signin;
+    private TextView signup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        signup = (TextView) findViewById(R.id.signup);
+
+        toolbar.setTitle("登录");
+        setSupportActionBar(toolbar);
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         username = (EditText) findViewById(R.id.username);
         password = (EditText) findViewById(R.id.password);
-        signin = (Button) findViewById(R.id.login);
+        signin = (TextView) findViewById(R.id.login);
         SharedPreferences sharedPreferences = getSharedPreferences("user", MODE_PRIVATE);
         if (!sharedPreferences.getString("username", "").equals("")) {
             username.setText(sharedPreferences.getString("username", ""));
@@ -39,13 +58,22 @@ public class SiginActivity extends Activity {
         }
         if (username.getText().length() == 0 || password.getText().length() == 0) {
             signin.setClickable(false);
-            signin.setBackgroundResource(R.drawable.button_login2);
+            signin.setTextColor(Color.GRAY);
 
         } else {
             signin.setClickable(true);
-            signin.setBackgroundResource(R.drawable.button_login);
+            signin.setTextColor(Color.rgb(0, 229, 238));
 
         }
+        signup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SiginActivity.this, WebViewActivity.class);
+                intent.putExtra("intent", "https://www.v2ex.com/signup");
+
+                startActivity(intent);
+            }
+        });
         username.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -62,11 +90,12 @@ public class SiginActivity extends Activity {
 
                 if (username.getText().length() == 0 || password.getText().length() == 0) {
                     signin.setClickable(false);
-                    signin.setBackgroundResource(R.drawable.button_login2);
+                    signin.setTextColor(Color.GRAY);
 
                 } else {
                     signin.setClickable(true);
-                    signin.setBackgroundResource(R.drawable.button_login);
+                    signin.setTextColor(Color.rgb(0, 229, 238));
+
 
                 }
 
@@ -89,11 +118,12 @@ public class SiginActivity extends Activity {
 
                 if (username.getText().length() == 0 || password.getText().length() == 0) {
                     signin.setClickable(false);
-                    signin.setBackgroundResource(R.drawable.button_login2);
+                    signin.setTextColor(Color.GRAY);
 
                 } else {
                     signin.setClickable(true);
-                    signin.setBackgroundResource(R.drawable.button_login);
+                    signin.setTextColor(Color.rgb(0, 229, 238));
+
 
                 }
             }
@@ -126,7 +156,7 @@ public class SiginActivity extends Activity {
         dialog.setTitle("登录中");
         dialog.setCancelable(false);
         dialog.show();
-        LoadDate.userLogin(username.getText().toString().trim(), password.getText().toString().trim(),dialog,this);
+        LoadDate.userLogin(username.getText().toString().trim(), password.getText().toString().trim(), dialog, this);
 
         //rxjava.login(username.getText().toString().trim(),password.getText().toString().trim(),this,dialog);
     }

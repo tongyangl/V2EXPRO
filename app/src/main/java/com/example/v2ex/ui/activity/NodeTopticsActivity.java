@@ -92,10 +92,15 @@ public class NodeTopticsActivity extends AppCompatActivity {
         });
 
 
+        if (!url.contains("https")) {
+            url = url.replace("http://www.v2ex.com/go/", "");
 
-        LoadDate.getNodeToptics(iv,toolbar, imageView, false, url.replace("http://www.v2ex.com/go/", "")
+        } else if (url.contains("https")) {
+            url = url.replace("https://www.v2ex.com/go/", "");
+        }
+        LoadDate.getNodeToptics(iv, toolbar, imageView, false,url
                 , listView,
-                getLayoutInflater(), NodeTopticsActivity.this, Integer.parseInt(num));
+                getLayoutInflater(), NodeTopticsActivity.this);
 
     }
 

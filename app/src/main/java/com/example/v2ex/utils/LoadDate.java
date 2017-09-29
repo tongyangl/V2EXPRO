@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.graphics.Rect;
 
 import android.support.v7.widget.LinearLayoutManager;
@@ -85,6 +86,8 @@ import static android.content.Context.INPUT_METHOD_SERVICE;
  */
 
 public class LoadDate {
+    public static String topticdetal = "";
+
     private static int page;
     private static String nodesUrl = "?p=";
 
@@ -880,7 +883,6 @@ public class LoadDate {
      * @param listView
      * @param layoutInflater
      * @param c
-     * @param num
      */
     public static void getNodeToptics(
             final ImageView iv,
@@ -892,8 +894,8 @@ public class LoadDate {
 
             final LRecyclerView listView,
             final LayoutInflater layoutInflater,
-            final Context c,
-            final int num
+            final Context c
+
 
     ) {
 
@@ -916,22 +918,20 @@ public class LoadDate {
 
                         String top_num = els.select("strong[class=gray]").text();
 
-                        Log.d("ddd", imgUrl[0] + des + node_title + top_num);
-                        if (num > 20) {
-                            Elements elements;
-                            elements = Jsoup.parse(s).select("div[class=cell]").get(4).select("a");
-                            String p = "";
+
+                        Elements elements;
+                        elements = Jsoup.parse(s).select("div[class=cell]").get(4).select("a");
+                        String p = "";
+                        p = elements.get(elements.size() - 1).text();
+                        if (!SomeUtils.isNumeric(p)) {
+                            elements = Jsoup.parse(s).select("div[class=cell]").get(5).select("a");
                             p = elements.get(elements.size() - 1).text();
-                            if (!SomeUtils.isNumeric(p)) {
-                                elements = Jsoup.parse(s).select("div[class=cell]").get(5).select("a");
-                                p = elements.get(elements.size() - 1).text();
-                            }
-                            if (!SomeUtils.isNumeric(p)) {
-                                elements = Jsoup.parse(s).select("div[class=cell]").get(3).select("a");
-                                p = elements.get(elements.size() - 1).text();
-                            }
-                            page = Integer.parseInt(p);
                         }
+                        if (!SomeUtils.isNumeric(p)) {
+                            elements = Jsoup.parse(s).select("div[class=cell]").get(3).select("a");
+                            p = elements.get(elements.size() - 1).text();
+                        }
+                        page = Integer.parseInt(p);
 
 
                         return HtmlToList.NodeTopicsToList(s);
@@ -946,21 +946,12 @@ public class LoadDate {
             public void onError(Throwable e) {
 
                 Toast.makeText(c, e.getMessage(), Toast.LENGTH_LONG).show();
-              /*  MyException.onError(e, loadingLayout);
-                loadingLayout.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                        LoadDate.getNodeToptics(loadingLayout, false, url.replace("http://www.v2ex.com/go/", "")
-                                , listView, layoutInflater, c, num);
-                    }
-                });*/
             }
 
             @Override
             public void onNext(final List<TopticModel> topticModels) {
                 String urls;
-                toolbar.setSubtitle("主题总数" + num);
+                //toolbar.setSubtitle("主题总数" + num);
                 Log.d("---", imgUrl[0]);
                 if (imgUrl[0].length() < 10) {
 
@@ -1004,7 +995,7 @@ public class LoadDate {
 
                     @Override
                     public void onLoadMore() {
-                        Log.d("asdsad", "asdsad" + nowPage);
+
                         nowPage++;
                         Internet_Manager.getInstance()
                                 .getNodeToptics("go/" + url + nodesUrl + nowPage)
@@ -1292,9 +1283,11 @@ public class LoadDate {
                                        final LoadingLayout loadingLayout
 
     ) {
-        View view = layoutInflater.inflate(R.layout.layout_recyclerview_list_footer_end, null);
+        if (listView.getFooterViewsCount() == 0) {
+            View view = layoutInflater.inflate(R.layout.layout_recyclerview_list_footer_end, null);
 
-        listView.addFooterView(view);
+            listView.addFooterView(view);
+        }
         listView.setDividerHeight(1);
         if (!isRefresh) {
             loadingLayout.setStatus(LoadingLayout.Loading);
@@ -1381,14 +1374,17 @@ public class LoadDate {
             boolean isRefresh, final LoadingLayout loadingLayout, final String url, final ListView listView,
             final SmartRefreshLayout smartRefreshLayout,
             final LayoutInflater inflater,
-            final Context Context
+            final Activity Context, final Toolbar toolbar
 
 
     ) {
 
-        View view = inflater.inflate(R.layout.layout_recyclerview_list_footer_end, null);
+        if (listView.getFooterViewsCount() == 0) {
+            View view = inflater.inflate(R.layout.layout_recyclerview_list_footer_end, null);
 
-        listView.addFooterView(view);
+            listView.addFooterView(view);
+        }
+
         if (!isRefresh) {
             loadingLayout.setStatus(LoadingLayout.Loading);
         }
@@ -1412,6 +1408,7 @@ public class LoadDate {
                         img[0] = "http:" + document.select("div[class=header]").select("img").attr("src");
                         Content[0] = document.getElementsByClass("topic_content").toString();
 
+                        topticdetal = Jsoup.parse(s).select("div[class=topic_buttons]").select("a").get(0).attr("href").substring(1);
                         repliceOnce = SomeUtils.getrepliceonce(s);
                         return HtmlToList.getdetals(s);
                     }
@@ -1430,7 +1427,7 @@ public class LoadDate {
                         loadingLayout.setOnReloadListener(new LoadingLayout.OnReloadListener() {
                             @Override
                             public void onReload(View v) {
-                                LoadDate.LoadTopticdetalis(false, loadingLayout, url, listView, smartRefreshLayout, inflater, Context);
+                                LoadDate.LoadTopticdetalis(false, loadingLayout, url, listView, smartRefreshLayout, inflater, Context, toolbar);
 
                             }
                         });
@@ -1470,6 +1467,7 @@ public class LoadDate {
                                             TopicsDetalisActivity.list = topticdetalisModels;
 
                                             if (listView.getHeaderViewsCount() == 0) {
+
                                                 View headerview = inflater.inflate(R.layout.lv_header, null);
                                                 TextView username = (TextView) headerview.findViewById(R.id.username);
                                                 ImageView imageView = (ImageView) headerview.findViewById(R.id.imagView);
@@ -1491,7 +1489,20 @@ public class LoadDate {
                                                 content.setRichText(Content[0]);
 
                                                 listView.addHeaderView(headerview);
+                                                Point p = new Point();
+                                                Context.getWindowManager().getDefaultDisplay().getSize(p);
+                                                int screenWidth = p.x;
+                                                int screenHeight = p.y;
+                                                Rect rect = new Rect(0, 0, screenWidth, screenHeight);
+                                                int[] location = new int[2];
+                                                toptictitle.getLocationInWindow(location);
+                                                if (toptictitle.getLocalVisibleRect(rect)) {
+// 控件在屏幕可见区域
+                                                    toolbar.setSubtitle("");
+                                                } else {
+                                                    toolbar.setSubtitle(title[0]);
 
+                                                }
                                             }
                                             smartRefreshLayout.finishRefresh(100);
                                             listView.setAdapter(new TopicRepliceAdaptar(inflater, topticdetalisModels, listView, Context));
@@ -1519,11 +1530,7 @@ public class LoadDate {
                                 time.setText(t[0]);
                                 nodename.setText(node[0]);
                                 toptictitle.setText(title[0]);
-
                                 LoadImg.LoadCircleImageView(img[0], imageView, Context);
-                                Glide.with(Context).load(img[0])
-                                        .into(imageView);
-
                                 content.setRichText(Content[0]);
 
                                 listView.addHeaderView(headerview);
