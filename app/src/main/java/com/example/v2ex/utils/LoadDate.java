@@ -10,6 +10,7 @@ import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.Rect;
 
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -88,7 +89,7 @@ import static android.content.Context.INPUT_METHOD_SERVICE;
 
 public class LoadDate {
     public static String topticdetal = "";
-
+    public static String nodetoptics = "";
     private static int page;
     private static String nodesUrl = "?p=";
 
@@ -477,7 +478,6 @@ public class LoadDate {
                             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                                 Intent intent = new Intent(context, TopicsDetalisActivity.class);
                                 intent.putExtra("url", topticModels.get(position).getRepliceurl());
-                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                 context.startActivity(intent);
                             }
                         });
@@ -887,11 +887,11 @@ public class LoadDate {
      * @param c
      */
     public static void getNodeToptics(
+            final TextView collect,
             final RelativeLayout relativeLayout,
-            final ImageView iv,
+
             final Toolbar toolbar,
-            //final LoadingLayout loadingLayout,
-            final ImageView collapsingToolbarLayout,
+
             boolean isFrefresh,
             final String url,
 
@@ -913,29 +913,7 @@ public class LoadDate {
                 .map(new Func1<String, List<TopticModel>>() {
                     @Override
                     public List<TopticModel> call(String s) {
-                        Element els = Jsoup.parse(s).select("div[class=header]").get(0);
-
-                        imgUrl[0] = "http:" + els.select("img").attr("src");
-                        String des = els.select("span[class=f12 gray]").text();
-                        String node_title = els.ownText();
-
-                        String top_num = els.select("strong[class=gray]").text();
-
-
-                        Elements elements;
-                        elements = Jsoup.parse(s).select("div[class=cell]").get(4).select("a");
-                        String p = "";
-                        p = elements.get(elements.size() - 1).text();
-                        if (!SomeUtils.isNumeric(p)) {
-                            elements = Jsoup.parse(s).select("div[class=cell]").get(5).select("a");
-                            p = elements.get(elements.size() - 1).text();
-                        }
-                        if (!SomeUtils.isNumeric(p)) {
-                            elements = Jsoup.parse(s).select("div[class=cell]").get(3).select("a");
-                            p = elements.get(elements.size() - 1).text();
-                        }
-                        page = Integer.parseInt(p);
-
+                        nodetoptics = Jsoup.parse(s).select("div[class=fr f12]").select("a").attr("href").substring(1);
 
                         return HtmlToList.NodeTopicsToList(s);
                     }
@@ -948,33 +926,32 @@ public class LoadDate {
             @Override
             public void onError(Throwable e) {
                 relativeLayout.setVisibility(View.GONE);
+                listView.setVisibility(View.VISIBLE);
                 Toast.makeText(c, e.getMessage(), Toast.LENGTH_LONG).show();
             }
 
             @Override
             public void onNext(final List<TopticModel> topticModels) {
+                Log.d("asdasd", nodetoptics);
 
+                if (nodetoptics.startsWith("unfavorite")) {
 
-                String urls;
-                //toolbar.setSubtitle("主题总数" + num);
-                Log.d("---", imgUrl[0]);
-                if (imgUrl[0].length() < 10) {
+                    collect.setText("已关注");
+                    collect.setBackgroundResource(R.drawable.collect2);
+                    Drawable drawable = c.getDrawable(R.drawable.ic_check_black_24dp);
+                    drawable.setBounds(0, 0, 32, 32);
+                    collect.setCompoundDrawables(drawable, null, null, null);
 
-                    urls = "http:////v2ex.assets.uxengine.net/site/logo@2x.png?m=1346064962";
                 } else {
-                    urls = imgUrl[0];
+                    collect.setText("关注");
+                    collect.setBackgroundResource(R.drawable.collect);
+                    Drawable drawable = c.getDrawable(R.drawable.ic_add_black_24dp);
+                    drawable.setBounds(0, 0, 32, 32);
+                    collect.setCompoundDrawables(drawable, null, null, null);
                 }
-                LoadImg.LoadCircleImageView(urls, iv, c);
-                Glide.with(c).load(urls).asBitmap().into(new SimpleTarget<Bitmap>() {
-                    @Override
-                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
 
-                        collapsingToolbarLayout.setImageBitmap(BlurBitmapUtil.blurBitmap(c, resource, 24));
-
-                    }
-                });
-                listView.setVisibility(View.VISIBLE);
                 relativeLayout.setVisibility(View.GONE);
+
                 listView.setLayoutManager(new LinearLayoutManager(c));
                 final NodesTopticAdapter adapter = new NodesTopticAdapter(topticModels, c);
 

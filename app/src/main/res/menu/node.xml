@@ -7,7 +7,7 @@
     <item android:id="@+id/action_share"
         android:title="分享"
         android:orderInCategory="90"
-        android:icon="@drawable/ic_share_black_24dp"
+        android:icon="@drawable/ic_share1_black_24dp"
         app:showAsAction="ifRoom" />
 </menu>
 
