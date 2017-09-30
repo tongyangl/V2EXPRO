@@ -22,6 +22,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import com.example.v2ex.R;
 import com.example.v2ex.utils.LoadDate;
@@ -47,6 +48,7 @@ public class NodeTopticsActivity extends AppCompatActivity {
     private CollapsingToolbarLayout toolbarLayout;
     private ImageView imageView;
     private ImageView iv;
+    private RelativeLayout relativeLayout;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -58,9 +60,10 @@ public class NodeTopticsActivity extends AppCompatActivity {
         imageView = (ImageView) findViewById(R.id.iv);
         iv = (ImageView) findViewById(R.id.Iv);
         toolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar_layout);
+        relativeLayout = (RelativeLayout) findViewById(R.id.relat);
         //loadingLayout = (LoadingLayout) findViewById(R.id.loadingLayout);
         // swipe = (SmartRefreshLayout) findViewById(R.id.swape);
-
+        listView.setVisibility(View.GONE);
         url = getIntent().getStringExtra("url");
         num = getIntent().getStringExtra("num");
         title = getIntent().getStringExtra("title");
@@ -98,7 +101,7 @@ public class NodeTopticsActivity extends AppCompatActivity {
         } else if (url.contains("https")) {
             url = url.replace("https://www.v2ex.com/go/", "");
         }
-        LoadDate.getNodeToptics(iv, toolbar, imageView, false,url
+        LoadDate.getNodeToptics(relativeLayout,iv, toolbar, imageView, false, url
                 , listView,
                 getLayoutInflater(), NodeTopticsActivity.this);
 

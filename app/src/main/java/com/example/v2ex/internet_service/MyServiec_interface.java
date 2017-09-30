@@ -74,6 +74,7 @@ public interface MyServiec_interface {
 
     @GET
     Observable<String> getNodeCollect(@Url String t);
+
     @Headers({
 
             "Origin: https://www.v2ex.com/",
@@ -84,5 +85,6 @@ public interface MyServiec_interface {
     @POST
     Call<String> creatToptoc(@Url String url, @FieldMap Map<String, String> map);
 
-
+    @GET
+    Call<String> collect(@Url String url);
 }

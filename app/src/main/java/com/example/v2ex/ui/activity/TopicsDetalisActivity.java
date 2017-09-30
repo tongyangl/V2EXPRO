@@ -31,6 +31,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.v2ex.R;
+import com.example.v2ex.internet_service.Internet_Manager;
 import com.example.v2ex.model.TopticdetalisModel;
 import com.example.v2ex.utils.LoadDate;
 import com.example.v2ex.utils.LoadImg;
@@ -41,6 +42,10 @@ import com.weavey.loading.lib.LoadingLayout;
 
 import java.io.Serializable;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by 佟杨 on 2017/4/6.
@@ -115,7 +120,50 @@ public class TopicsDetalisActivity extends AppCompatActivity {
                             startActivity(Intent.createChooser(shareIntent, "分享主题到"));
                         }
                     });
+                    TextView collect = (TextView) view.findViewById(R.id.bt_collect);
+                    collect.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
 
+                            Internet_Manager.getInstance().collect(LoadDate.topticdetal)
+                                    .enqueue(new Callback<String>() {
+                                        @Override
+                                        public void onResponse(Call<String> call, Response<String> response) {
+                                            int code = response.code();
+
+                                            if (code == 200) {
+
+                                                if (LoadDate.topticdetal.startsWith("unfavorite")) {
+                                                    LoadDate.topticdetal = LoadDate.topticdetal.substring(2);
+
+                                                    Toast.makeText(TopicsDetalisActivity.this, "取消收藏成功", Toast.LENGTH_SHORT).show();
+                                                    Log.d("---", LoadDate.topticdetal);
+                                                } else {
+
+                                                    LoadDate.topticdetal = "un" + LoadDate.topticdetal;
+                                                    Log.d("---", LoadDate.topticdetal);
+                                                    Toast.makeText(TopicsDetalisActivity.this, "主题收藏成功", Toast.LENGTH_SHORT).show();
+
+                                                }
+
+                                            }else {
+                                                Log.d("---", LoadDate.topticdetal);
+                                                Toast.makeText(TopicsDetalisActivity.this, "收藏失败", Toast.LENGTH_SHORT).show();
+
+                                            }
+
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<String> call, Throwable t) {
+                                            Log.d("---", LoadDate.topticdetal);
+                                            Toast.makeText(TopicsDetalisActivity.this, "收藏失败", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+
+
+                        }
+                    });
                     ColorDrawable dw = new ColorDrawable(0xffffffff);
                     popupWindow.setBackgroundDrawable(dw);
                     popupWindow.setOutsideTouchable(true);

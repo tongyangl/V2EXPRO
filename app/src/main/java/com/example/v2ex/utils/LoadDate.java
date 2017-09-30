@@ -23,6 +23,7 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -476,6 +477,7 @@ public class LoadDate {
                             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                                 Intent intent = new Intent(context, TopicsDetalisActivity.class);
                                 intent.putExtra("url", topticModels.get(position).getRepliceurl());
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                 context.startActivity(intent);
                             }
                         });
@@ -885,6 +887,7 @@ public class LoadDate {
      * @param c
      */
     public static void getNodeToptics(
+            final RelativeLayout relativeLayout,
             final ImageView iv,
             final Toolbar toolbar,
             //final LoadingLayout loadingLayout,
@@ -944,12 +947,14 @@ public class LoadDate {
 
             @Override
             public void onError(Throwable e) {
-
+                relativeLayout.setVisibility(View.GONE);
                 Toast.makeText(c, e.getMessage(), Toast.LENGTH_LONG).show();
             }
 
             @Override
             public void onNext(final List<TopticModel> topticModels) {
+
+
                 String urls;
                 //toolbar.setSubtitle("主题总数" + num);
                 Log.d("---", imgUrl[0]);
@@ -968,7 +973,8 @@ public class LoadDate {
 
                     }
                 });
-
+                listView.setVisibility(View.VISIBLE);
+                relativeLayout.setVisibility(View.GONE);
                 listView.setLayoutManager(new LinearLayoutManager(c));
                 final NodesTopticAdapter adapter = new NodesTopticAdapter(topticModels, c);
 

@@ -4,6 +4,22 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+
+    <RelativeLayout
+        android:id="@+id/relat"
+        android:visibility="visible"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_centerInParent="true" />
+
+    </RelativeLayout>
+
     <com.github.jdsjlzx.recyclerview.LRecyclerView
         android:id="@+id/lv"
         android:layout_width="match_parent"
@@ -42,12 +58,12 @@
                 </ImageView>
 
                 <ImageView
-                    android:background="@drawable/shape_gray_square_bg"
                     android:id="@+id/Iv"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginTop="50dp" />
+                    android:layout_marginTop="50dp"
+                    android:background="@drawable/shape_gray_square_bg" />
             </RelativeLayout>
 
             <android.support.v7.widget.Toolbar

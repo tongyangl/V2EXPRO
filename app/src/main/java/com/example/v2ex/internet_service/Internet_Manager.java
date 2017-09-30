@@ -167,4 +167,9 @@ public class Internet_Manager {
 
         return service.creatToptoc(url, map);
     }
+
+    public Call<String> collect(String url) {
+
+        return service.collect(url);
+    }
 }
