@@ -15,6 +15,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.CookieManager;
+import android.webkit.CookieSyncManager;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
@@ -90,14 +92,29 @@ public class WebViewActivity extends AppCompatActivity {
         webView.setWebViewClient(new WebViewClient() {
 
             @Override
+            public void onPageFinished(WebView view, String url) {
+
+                CookieManager cookieManager = CookieManager.getInstance();
+
+
+
+                String CookieStr = cookieManager.getCookie(url);
+                Log.e("sunzn", "Cookies = " + CookieStr);
+                Log.e("sunzn", "Cookies = " + url);
+                super.onPageFinished(view, url);
+
+            }
+
+            @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
+
 
                 if (url.contains("https://www.v2ex.com/t/")) {
 
                     Log.d("urlurl", url);
                     Intent intent = new Intent(WebViewActivity.this, TopicsDetalisActivity.class);
-                    if (!url.contains("#reply")){
-                         url+="#reply101";
+                    if (!url.contains("#reply")) {
+                        url += "#reply101";
                     }
                     intent.putExtra("url", url.replace("https://www.v2ex.com/", ""));
 

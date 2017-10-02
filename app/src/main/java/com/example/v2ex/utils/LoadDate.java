@@ -1115,13 +1115,10 @@ public class LoadDate {
     /**
      * 用户登录
      *
-     * @param userName
-     * @param passWord
      * @param dialog
      * @param context
      */
-    public static void userLogin(final String userName,
-                                 final String passWord,
+    public static void userLogin(Map<String, String> map,
                                  final ProgressDialog dialog,
                                  final Activity context
 
@@ -1129,26 +1126,11 @@ public class LoadDate {
 
 
         Internet_Manager.getInstance()
-                .getUserFormat()
+                .userLogin(map)
+
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .map(new Func1<String, String[]>() {
-                    @Override
-                    public String[] call(String s) {
-                        Document document = Jsoup.parse(s);
-                        Elements elements1 = document.select("div[class=box]");
-                        Elements tr = elements1.get(1).select("form").select("table").select("tr");
-                        String name = tr.get(0).select("td").get(1).select("input").attr("name");
-                        String pass = tr.get(1).select("td").get(1).select("input").attr("name");
-                        String once = tr.get(2).select("td").get(1).select("input").attr("value");
-
-                        return new String[]{
-                                name, pass, once
-
-                        };
-                    }
-                })
-                .subscribe(new Subscriber<String[]>() {
+                .subscribe(new Subscriber<String>() {
                     @Override
                     public void onCompleted() {
 
@@ -1156,25 +1138,16 @@ public class LoadDate {
 
                     @Override
                     public void onError(Throwable e) {
-
-                        Toast.makeText(context, "111111111" + e.getMessage(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(context, e.getMessage() + "22222222", Toast.LENGTH_LONG).show();
                         dialog.dismiss();
 
                     }
 
                     @Override
-                    public void onNext(String[] s) {
+                    public void onNext(String s) {
 
-                        Log.d("ssss", s[0] + " " + s[1] + " " + s[2]);
-
-                        Map<String, String> map = new HashMap<String, String>();
-                        map.put(s[0], userName);
-                        map.put(s[1], passWord);
-                        map.put("once", s[2]);
-                        map.put("next", "/");
                         Internet_Manager.getInstance()
-                                .userLogin(map)
-
+                                .getToptictab("all")
                                 .subscribeOn(Schedulers.io())
                                 .observeOn(AndroidSchedulers.mainThread())
                                 .subscribe(new Subscriber<String>() {
@@ -1185,64 +1158,42 @@ public class LoadDate {
 
                                     @Override
                                     public void onError(Throwable e) {
-                                        Toast.makeText(context, e.getMessage() + "22222222", Toast.LENGTH_LONG).show();
+                                        Toast.makeText(context, "登录失败" + e.getMessage(), Toast.LENGTH_LONG).show();
                                         dialog.dismiss();
 
                                     }
 
                                     @Override
                                     public void onNext(String s) {
-
-                                        Internet_Manager.getInstance()
-                                                .getToptictab("all")
-                                                .subscribeOn(Schedulers.io())
-                                                .observeOn(AndroidSchedulers.mainThread())
-                                                .subscribe(new Subscriber<String>() {
-                                                    @Override
-                                                    public void onCompleted() {
-
-                                                    }
-
-                                                    @Override
-                                                    public void onError(Throwable e) {
-                                                        Toast.makeText(context, "登录失败" + e.getMessage(), Toast.LENGTH_LONG).show();
-                                                        dialog.dismiss();
-
-                                                    }
-
-                                                    @Override
-                                                    public void onNext(String s) {
-                                                        Document document = Jsoup.parse(s);
-                                                        String elements = document.select("div[id=Rightbar]").text();
+                                        Document document = Jsoup.parse(s);
+                                        String elements = document.select("div[id=Rightbar]").text();
 
 
-                                                        if (elements.contains("条未读提醒")) {
-                                                            Toast.makeText(context, "登录成功", Toast.LENGTH_LONG).show();
-                                                            //context.sendBroadcast();
+                                        if (elements.contains("条未读提醒")) {
+                                            Toast.makeText(context, "登录成功", Toast.LENGTH_LONG).show();
+                                            //context.sendBroadcast();
 
-                                                            Elements elements1 = document.select("div[id=Rightbar]").select("div[class=box]");
-                                                            Log.d("----", elements1.size() + "");
-                                                            String userimg = "http://" + elements1.get(0).select("img").attr("src").substring(2);
-                                                            SharedPreferences sharedPreferences = context.getSharedPreferences("user", Context.MODE_PRIVATE);
-                                                            SharedPreferences.Editor editor = sharedPreferences.edit();
-                                                            context.setResult(2);
+                                            Elements elements1 = document.select("div[id=Rightbar]").select("div[class=box]");
+                                            Log.d("----", elements1.size() + "");
+                                            String userimg = "http://" + elements1.get(0).select("img").attr("src").substring(2);
+                                            SharedPreferences sharedPreferences = context.getSharedPreferences("user", Context.MODE_PRIVATE);
+                                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                                            context.setResult(2);
 
-                                                            Log.d("===", userimg);
-                                                            editor.putString("userimg", userimg);
-                                                            editor.commit();
-                                                            context.finish();
-                                                            dialog.dismiss();
+                                            Log.d("===", userimg);
+                                            editor.putString("userimg", userimg);
+                                            editor.commit();
+                                            context.finish();
+                                            dialog.dismiss();
 
-                                                        } else {
-                                                            Toast.makeText(context, "登录失败", Toast.LENGTH_LONG).show();
-                                                            dialog.dismiss();
-                                                        }
-                                                    }
-                                                });
-
-
+                                        } else {
+                                            Toast.makeText(context, "登录失败", Toast.LENGTH_LONG).show();
+                                            dialog.dismiss();
+                                        }
                                     }
                                 });
+
+
                     }
                 });
 
@@ -1383,16 +1334,21 @@ public class LoadDate {
                     @Override
                     public List<TopticdetalisModel> call(String s) {
                         Document document = Jsoup.parse(s);
-
+                        Log.d("caonima", s);
                         t[0] = document.select("div[class=header]").select("small[class=gray]").get(0).ownText();
+
                         node[0] = document.select("div[class=header]").select("a").get(2).text();
                         user[0] = document.select("div[class=header]").select("small[class=gray]").select("a").get(0).text();
                         title[0] = document.select("div[class=header]").select("h1").text();
                         img[0] = "http:" + document.select("div[class=header]").select("img").attr("src");
                         Content[0] = document.getElementsByClass("topic_content").toString();
 
-                        topticdetal = Jsoup.parse(s).select("div[class=topic_buttons]").select("a").get(0).attr("href").substring(1);
+                        if (Jsoup.parse(s).hasClass("topic_buttons")) {
+                            topticdetal = Jsoup.parse(s).select("div[class=topic_buttons]").select("a").get(0).attr("href").substring(1);
+
+                        }
                         repliceOnce = SomeUtils.getrepliceonce(s);
+
                         return HtmlToList.getdetals(s);
                     }
                 }).subscribeOn(Schedulers.io())

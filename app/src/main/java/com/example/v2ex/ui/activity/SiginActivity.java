@@ -4,19 +4,38 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.v2ex.R;
+import com.example.v2ex.internet_service.Internet_Manager;
 import com.example.v2ex.utils.LoadDate;
+import com.example.v2ex.utils.LoadImg;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Func1;
+import rx.schedulers.Schedulers;
 
 
 /**
@@ -25,10 +44,17 @@ import com.example.v2ex.utils.LoadDate;
 
 public class SiginActivity extends AppCompatActivity {
     private Toolbar toolbar;
-    EditText username;
-    EditText password;
-    TextView signin;
+    private android.support.design.widget.TextInputEditText username;
+    private android.support.design.widget.TextInputEditText password;
+    private TextView signin;
     private TextView signup;
+    private ImageView iv_code;
+    private android.support.design.widget.TextInputEditText tv_code;
+    private Map<String, String> map;
+    private String once;
+    private String code;
+    private String cv_name;
+    private String cv_pass;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +62,8 @@ public class SiginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         signup = (TextView) findViewById(R.id.signup);
-
+        iv_code = (ImageView) findViewById(R.id.iv_code);
+        tv_code = (android.support.design.widget.TextInputEditText) findViewById(R.id.text_code);
         toolbar.setTitle("登录");
         setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
@@ -46,8 +73,8 @@ public class SiginActivity extends AppCompatActivity {
                 finish();
             }
         });
-        username = (EditText) findViewById(R.id.username);
-        password = (EditText) findViewById(R.id.password);
+        username = (android.support.design.widget.TextInputEditText) findViewById(R.id.username);
+        password = (android.support.design.widget.TextInputEditText) findViewById(R.id.password);
         signin = (TextView) findViewById(R.id.login);
         SharedPreferences sharedPreferences = getSharedPreferences("user", MODE_PRIVATE);
         if (!sharedPreferences.getString("username", "").equals("")) {
@@ -135,6 +162,8 @@ public class SiginActivity extends AppCompatActivity {
                 Signin();
             }
         });
+
+        getOnce();
     }
 
 
@@ -144,9 +173,6 @@ public class SiginActivity extends AppCompatActivity {
 
         String name = username.getText().toString().trim();
         String pass = password.getText().toString().trim();
-        String args[] = {
-                name, pass
-        };
         SharedPreferences sharedPreferences = getSharedPreferences("user", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("username", name);
@@ -156,7 +182,13 @@ public class SiginActivity extends AppCompatActivity {
         dialog.setTitle("登录中");
         dialog.setCancelable(false);
         dialog.show();
-        LoadDate.userLogin(username.getText().toString().trim(), password.getText().toString().trim(), dialog, this);
+
+        map.put(cv_name, name);
+        map.put(cv_pass, pass);
+        map.put("once", once);
+        map.put(code, tv_code.getText().toString().trim());
+        map.put("next", "/");
+        LoadDate.userLogin(map, dialog, this);
 
         //rxjava.login(username.getText().toString().trim(),password.getText().toString().trim(),this,dialog);
     }
@@ -167,5 +199,60 @@ public class SiginActivity extends AppCompatActivity {
         if (dialog != null) {
             dialog.dismiss();
         }
+    }
+
+    private void getOnce() {
+
+        Internet_Manager.getInstance()
+                .getUserFormat()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .map(new Func1<String, String>() {
+                    @Override
+                    public String call(String s) {
+                        Document document = Jsoup.parse(s);
+                        Elements elements1 = document.select("div[class=box]");
+                        Elements tr = elements1.get(1).select("form").select("table").select("tr");
+                        cv_name = tr.get(0).select("td").get(1).select("input").attr("name");
+                        cv_pass = tr.get(1).select("td").get(1).select("input").attr("name");
+                        // String once = tr.get(2).select("td").get(1).select("input").attr("value");code = tr.get(2).select("td").get(1).select("input").attr("name");
+                        String imgcode = tr.get(2).select("td").get(1).select("div").attr("style");
+                        Log.d("testtest", imgcode);
+                        int start = imgcode.indexOf("/");
+                        int end = imgcode.lastIndexOf("'");
+                        String img = imgcode.substring(start + 1, end);
+
+                        int start1 = img.indexOf("=");
+                        once = img.substring(start1);
+
+                        //  name, pass, code, img, once
+
+                        return img;
+                    }
+                })
+                .subscribe(new Subscriber<String>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                        Toast.makeText(getApplicationContext(), "111111111" + e.getMessage(), Toast.LENGTH_LONG).show();
+                        dialog.dismiss();
+
+                    }
+
+                    @Override
+                    public void onNext(String s) {
+
+                        Log.d("testtest", s);
+
+
+                        LoadImg.LoadImage("https://www.v2ex.com/" + "_captcha?once=87663", iv_code, SiginActivity.this);
+
+                    }
+                });
     }
 }

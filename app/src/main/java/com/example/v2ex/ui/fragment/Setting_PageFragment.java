@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
@@ -23,6 +24,7 @@ import com.example.v2ex.ui.activity.NodeCollectActivity;
 import com.example.v2ex.ui.activity.SiginActivity;
 import com.example.v2ex.ui.activity.SpecialActivity;
 import com.example.v2ex.ui.activity.TopticCollectActivity;
+import com.example.v2ex.ui.activity.WebViewActivity;
 import com.example.v2ex.utils.GlideCacheUtil;
 import com.example.v2ex.utils.LoadImg;
 import com.leon.lib.settingview.LSettingItem;
@@ -183,15 +185,22 @@ public class Setting_PageFragment extends BaseFragment {
         userName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getContext(), SiginActivity.class);
+                /*Intent intent = new Intent(getContext(), SiginActivity.class);
+                startActivityForResult(intent, 1);*/
+                Intent intent = new Intent(getContext(), WebViewActivity.class);
+                intent.putExtra("intent","https://www.v2ex.com/signin");
                 startActivityForResult(intent, 1);
+
             }
         });
         userIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getContext(), SiginActivity.class);
+                Intent intent = new Intent(getContext(), WebViewActivity.class);
+                intent.putExtra("intent","https://www.v2ex.com/signin");
                 startActivityForResult(intent, 1);
+                /*Intent intent = new Intent(getContext(), SiginActivity.class);
+                startActivityForResult(intent, 1);*/
             }
         });
     }

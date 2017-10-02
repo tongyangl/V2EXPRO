@@ -60,6 +60,7 @@ public class Internet_Manager {
         //定制OkHttp
         OkHttpClient.Builder httpClientBuilder = new OkHttpClient
                 .Builder();
+
         //OkHttp进行添加拦截器loggingInterceptor
         httpClientBuilder.addInterceptor(loggingInterceptor);
 
@@ -67,9 +68,9 @@ public class Internet_Manager {
         httpClientBuilder.connectTimeout(15, TimeUnit.SECONDS)
                 .writeTimeout(15, TimeUnit.SECONDS)
                 .readTimeout(30, TimeUnit.SECONDS)
+
                 .addInterceptor(new AddCookiesInterceptor(context))
-                .addInterceptor(new ReceivedCookiesInterceptor(context)).
-                cookieJar(new PersistentCookieJar(new SetCookieCache(), new SharedPrefsCookiePersistor(context)));
+                .addInterceptor(new ReceivedCookiesInterceptor(context));
         httpClientBuilder.retryOnConnectionFailure(true);
 
         return httpClientBuilder;
@@ -79,6 +80,7 @@ public class Internet_Manager {
     private Retrofit retrofit = new Retrofit.Builder()
             .baseUrl("https://www.v2ex.com/")
             .client(getOkHttpClient().build())
+
             .addConverterFactory(ScalarsConverterFactory.create())
             .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
             .build();
