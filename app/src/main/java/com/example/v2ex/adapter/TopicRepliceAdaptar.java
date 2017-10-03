@@ -1,6 +1,7 @@
 package com.example.v2ex.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.v2ex.R;
 import com.example.v2ex.model.TopticdetalisModel;
+import com.example.v2ex.ui.activity.WebViewActivity;
 import com.example.v2ex.utils.LoadImg;
 import com.example.v2ex.widget.RichTextView;
 
@@ -60,7 +62,7 @@ public class TopicRepliceAdaptar extends BaseAdapter {
     }
 
     @Override
-    public View getView(int i, View view, ViewGroup viewGroup) {
+    public View getView(final int i, View view, ViewGroup viewGroup) {
 
         if (view == null) {
             viewHolder = new viewHolder();
@@ -81,8 +83,16 @@ public class TopicRepliceAdaptar extends BaseAdapter {
         viewHolder.username.setText(list.get(i).getUsername());
 
         viewHolder.replice.setRichText(list.get(i).getContent());
-        LoadImg.LoadCircleImageView(list.get(i).getImg(),viewHolder.imageView,context);
-
+        LoadImg.LoadCircleImageView(list.get(i).getImg(), viewHolder.imageView, context);
+        viewHolder.imageView.setClickable(true);
+        viewHolder.imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, WebViewActivity.class);
+                intent.putExtra("intent", "https://www.v2ex.com/member/" + list.get(i).getUsername());
+                context.startActivity(intent);
+            }
+        });
         return view;
 
 

@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import com.example.v2ex.R;
 import com.example.v2ex.adapter.NodeRecycleAdapter;
@@ -52,6 +53,7 @@ public class Collection_PageFragment extends BaseFragment implements SearchView.
     private SmartRefreshLayout mrefreshLayout;
     private RecyclerView recyclerView;
     private SearchView searchView;
+    private ProgressBar progressBar;
 
     @Nullable
     @Override
@@ -60,6 +62,7 @@ public class Collection_PageFragment extends BaseFragment implements SearchView.
         recyclerView = (RecyclerView) view.findViewById(R.id.recycle);
         mrefreshLayout = (SmartRefreshLayout) view.findViewById(R.id.swipe);
         searchView = (SearchView) view.findViewById(R.id.bt_search);
+        progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
         return view;
     }
 
@@ -110,7 +113,8 @@ public class Collection_PageFragment extends BaseFragment implements SearchView.
 
                     @Override
                     public void onNext(List<NodesModel> nodesModels) {
-
+                        progressBar.setVisibility(View.GONE);
+                        mrefreshLayout.setVisibility(View.VISIBLE);
                         adapter = new NodeRecycleAdapter(nodesModels, getActivity());
                         adapter.notifiy(nodesModels);
 
@@ -122,7 +126,7 @@ public class Collection_PageFragment extends BaseFragment implements SearchView.
 
     public static List<NodesModel> getNodesList(Context context) {
 
-        InputStream inputStream =context .getResources().openRawResource(R.raw.nodejson);
+        InputStream inputStream = context.getResources().openRawResource(R.raw.nodejson);
         InputStreamReader inputStreamReader = null;
         try {
             inputStreamReader = new InputStreamReader(inputStream, "utf-8");

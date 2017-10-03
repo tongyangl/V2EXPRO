@@ -32,7 +32,7 @@ public class SpecialActivity extends Activity {
         listView = (ListView) findViewById(R.id.listView);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         loadingLayout = (LoadingLayout) findViewById(R.id.loadingLayout);
-        toolbar.setTitle("主题收藏");
+        toolbar.setTitle("特别关注");
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override

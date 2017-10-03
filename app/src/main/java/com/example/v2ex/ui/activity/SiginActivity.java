@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,6 +33,10 @@ import org.jsoup.select.Elements;
 import java.util.HashMap;
 import java.util.Map;
 
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func1;
@@ -55,6 +60,7 @@ public class SiginActivity extends AppCompatActivity {
     private String code;
     private String cv_name;
     private String cv_pass;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +69,7 @@ public class SiginActivity extends AppCompatActivity {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         signup = (TextView) findViewById(R.id.signup);
         iv_code = (ImageView) findViewById(R.id.iv_code);
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
         tv_code = (android.support.design.widget.TextInputEditText) findViewById(R.id.text_code);
         toolbar.setTitle("登录");
         setSupportActionBar(toolbar);
@@ -164,6 +171,12 @@ public class SiginActivity extends AppCompatActivity {
         });
 
         getOnce();
+        iv_code.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getOnce();
+            }
+        });
     }
 
 
@@ -182,15 +195,20 @@ public class SiginActivity extends AppCompatActivity {
         dialog.setTitle("登录中");
         dialog.setCancelable(false);
         dialog.show();
-
+        map = new HashMap<>();
         map.put(cv_name, name);
         map.put(cv_pass, pass);
         map.put("once", once);
         map.put(code, tv_code.getText().toString().trim());
         map.put("next", "/");
+
+        Log.d("testtest", cv_name);
+        Log.d("testtest", cv_pass);
+        Log.d("testtest", once);
+        Log.d("testtest", code);
+
         LoadDate.userLogin(map, dialog, this);
 
-        //rxjava.login(username.getText().toString().trim(),password.getText().toString().trim(),this,dialog);
     }
 
     @Override
@@ -202,7 +220,8 @@ public class SiginActivity extends AppCompatActivity {
     }
 
     private void getOnce() {
-
+        iv_code.setVisibility(View.GONE);
+        progressBar.setVisibility(View.VISIBLE);
         Internet_Manager.getInstance()
                 .getUserFormat()
                 .subscribeOn(Schedulers.io())
@@ -215,7 +234,8 @@ public class SiginActivity extends AppCompatActivity {
                         Elements tr = elements1.get(1).select("form").select("table").select("tr");
                         cv_name = tr.get(0).select("td").get(1).select("input").attr("name");
                         cv_pass = tr.get(1).select("td").get(1).select("input").attr("name");
-                        // String once = tr.get(2).select("td").get(1).select("input").attr("value");code = tr.get(2).select("td").get(1).select("input").attr("name");
+                        //String once = tr.get(2).select("td").get(1).select("input").attr("value");
+                        code = tr.get(2).select("td").get(1).select("input").attr("name");
                         String imgcode = tr.get(2).select("td").get(1).select("div").attr("style");
                         Log.d("testtest", imgcode);
                         int start = imgcode.indexOf("/");
@@ -223,9 +243,8 @@ public class SiginActivity extends AppCompatActivity {
                         String img = imgcode.substring(start + 1, end);
 
                         int start1 = img.indexOf("=");
-                        once = img.substring(start1);
+                        once = img.substring(start1 + 1);
 
-                        //  name, pass, code, img, once
 
                         return img;
                     }
@@ -240,8 +259,9 @@ public class SiginActivity extends AppCompatActivity {
                     public void onError(Throwable e) {
 
                         Toast.makeText(getApplicationContext(), "111111111" + e.getMessage(), Toast.LENGTH_LONG).show();
-                        dialog.dismiss();
-
+                        progressBar.setVisibility(View.GONE);
+                        iv_code.setVisibility(View.VISIBLE);
+                        iv_code.setImageResource(R.drawable.ic_error);
                     }
 
                     @Override
@@ -249,8 +269,33 @@ public class SiginActivity extends AppCompatActivity {
 
                         Log.d("testtest", s);
 
+                        Internet_Manager.getInstance()
+                                .downLoad(s)
+                                .enqueue(new Callback<ResponseBody>() {
+                                    @Override
+                                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
 
-                        LoadImg.LoadImage("https://www.v2ex.com/" + "_captcha?once=87663", iv_code, SiginActivity.this);
+                                        if (response.code() == 200) {
+
+                                            iv_code.setImageBitmap(BitmapFactory.decodeStream(response.body().byteStream()));
+
+                                            iv_code.setVisibility(View.VISIBLE);
+                                            progressBar.setVisibility(View.GONE);
+                                        } else {
+                                            iv_code.setVisibility(View.VISIBLE);
+                                            progressBar.setVisibility(View.GONE);
+                                            iv_code.setImageResource(R.drawable.ic_error);
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                        iv_code.setVisibility(View.VISIBLE);
+                                        progressBar.setVisibility(View.GONE);
+                                        iv_code.setImageResource(R.drawable.ic_error);
+                                    }
+                                });
+
 
                     }
                 });

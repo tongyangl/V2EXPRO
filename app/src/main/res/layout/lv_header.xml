@@ -68,7 +68,7 @@
         />
 
     <View
-        android:background="#BEBEBE"
+        android:background="#EEE9E9"
         android:id="@+id/view"
         android:layout_below="@+id/topictitle"
         android:layout_margin="10dp"

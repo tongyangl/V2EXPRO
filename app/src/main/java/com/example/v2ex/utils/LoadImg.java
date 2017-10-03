@@ -27,6 +27,7 @@ public class LoadImg {
     public static void LoadImage(String url, ImageView imageView, Context context) {
         Glide.with(context)
                 .load(url)
+                .error(R.drawable.ic_error)
                 .placeholder(R.drawable.ic_loading)
                 .into(imageView);
 

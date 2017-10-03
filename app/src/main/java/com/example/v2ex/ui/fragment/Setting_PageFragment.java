@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.example.v2ex.MainActivity;
 import com.example.v2ex.R;
+import com.example.v2ex.ui.activity.CreateTopticActivity;
 import com.example.v2ex.ui.activity.NodeCollectActivity;
 import com.example.v2ex.ui.activity.SiginActivity;
 import com.example.v2ex.ui.activity.SpecialActivity;
@@ -27,6 +28,7 @@ import com.example.v2ex.ui.activity.TopticCollectActivity;
 import com.example.v2ex.ui.activity.WebViewActivity;
 import com.example.v2ex.utils.GlideCacheUtil;
 import com.example.v2ex.utils.LoadImg;
+import com.example.v2ex.utils.SomeUtils;
 import com.leon.lib.settingview.LSettingItem;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -74,8 +76,16 @@ public class Setting_PageFragment extends BaseFragment {
         nodeCollect.setmOnLSettingItemClick(new LSettingItem.OnLSettingItemClick() {
             @Override
             public void click(boolean isChecked) {
-                Intent intent = new Intent(getActivity(), NodeCollectActivity.class);
-                startActivity(intent);
+
+                if (SomeUtils.islogin(getActivity())) {
+                    Intent intent = new Intent(getActivity(), NodeCollectActivity.class);
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(getActivity(), "请登陆后再操作", Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(getActivity(), SiginActivity.class);
+                    startActivity(intent);
+                }
+
             }
         });
         nodeCollect.setLeftText("节点收藏");
@@ -83,20 +93,40 @@ public class Setting_PageFragment extends BaseFragment {
         topticsCollect.setmOnLSettingItemClick(new LSettingItem.OnLSettingItemClick() {
             @Override
             public void click(boolean isChecked) {
-                Intent intent = new Intent(getActivity(), TopticCollectActivity.class);
-                startActivity(intent);
+
+
+                if (SomeUtils.islogin(getActivity())) {
+                    Intent intent = new Intent(getActivity(), TopticCollectActivity.class);
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(getActivity(), "请登陆后再操作", Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(getActivity(), SiginActivity.class);
+                    startActivity(intent);
+                }
             }
         });
         topticsCollect.setLeftText("主题收藏");
         special.setmOnLSettingItemClick(new LSettingItem.OnLSettingItemClick() {
             @Override
             public void click(boolean isChecked) {
-                Intent intent = new Intent(getActivity(), SpecialActivity.class);
-                startActivity(intent);
+
+                if (SomeUtils.islogin(getActivity())) {
+                    Intent intent = new Intent(getActivity(), SpecialActivity.class);
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(getActivity(), "请登陆后再操作", Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(getActivity(), SiginActivity.class);
+                    startActivity(intent);
+                }
             }
         });
         special.setLeftText("特别关注");
         noImg.setLeftText("移动网络下显示图片");
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("setting", Context.MODE_PRIVATE);
+        if (sharedPreferences.getBoolean("noImg", true)) {
+            noImg.clickOn();
+        }
+
         noImg.setmOnLSettingItemClick(new LSettingItem.OnLSettingItemClick() {
             @Override
             public void click(boolean isChecked) {
@@ -146,10 +176,12 @@ public class Setting_PageFragment extends BaseFragment {
                         .setNegativeButton("取消", null).show();
             }
         });
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("user", Context.MODE_PRIVATE);
-        if (!sharedPreferences.getString("userimg", "").equals("")) {
-            LoadImg.LoadCircleImageView(sharedPreferences.getString("userimg", ""), userIcon, getContext());
-            userName.setText(sharedPreferences.getString("username", ""));
+        SharedPreferences sharedPreferences1 = getActivity().getSharedPreferences("user", Context.MODE_PRIVATE);
+
+        if (!sharedPreferences1.getString("userimg", "").equals("")) {
+
+            LoadImg.LoadCircleImageView(sharedPreferences1.getString("userimg", ""), userIcon, getContext());
+            userName.setText(sharedPreferences1.getString("username", ""));
             set_bt.setVisibility(View.VISIBLE);
 
         }
@@ -185,35 +217,35 @@ public class Setting_PageFragment extends BaseFragment {
         userName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*Intent intent = new Intent(getContext(), SiginActivity.class);
-                startActivityForResult(intent, 1);*/
-                Intent intent = new Intent(getContext(), WebViewActivity.class);
-                intent.putExtra("intent","https://www.v2ex.com/signin");
+                Intent intent = new Intent(getContext(), SiginActivity.class);
                 startActivityForResult(intent, 1);
+
 
             }
         });
         userIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getContext(), WebViewActivity.class);
-                intent.putExtra("intent","https://www.v2ex.com/signin");
+
+                Intent intent = new Intent(getContext(), SiginActivity.class);
                 startActivityForResult(intent, 1);
-                /*Intent intent = new Intent(getContext(), SiginActivity.class);
-                startActivityForResult(intent, 1);*/
             }
         });
     }
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("user", Context.MODE_PRIVATE);
-        LoadImg.LoadImage(sharedPreferences.getString("userimg", ""), userIcon, getContext());
-        userName.setText(sharedPreferences.getString("username", ""));
-        set_bt.setVisibility(View.VISIBLE);
+        if (!sharedPreferences.getString("userimg", "").equals("")){
+            userName.setText(sharedPreferences.getString("username", ""));
+            set_bt.setVisibility(View.VISIBLE);
+            LoadImg.LoadCircleImageView(sharedPreferences.getString("userimg", ""), userIcon, getContext());
+
+        }
+
 
     }
 }

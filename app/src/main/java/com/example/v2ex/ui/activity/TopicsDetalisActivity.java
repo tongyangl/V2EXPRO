@@ -30,11 +30,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.v2ex.MainActivity;
 import com.example.v2ex.R;
 import com.example.v2ex.internet_service.Internet_Manager;
 import com.example.v2ex.model.TopticdetalisModel;
 import com.example.v2ex.utils.LoadDate;
 import com.example.v2ex.utils.LoadImg;
+import com.example.v2ex.utils.SomeUtils;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
@@ -124,42 +126,51 @@ public class TopicsDetalisActivity extends AppCompatActivity {
                     collect.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            if (SomeUtils.islogin(TopicsDetalisActivity.this)) {
 
-                            Internet_Manager.getInstance().collect(LoadDate.topticdetal)
-                                    .enqueue(new Callback<String>() {
-                                        @Override
-                                        public void onResponse(Call<String> call, Response<String> response) {
-                                            int code = response.code();
+                                Internet_Manager.getInstance().collect(LoadDate.topticdetal)
+                                        .enqueue(new Callback<String>() {
+                                            @Override
+                                            public void onResponse(Call<String> call, Response<String> response) {
+                                                int code = response.code();
 
-                                            if (code == 200) {
+                                                if (code == 200) {
 
-                                                if (LoadDate.topticdetal.startsWith("unfavorite")) {
-                                                    LoadDate.topticdetal = LoadDate.topticdetal.substring(2);
+                                                    if (LoadDate.topticdetal.startsWith("unfavorite")) {
+                                                        LoadDate.topticdetal = LoadDate.topticdetal.substring(2);
 
-                                                    Toast.makeText(TopicsDetalisActivity.this, "取消收藏成功", Toast.LENGTH_SHORT).show();
-                                                    Log.d("---", LoadDate.topticdetal);
+                                                        Toast.makeText(TopicsDetalisActivity.this, "取消收藏成功", Toast.LENGTH_SHORT).show();
+                                                        Log.d("---", LoadDate.topticdetal);
+                                                    } else {
+
+                                                        LoadDate.topticdetal = "un" + LoadDate.topticdetal;
+                                                        Log.d("---", LoadDate.topticdetal);
+                                                        Toast.makeText(TopicsDetalisActivity.this, "主题收藏成功", Toast.LENGTH_SHORT).show();
+
+                                                    }
+
                                                 } else {
-
-                                                    LoadDate.topticdetal = "un" + LoadDate.topticdetal;
                                                     Log.d("---", LoadDate.topticdetal);
-                                                    Toast.makeText(TopicsDetalisActivity.this, "主题收藏成功", Toast.LENGTH_SHORT).show();
+                                                    Toast.makeText(TopicsDetalisActivity.this, "收藏失败", Toast.LENGTH_SHORT).show();
 
                                                 }
 
-                                            }else {
-                                                Log.d("---", LoadDate.topticdetal);
-                                                Toast.makeText(TopicsDetalisActivity.this, "收藏失败", Toast.LENGTH_SHORT).show();
-
                                             }
 
-                                        }
+                                            @Override
+                                            public void onFailure(Call<String> call, Throwable t) {
+                                                Log.d("---", LoadDate.topticdetal);
+                                                Toast.makeText(TopicsDetalisActivity.this, "收藏失败", Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+                            }else {
 
-                                        @Override
-                                        public void onFailure(Call<String> call, Throwable t) {
-                                            Log.d("---", LoadDate.topticdetal);
-                                            Toast.makeText(TopicsDetalisActivity.this, "收藏失败", Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
+                                Toast.makeText(getApplicationContext(), "请登陆后再操作", Toast.LENGTH_LONG).show();
+                                Intent intent = new Intent(TopicsDetalisActivity.this, SiginActivity.class);
+                                startActivity(intent);
+
+                            }
+
 
 
                         }
@@ -198,9 +209,17 @@ public class TopicsDetalisActivity extends AppCompatActivity {
         replice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                progressDialog = new ProgressDialog(TopicsDetalisActivity.this);
 
-                LoadDate.repliceToptic(smartRefreshLayout, loadingLayout, editText, url.substring(2, 8), getApplicationContext(), progressDialog);
+                if (SomeUtils.islogin(TopicsDetalisActivity.this)) {
+                    progressDialog = new ProgressDialog(TopicsDetalisActivity.this);
+
+                    LoadDate.repliceToptic(smartRefreshLayout, loadingLayout, editText, url.substring(2, 8), getApplicationContext(), progressDialog);
+
+                } else {
+                    Toast.makeText(getApplicationContext(), "请登陆后再操作", Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(TopicsDetalisActivity.this, SiginActivity.class);
+                    startActivity(intent);
+                }
             }
         });
         editText.addTextChangedListener(new TextWatcher() {

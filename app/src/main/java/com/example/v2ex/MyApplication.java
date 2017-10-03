@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.MemoryCategory;
+import com.example.v2ex.utils.LoadImg;
 import com.squareup.leakcanary.LeakCanary;
 import com.weavey.loading.lib.LoadingLayout;
 
@@ -29,7 +30,7 @@ public class MyApplication extends Application {
         // Normal app init code...
 
         SharedPreferences sharedPreferences = getSharedPreferences("setting", Context.MODE_PRIVATE);
-        noImg = sharedPreferences.getBoolean("noImg", false);
+        noImg = sharedPreferences.getBoolean("noImg", true);
         isNight = sharedPreferences.getBoolean("isNight", false);
         Glide.get(getApplicationContext()).setMemoryCategory(MemoryCategory.HIGH);
         LoadingLayout.getConfig()
@@ -48,6 +49,7 @@ public class MyApplication extends Application {
                 .setReloadButtonWidthAndHeight(150, 40);
 
     }
+
 
 
 }

@@ -47,6 +47,7 @@ import com.example.v2ex.model.NoticeModel;
 import com.example.v2ex.model.TopticModel;
 import com.example.v2ex.model.TopticdetalisModel;
 import com.example.v2ex.ui.activity.TopicsDetalisActivity;
+import com.example.v2ex.ui.activity.WebViewActivity;
 import com.example.v2ex.widget.RichTextView;
 import com.github.jdsjlzx.ItemDecoration.DividerDecoration;
 import com.github.jdsjlzx.interfaces.OnItemClickListener;
@@ -1308,7 +1309,7 @@ public class LoadDate {
             boolean isRefresh, final LoadingLayout loadingLayout, final String url, final ListView listView,
             final SmartRefreshLayout smartRefreshLayout,
             final LayoutInflater inflater,
-            final Activity Context, final Toolbar toolbar
+            final Context Context, final Toolbar toolbar
 
 
     ) {
@@ -1373,7 +1374,7 @@ public class LoadDate {
                     }
 
                     @Override
-                    public void onNext(List<TopticdetalisModel> topticdetalisModels) {
+                    public void onNext(final List<TopticdetalisModel> topticdetalisModels) {
                         TopicsDetalisActivity.list = topticdetalisModels;
 
                         if (Integer.parseInt(url.substring(url.indexOf("y") + 1, url.length())) > 100) {
@@ -1401,7 +1402,7 @@ public class LoadDate {
                                         }
 
                                         @Override
-                                        public void onNext(final List<TopticdetalisModel> topticdetalisModels) {
+                                        public void onNext( List<TopticdetalisModel> topticdetalisModels) {
                                             loadingLayout.setStatus(LoadingLayout.Success);
                                             TopicsDetalisActivity.list = topticdetalisModels;
 
@@ -1414,6 +1415,15 @@ public class LoadDate {
                                                 TextView nodename = (TextView) headerview.findViewById(R.id.nodename);
                                                 TextView toptictitle = (TextView) headerview.findViewById(R.id.topictitle);
                                                 RichTextView content = (RichTextView) headerview.findViewById(R.id.content);
+                                                imageView.setClickable(true);
+                                                imageView.setOnClickListener(new View.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(View v) {
+                                                        Intent intent = new Intent(Context, WebViewActivity.class);
+                                                        intent.putExtra("intent", "https://www.v2ex.com/member/" + user[0]);
+                                                        Context.startActivity(intent);
+                                                    }
+                                                });
                                                 nodename.setBackgroundResource(R.drawable.list_textview_replice);
                                                 nodename.setTextColor(Color.WHITE);
                                                 Log.d("---", user[0] + " " + t[0]);
@@ -1428,20 +1438,8 @@ public class LoadDate {
                                                 content.setRichText(Content[0]);
 
                                                 listView.addHeaderView(headerview);
-                                                Point p = new Point();
-                                                Context.getWindowManager().getDefaultDisplay().getSize(p);
-                                                int screenWidth = p.x;
-                                                int screenHeight = p.y;
-                                                Rect rect = new Rect(0, 0, screenWidth, screenHeight);
-                                                int[] location = new int[2];
-                                                toptictitle.getLocationInWindow(location);
-                                                if (toptictitle.getLocalVisibleRect(rect)) {
-// 控件在屏幕可见区域
-                                                    toolbar.setSubtitle("");
-                                                } else {
-                                                    toolbar.setSubtitle(title[0]);
 
-                                                }
+                                                
                                             }
                                             smartRefreshLayout.finishRefresh(100);
                                             listView.setAdapter(new TopicRepliceAdaptar(inflater, topticdetalisModels, listView, Context));
@@ -1462,6 +1460,15 @@ public class LoadDate {
                                 TextView nodename = (TextView) headerview.findViewById(R.id.nodename);
                                 TextView toptictitle = (TextView) headerview.findViewById(R.id.topictitle);
                                 RichTextView content = (RichTextView) headerview.findViewById(R.id.content);
+                                imageView.setClickable(true);
+                                imageView.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        Intent intent = new Intent(Context, WebViewActivity.class);
+                                        intent.putExtra("intent", "https://www.v2ex.com/member/" + user[0]);
+                                        Context.startActivity(intent);
+                                    }
+                                });
                                 nodename.setBackgroundResource(R.drawable.list_textview_replice);
                                 nodename.setTextColor(Color.WHITE);
                                 Log.d("---", user[0] + " " + t[0]);

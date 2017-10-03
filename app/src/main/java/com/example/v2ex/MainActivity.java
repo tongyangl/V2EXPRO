@@ -1,6 +1,8 @@
 package com.example.v2ex;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -23,11 +25,14 @@ import com.example.v2ex.adapter.MyFragment1PagerAdaptar;
 import com.example.v2ex.internet_service.Internet_Manager;
 import com.example.v2ex.ui.activity.CreateTopticActivity;
 
+import com.example.v2ex.ui.activity.SiginActivity;
 import com.example.v2ex.ui.activity.WebViewActivity;
 import com.example.v2ex.ui.fragment.Collection_PageFragment;
 import com.example.v2ex.ui.fragment.Home_PageFragment;
 import com.example.v2ex.ui.fragment.Notice_PageFragment;
 import com.example.v2ex.ui.fragment.Setting_PageFragment;
+import com.example.v2ex.utils.LoadImg;
+import com.example.v2ex.utils.SomeUtils;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 
 
@@ -55,7 +60,6 @@ public class MainActivity extends AppCompatActivity implements MaterialSearchVie
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Internet_Manager.context = this;
-
         viewPager = (ViewPager) findViewById(R.id.viewPager);
         //  radioGroup = (RadioGroup) findViewById(R.id.radioGroup);
         Home_Page_Button = (RadioButton) findViewById(R.id.home_page);
@@ -138,8 +142,16 @@ public class MainActivity extends AppCompatActivity implements MaterialSearchVie
         createToptic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, CreateTopticActivity.class);
-                startActivity(intent);
+
+                if (SomeUtils.islogin(MainActivity.this)) {
+                    Intent intent = new Intent(MainActivity.this, CreateTopticActivity.class);
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(getApplicationContext(),"请登陆后再操作",Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(MainActivity.this, SiginActivity.class);
+                    startActivity(intent);
+                }
+
             }
         });
         Home_Page_Button.setOnClickListener(new View.OnClickListener() {
@@ -183,43 +195,6 @@ public class MainActivity extends AppCompatActivity implements MaterialSearchVie
             }
         });
 
-       /* toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                popupWindow = new PopupWindow(MainActivity.this);
-                View view = getLayoutInflater().inflate(R.layout.popu_searchview, null);
-
-                SearchView search = (SearchView) view.findViewById(R.id.searchView);
-                search.setIconifiedByDefault(true);
-                search.setFocusable(true);
-                search.setIconified(false);
-                search.requestFocusFromTouch();
-                search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-                    @Override
-                    public boolean onQueryTextSubmit(String query) {
-                        Intent intent = new Intent(MainActivity.this, WebViewActivity.class);
-                        intent.putExtra("intent","http://www.baidu.com/s?ie=UTF-8&wd="+query+"site:www.v2ex.com");
-                        startActivity(intent);
-                        return true;
-                    }
-
-                    @Override
-                    public boolean onQueryTextChange(String newText) {
-                        return false;
-                    }
-                });
-                ColorDrawable dw = new ColorDrawable(0xffffffff);
-                popupWindow.setBackgroundDrawable(dw);
-
-                popupWindow.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
-                popupWindow.setWidth(LinearLayout.LayoutParams.MATCH_PARENT);
-                popupWindow.setContentView(view);
-                popupWindow.setAnimationStyle(R.style.popu_style);
-                popupWindow.showAtLocation(getLayoutInflater().inflate(R.layout.activity_topticdetal, null), Gravity.TOP, 0, 0);
-
-                return true;
-            }
-        });*/
     }
 
     @Override
@@ -227,7 +202,7 @@ public class MainActivity extends AppCompatActivity implements MaterialSearchVie
 
         getMenuInflater().inflate(R.menu.search, menu);
 
-       MenuItem item = menu.findItem(R.id.ab_search);
+        MenuItem item = menu.findItem(R.id.ab_search);
 
         android.widget.SearchView searchView = (android.widget.SearchView) MenuItemCompat.getActionView(item);
         searchView.setIconifiedByDefault(true);
@@ -239,7 +214,7 @@ public class MainActivity extends AppCompatActivity implements MaterialSearchVie
             @Override
             public boolean onQueryTextSubmit(String query) {
                 Intent intent = new Intent(MainActivity.this, WebViewActivity.class);
-                intent.putExtra("intent","http://www.baidu.com/s?ie=UTF-8&wd="+query+"site:www.v2ex.com");
+                intent.putExtra("intent", "http://www.baidu.com/s?ie=UTF-8&wd=" + query + "site:www.v2ex.com");
                 startActivity(intent);
                 return true;
             }
@@ -287,4 +262,6 @@ public class MainActivity extends AppCompatActivity implements MaterialSearchVie
     public boolean onQueryTextChange(String newText) {
         return false;
     }
+
+
 }

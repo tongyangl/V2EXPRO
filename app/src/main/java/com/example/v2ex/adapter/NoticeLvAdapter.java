@@ -15,6 +15,7 @@ import com.cpiz.android.bubbleview.BubbleTextView;
 import com.example.v2ex.R;
 import com.example.v2ex.model.NoticeModel;
 import com.example.v2ex.ui.activity.TopicsDetalisActivity;
+import com.example.v2ex.ui.activity.WebViewActivity;
 import com.example.v2ex.utils.LoadImg;
 
 import java.util.List;
@@ -53,7 +54,7 @@ public class NoticeLvAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         viewHoder = new ViewHoder();
         if (convertView == null) {
             convertView = layoutInflater.inflate(R.layout.lv_notice, null);
@@ -90,6 +91,15 @@ public class NoticeLvAdapter extends BaseAdapter {
                 intent.putExtra("@user", username);
 
                 intent.putExtra("url", url);
+                activity.startActivity(intent);
+            }
+        });
+        viewHoder.imageView.setClickable(true);
+        viewHoder.imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(activity, WebViewActivity.class);
+                intent.putExtra("intent", "https://www.v2ex.com/member/" + list.get(position).getUsername());
                 activity.startActivity(intent);
             }
         });

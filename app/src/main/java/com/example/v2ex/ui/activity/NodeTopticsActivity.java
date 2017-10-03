@@ -75,6 +75,7 @@ public class NodeTopticsActivity extends AppCompatActivity {
     private TextView collect;
     private ProgressBar progressBar;
     private TextView tv_header;
+    private TextView tv_footer;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -87,6 +88,7 @@ public class NodeTopticsActivity extends AppCompatActivity {
         toptics = (TextView) findViewById(R.id.toptics);
         relativeLayout = (RelativeLayout) findViewById(R.id.relat);
         progressBar = (ProgressBar) findViewById(R.id.progressBar2);
+        tv_footer = (TextView) findViewById(R.id.footer);
         collect = (TextView) findViewById(R.id.collect);
         tv_header = (TextView) findViewById(R.id.header);
         toolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsingToolbarLayout);
@@ -199,8 +201,23 @@ public class NodeTopticsActivity extends AppCompatActivity {
                                 String starts = jsonObject.getString("stars");
 
                                 String header = jsonObject.getString("header");
+                                String footer = jsonObject.getString("footer");
+                                if (!header.equals("null")) {
 
-                                tv_header.setText(header);
+                                    tv_header.setText(header);
+                                }else {
+                                    tv_header.setVisibility(View.GONE);
+                                }
+                                if (!footer.equals("null")) {
+
+                                    tv_footer.setText(footer);
+
+                                }else {
+                                    tv_footer.setVisibility(View.GONE);
+
+                                }
+
+
                                 toptics.setText(starts);
 
                                 Glide.with(NodeTopticsActivity.this).load("http:" + imgurl).asBitmap().into(new SimpleTarget<Bitmap>() {

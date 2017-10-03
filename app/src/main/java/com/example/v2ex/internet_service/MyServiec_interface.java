@@ -3,6 +3,7 @@ package com.example.v2ex.internet_service;
 
 import java.util.Map;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FieldMap;
@@ -13,6 +14,7 @@ import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
+import retrofit2.http.Streaming;
 import retrofit2.http.Url;
 import rx.Observable;
 
@@ -87,4 +89,8 @@ public interface MyServiec_interface {
 
     @GET
     Call<String> collect(@Url String url);
+
+    @Streaming
+    @GET
+    Call<ResponseBody> downLoad(@Url String url);
 }

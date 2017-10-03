@@ -22,6 +22,7 @@ import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import okhttp3.ResponseBody;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Retrofit;
@@ -70,7 +71,9 @@ public class Internet_Manager {
                 .readTimeout(30, TimeUnit.SECONDS)
 
                 .addInterceptor(new AddCookiesInterceptor(context))
-                .addInterceptor(new ReceivedCookiesInterceptor(context));
+                .addInterceptor(new ReceivedCookiesInterceptor(context)).
+                cookieJar(new PersistentCookieJar(new SetCookieCache(), new SharedPrefsCookiePersistor(context)));
+
         httpClientBuilder.retryOnConnectionFailure(true);
 
         return httpClientBuilder;
@@ -173,5 +176,10 @@ public class Internet_Manager {
     public Call<String> collect(String url) {
 
         return service.collect(url);
+    }
+
+    public Call<ResponseBody> downLoad(String url) {
+
+        return service.downLoad(url);
     }
 }

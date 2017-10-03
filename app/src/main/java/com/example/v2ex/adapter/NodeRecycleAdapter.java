@@ -12,10 +12,15 @@ import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.v2ex.MainActivity;
 import com.example.v2ex.R;
 import com.example.v2ex.model.NodesModel;
+import com.example.v2ex.ui.activity.CreateTopticActivity;
 import com.example.v2ex.ui.activity.NodeTopticsActivity;
+import com.example.v2ex.ui.activity.SiginActivity;
+import com.example.v2ex.utils.SomeUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -60,10 +65,7 @@ public class NodeRecycleAdapter extends RecyclerView.Adapter<NodeRecycleAdapter.
         if (list != null && list.size() > 0) {
             this.list.addAll(list);
             notifyDataSetChanged();
-
         }
-        // this.list.clear();
-        //   this.list.addAll(mlist);
     }
 
     @Override
@@ -72,22 +74,31 @@ public class NodeRecycleAdapter extends RecyclerView.Adapter<NodeRecycleAdapter.
 
         if (!list.get(position).getContent().equals("null") | list.get(position).getContent().contains("nbsp")) {
             holder.dresprtion.setText(Html.fromHtml(list.get(position).getContent()));
-            //   RichText.from(().into(holder.dresprtion);
+
         }
 
         holder.num.setText(list.get(position).getNum() + "条信息");
         holder.itemView.setTag(list.get(position));
+
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(activity, NodeTopticsActivity.class);
-                intent.putExtra("url", list.get(position).getUrl());
-                intent.putExtra("num", list.get(position).getNum());
-                intent.putExtra("title", list.get(position).getTitle());
 
-                Log.d("----", "click");
+                if (SomeUtils.islogin(activity)) {
 
-                activity.startActivity(intent);
+                    Intent intent = new Intent(activity, NodeTopticsActivity.class);
+                    intent.putExtra("url", list.get(position).getUrl());
+                    intent.putExtra("num", list.get(position).getNum());
+                    intent.putExtra("title", list.get(position).getTitle());
+
+
+                    activity.startActivity(intent);
+                } else {
+                    Toast.makeText(activity, "请登陆后再操作", Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(activity, SiginActivity.class);
+                    activity.startActivity(intent);
+                }
+
             }
         });
     }

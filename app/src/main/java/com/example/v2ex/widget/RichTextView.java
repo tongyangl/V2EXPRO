@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.example.v2ex.MyApplication;
 import com.example.v2ex.ui.activity.photoviewactivity;
+import com.example.v2ex.utils.SomeUtils;
 
 import java.util.ArrayList;
 
@@ -28,7 +29,7 @@ import static android.content.Context.TELEPHONY_SERVICE;
 /**
  * Created by yw on 2015/5/10.
  */
-public class RichTextView extends TextView  {
+public class RichTextView extends TextView {
 
     public RichTextView(Context context) {
         super(context);
@@ -47,11 +48,11 @@ public class RichTextView extends TextView  {
 
         setTextIsSelectable(true);
 
-        /*if (MyApplication.noImg && netType != ConnectivityManager.TYPE_WIFI) {
+        if (MyApplication.noImg && SomeUtils.isMobile(getContext())) {
             super.setText(Html.fromHtml(text));
             setMovementMethod(LinkMovementMethod.getInstance());
             return;
-        }*/
+        }
 
         Spanned spanned = Html.fromHtml(text, new AsyncImageGetter(getContext(), this), null);
         SpannableStringBuilder htmlSpannable;

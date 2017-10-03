@@ -59,8 +59,7 @@ public class NodeCollectAdapter extends RecyclerView.Adapter<NodeCollectAdapter.
         holder.num.setText(list.get(position).getNum() + "条信息");
         Log.d("====", list.get(position).getImgurl() + "ss");
         LoadImg.LoadImage(list.get(position).getImgurl(), holder.img, activity);
-        //ImageLoader.getInstance().displayImage(list.get(position).get("imgurl"),holder.img);
-        //    SetImg.setImg(list.get(position).get("img"),holder.img,activity);
+
         holder.itemView.setTag(list.get(position));
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
