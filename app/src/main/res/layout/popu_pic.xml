@@ -9,7 +9,8 @@
       android:orientation="vertical"
       android:layout_width="match_parent"
       android:layout_height="wrap_content">
-      <TextView
+      <Button
+          android:background="@drawable/bt_press"
           android:id="@+id/save"
           android:text="保存图片"
           android:gravity="center"
@@ -22,12 +23,13 @@
   </LinearLayout>
 
     <LinearLayout
-        android:layout_marginTop="10dp"
+
         android:background="@drawable/item_ripple"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <TextView
+        <Button
+            android:background="@drawable/bt_press"
             android:id="@+id/cancel"
             android:text="取消"
             android:gravity="center"

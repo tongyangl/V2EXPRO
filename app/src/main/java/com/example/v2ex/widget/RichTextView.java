@@ -14,6 +14,7 @@ import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.ImageSpan;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -48,8 +49,9 @@ public class RichTextView extends TextView {
 
         setTextIsSelectable(true);
 
-        if (MyApplication.noImg && SomeUtils.isMobile(getContext())) {
+        if (!MyApplication.noImg && SomeUtils.isMobile(getContext())) {
             super.setText(Html.fromHtml(text));
+
             setMovementMethod(LinkMovementMethod.getInstance());
             return;
         }
@@ -64,23 +66,25 @@ public class RichTextView extends TextView {
 
         ImageSpan[] spans = htmlSpannable.getSpans(0, htmlSpannable.length(), ImageSpan.class);
         final ArrayList<String> imageUrls = new ArrayList<String>();
-        final ArrayList<String> imagePositions = new ArrayList<String>();
+
         for (ImageSpan span : spans) {
             final String imageUrl = span.getSource();
-            final int start = htmlSpannable.getSpanStart(span);
-            final int end = htmlSpannable.getSpanEnd(span);
-            imagePositions.add(start + "/" + end);
+
+
             imageUrls.add(imageUrl);
         }
 
-        for (ImageSpan span : spans) {
-            final int start = htmlSpannable.getSpanStart(span);
-            final int end = htmlSpannable.getSpanEnd(span);
+        for (int i=0;i<spans.length;i++){
+            final int start = htmlSpannable.getSpanStart(spans[i]);
+            final int end = htmlSpannable.getSpanEnd(spans[i]);
 
-            ClickableSpan clickableSpan = new ClickableSpan() {
+
+            final int finalI = i;
+            final ClickableSpan clickableSpan = new ClickableSpan() {
                 @Override
                 public void onClick(View widget) {
                     Intent intent = new Intent(getContext(), photoviewactivity.class);
+                    intent.putExtra("position", finalI);
                     intent.putStringArrayListExtra("list", imageUrls);
                     getContext().startActivity(intent);
                 }
@@ -95,7 +99,11 @@ public class RichTextView extends TextView {
             }
 
             htmlSpannable.setSpan(clickableSpan, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+
         }
+
+
 
         super.setText(htmlSpannable);
         setMovementMethod(LinkMovementMethod.getInstance());

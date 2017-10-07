@@ -1,15 +1,19 @@
 package com.example.v2ex.ui.activity;
 
 import android.app.ProgressDialog;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.telephony.SmsManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -26,6 +30,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,6 +42,7 @@ import com.example.v2ex.model.TopticdetalisModel;
 import com.example.v2ex.utils.LoadDate;
 import com.example.v2ex.utils.LoadImg;
 import com.example.v2ex.utils.SomeUtils;
+import com.example.v2ex.widget.RichTextView;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
@@ -109,6 +115,8 @@ public class TopicsDetalisActivity extends AppCompatActivity {
                             popupWindow.dismiss();
                         }
                     });
+
+                    final ProgressBar bar = (ProgressBar) view.findViewById(R.id.progressBar);
                     TextView share = (TextView) view.findViewById(R.id.tv_share);
                     share.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -122,29 +130,48 @@ public class TopicsDetalisActivity extends AppCompatActivity {
                             startActivity(Intent.createChooser(shareIntent, "分享主题到"));
                         }
                     });
-                    TextView collect = (TextView) view.findViewById(R.id.bt_collect);
+                    final TextView collect = (TextView) view.findViewById(R.id.bt_collect);
+                    if (LoadDate.topticdetal.startsWith("un")) {
+
+                        Drawable drawable = getDrawable(R.drawable.ic_star_black_24dp);
+                        drawable.setBounds(0, 0, 108, 108);
+                        collect.setCompoundDrawables(null, drawable, null, null);
+
+                    } else {
+                        Drawable drawable = getDrawable(R.drawable.ic_star_border_black_24dp);
+                        drawable.setBounds(0, 0, 108, 108);
+                        collect.setCompoundDrawables(null, drawable, null, null);
+
+                    }
+
                     collect.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             if (SomeUtils.islogin(TopicsDetalisActivity.this)) {
-
+                                bar.setVisibility(View.VISIBLE);
+                                collect.setVisibility(View.GONE);
                                 Internet_Manager.getInstance().collect(LoadDate.topticdetal)
                                         .enqueue(new Callback<String>() {
                                             @Override
                                             public void onResponse(Call<String> call, Response<String> response) {
                                                 int code = response.code();
-
+                                                bar.setVisibility(View.GONE);
+                                                collect.setVisibility(View.VISIBLE);
                                                 if (code == 200) {
 
-                                                    if (LoadDate.topticdetal.startsWith("unfavorite")) {
+                                                    if (LoadDate.topticdetal.startsWith("un")) {
                                                         LoadDate.topticdetal = LoadDate.topticdetal.substring(2);
-
+                                                        Drawable drawable = getDrawable(R.drawable.ic_star_border_black_24dp);
+                                                        drawable.setBounds(0, 0, 108, 108);
+                                                        collect.setCompoundDrawables(null, drawable, null, null);
                                                         Toast.makeText(TopicsDetalisActivity.this, "取消收藏成功", Toast.LENGTH_SHORT).show();
-                                                        Log.d("---", LoadDate.topticdetal);
-                                                    } else {
 
+                                                    } else {
+                                                        Drawable drawable = getDrawable(R.drawable.ic_star_black_24dp);
+                                                        drawable.setBounds(0, 0, 108, 108);
+                                                        collect.setCompoundDrawables(null, drawable, null, null);
                                                         LoadDate.topticdetal = "un" + LoadDate.topticdetal;
-                                                        Log.d("---", LoadDate.topticdetal);
+
                                                         Toast.makeText(TopicsDetalisActivity.this, "主题收藏成功", Toast.LENGTH_SHORT).show();
 
                                                     }
@@ -161,9 +188,11 @@ public class TopicsDetalisActivity extends AppCompatActivity {
                                             public void onFailure(Call<String> call, Throwable t) {
                                                 Log.d("---", LoadDate.topticdetal);
                                                 Toast.makeText(TopicsDetalisActivity.this, "收藏失败", Toast.LENGTH_SHORT).show();
+                                                bar.setVisibility(View.GONE);
+                                                collect.setVisibility(View.VISIBLE);
                                             }
                                         });
-                            }else {
+                            } else {
 
                                 Toast.makeText(getApplicationContext(), "请登陆后再操作", Toast.LENGTH_LONG).show();
                                 Intent intent = new Intent(TopicsDetalisActivity.this, SiginActivity.class);
@@ -172,7 +201,55 @@ public class TopicsDetalisActivity extends AppCompatActivity {
                             }
 
 
+                        }
+                    });
+                    TextView bt_textSize = (TextView) view.findViewById(R.id.bt_textSize);
+                    bt_textSize.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
 
+                        }
+                    });
+
+                    TextView sendems = (TextView) view.findViewById(R.id.bt_send);
+                    sendems.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Uri uri2 = Uri.parse("smsto:");
+                            Intent intentMessage = new Intent(Intent.ACTION_VIEW, uri2);
+                            intentMessage.putExtra("sms_body", LoadDate.toptictitle + "原文链接:" + "https://www.v2ex.com/" + url);
+                            startActivity(intentMessage);
+                        }
+                    });
+                    TextView sendmail = (TextView) view.findViewById(R.id.bt_mail);
+                    sendmail.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent data = new Intent(Intent.ACTION_SENDTO);
+                            data.setData(Uri.parse("mailto:"));
+                            data.putExtra(Intent.EXTRA_SUBJECT, LoadDate.toptictitle);
+                            data.putExtra(Intent.EXTRA_TEXT, LoadDate.content + "原文链接:" + "https://www.v2ex.com/" + url);
+                            startActivity(data);
+                        }
+                    });
+                    TextView copytext = (TextView) view.findViewById(R.id.bt_copycontent);
+                    copytext.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            ClipboardManager cmb = (ClipboardManager)
+                                    getSystemService(Context.CLIPBOARD_SERVICE);
+                            cmb.setText(LoadDate.toptictitle + "\n" + LoadDate.content);
+                            Toast.makeText(getApplicationContext(), "已复制到剪贴板", Toast.LENGTH_LONG).show();
+                        }
+                    });
+                    TextView copylink = (TextView) view.findViewById(R.id.bt_copylink);
+                    copylink.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            ClipboardManager cmb = (ClipboardManager)
+                                    getSystemService(Context.CLIPBOARD_SERVICE);
+                            cmb.setText("https://www.v2ex.com/"+url);
+                            Toast.makeText(getApplicationContext(), "已复制到剪贴板", Toast.LENGTH_LONG).show();
                         }
                     });
                     ColorDrawable dw = new ColorDrawable(0xffffffff);

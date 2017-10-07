@@ -93,6 +93,8 @@ public class LoadDate {
     public static String nodetoptics = "";
     private static int page;
     private static String nodesUrl = "?p=";
+    public static String toptictitle = "";
+    public static String content = "";
 
     private static String repliceOnce = "";
 
@@ -1335,19 +1337,21 @@ public class LoadDate {
                     @Override
                     public List<TopticdetalisModel> call(String s) {
                         Document document = Jsoup.parse(s);
-                        Log.d("caonima", s);
+
                         t[0] = document.select("div[class=header]").select("small[class=gray]").get(0).ownText();
 
                         node[0] = document.select("div[class=header]").select("a").get(2).text();
                         user[0] = document.select("div[class=header]").select("small[class=gray]").select("a").get(0).text();
                         title[0] = document.select("div[class=header]").select("h1").text();
+                        toptictitle = title[0];
                         img[0] = "http:" + document.select("div[class=header]").select("img").attr("src");
                         Content[0] = document.getElementsByClass("topic_content").toString();
-
-                        if (Jsoup.parse(s).hasClass("topic_buttons")) {
-                            topticdetal = Jsoup.parse(s).select("div[class=topic_buttons]").select("a").get(0).attr("href").substring(1);
+                        content = Content[0];
+                        if (s.contains("topic_buttons")) {
+                            topticdetal = document.select("div[class=topic_buttons]").select("a").get(0).attr("href").substring(1);
 
                         }
+                        Log.d("tagtag", topticdetal + "asd");
                         repliceOnce = SomeUtils.getrepliceonce(s);
 
                         return HtmlToList.getdetals(s);
@@ -1402,7 +1406,7 @@ public class LoadDate {
                                         }
 
                                         @Override
-                                        public void onNext( List<TopticdetalisModel> topticdetalisModels) {
+                                        public void onNext(List<TopticdetalisModel> topticdetalisModels) {
                                             loadingLayout.setStatus(LoadingLayout.Success);
                                             TopicsDetalisActivity.list = topticdetalisModels;
 
@@ -1439,7 +1443,7 @@ public class LoadDate {
 
                                                 listView.addHeaderView(headerview);
 
-                                                
+
                                             }
                                             smartRefreshLayout.finishRefresh(100);
                                             listView.setAdapter(new TopicRepliceAdaptar(inflater, topticdetalisModels, listView, Context));

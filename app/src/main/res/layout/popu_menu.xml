@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:orientation="vertical"
 
     >
 
     <LinearLayout
-        android:id="@+id/LinearLayout"
+        android:id="@+id/LinearLayouttop"
         android:layout_width="match_parent"
-        android:layout_height="120dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
+        android:layout_height="100dp"
+        android:layout_above="@+id/LinearLayoutbottom"
         android:background="#f3f3f3"
         android:orientation="horizontal">
 
@@ -22,17 +21,152 @@
             android:layout_weight="1"
             android:gravity="center">
 
+
             <TextView
-                android:id="@+id/bt_collect"
+
+                android:id="@+id/bt_send"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
                 android:layout_weight="1"
+                android:background="@drawable/bt_popu_press"
+                android:clickable="true"
+                android:drawableTop="@drawable/ic_chat_bubble_outline_black_24dp"
+                android:paddingTop="15dp"
+                android:textSize="13sp" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/bt_mail"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:background="@drawable/bt_popu_press"
+                android:clickable="true"
+                android:drawableTop="@drawable/ic_mail_outline_black_24dp"
+                android:paddingTop="15dp"
+
+                android:textSize="13sp" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/bt_copycontent"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
 
                 android:background="@drawable/bt_popu_press"
                 android:clickable="true"
-                android:drawableTop="@drawable/ic_star_border_black_24dp"
+                android:drawableTop="@drawable/ic_library_books_black_24dp"
+                android:paddingTop="15dp"
+
+                android:textSize="13sp" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/bt_copylink"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:background="@drawable/bt_popu_press"
+                android:clickable="true"
+                android:drawableTop="@drawable/ic_link_black_24dp"
                 android:paddingTop="15dp"
                 android:textSize="13sp" />
+        </RelativeLayout>
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:background="#f3f3f3"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="发短信" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="发邮件" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="复制文本" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="复制链接" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/LinearLayoutbottom"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:background="#f3f3f3"
+        android:orientation="horizontal">
+
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/bt_collect"
+
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_centerHorizontal="true"
+                android:layout_weight="1"
+                android:background="@drawable/bt_popu_press"
+                android:clickable="true"
+                android:drawableTop="@drawable/ic_star_border_black_24dp"
+                android:gravity="center"
+                android:paddingTop="15dp"
+                android:textSize="13sp" />
+
         </RelativeLayout>
 
         <RelativeLayout
@@ -71,7 +205,7 @@
 
                 android:background="@drawable/bt_popu_press"
                 android:clickable="true"
-                android:drawableTop="@drawable/ic_brightness_auto_black_24dp"
+                android:drawableTop="@drawable/ic_highlight_off_black_24dp"
                 android:paddingTop="15dp"
 
                 android:textSize="13sp" />
@@ -98,11 +232,46 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:background="#f3f3f3"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="收藏" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="夜间模式" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="忽略主题" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="分享" />
+    </LinearLayout>
+
     <Button
         android:id="@+id/bt_cancel"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_below="@+id/LinearLayout"
+        android:layout_below="@+id/LinearLayoutbottom"
         android:background="@drawable/bt_press"
         android:text="取消" />
-</RelativeLayout>
+</LinearLayout>

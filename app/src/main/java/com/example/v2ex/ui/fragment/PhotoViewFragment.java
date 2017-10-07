@@ -17,6 +17,8 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -44,7 +46,7 @@ public class PhotoViewFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Log.d("---", "onActivityCreated");
+
         mMaxWidth = ScreenUtils.getDisplayWidth(getContext()) - ScreenUtils.dp(getContext(), 100);
     }
 
@@ -60,7 +62,11 @@ public class PhotoViewFragment extends Fragment {
         imageView = (PinchImageView) view.findViewById(R.id.pinchimageView);
 
         Glide.with(getContext())
+
                 .load(url)
+                .asBitmap()
+                .placeholder(R.drawable.ic_loading)
+                .error(R.drawable.ic_error)
                 .into(imageView);
 
         imageView.setOnLongClickListener(new View.OnLongClickListener() {
@@ -68,10 +74,10 @@ public class PhotoViewFragment extends Fragment {
             public boolean onLongClick(View v) {
                 final PopupWindow popupWindow = new PopupWindow(getContext());
                 View view = getActivity().getLayoutInflater().inflate(R.layout.popu_pic, null);
-                TextView save = (TextView) view.findViewById(R.id.save);
+                Button save = (Button) view.findViewById(R.id.save);
                 // TextView shibie = (TextView) view.findViewById(R.id.shibie);
 
-                TextView cancel = (TextView) view.findViewById(R.id.cancel);
+                Button cancel = (Button) view.findViewById(R.id.cancel);
                 cancel.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -94,6 +100,7 @@ public class PhotoViewFragment extends Fragment {
                 popupWindow.setFocusable(true);
                 popupWindow.setOutsideTouchable(true);
                 popupWindow.setContentView(view);
+                popupWindow.setAnimationStyle(R.style.popu_style);
                 popupWindow.showAtLocation(getActivity().getLayoutInflater().inflate(R.layout.activity_photoview, null), Gravity.BOTTOM | Gravity.CENTER, 0, 0);
 
                 return true;
@@ -109,8 +116,9 @@ public class PhotoViewFragment extends Fragment {
     }
 
     public void savepic() {
-        Bitmap image = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
-        MediaStore.Images.Media.insertImage(getActivity().getContentResolver(), image, url, "v2ex保存的图片");
+
+        Bitmap bm = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
+        MediaStore.Images.Media.insertImage(getActivity().getContentResolver(), bm, url, "v2ex保存的图片");
         Toast.makeText(getContext(), "已保存到系统图库", Toast.LENGTH_SHORT).show();
     }
 

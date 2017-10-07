@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.v2ex.MainActivity;
+import com.example.v2ex.MyApplication;
 import com.example.v2ex.R;
 import com.example.v2ex.ui.activity.CreateTopticActivity;
 import com.example.v2ex.ui.activity.NodeCollectActivity;
@@ -132,6 +133,7 @@ public class Setting_PageFragment extends BaseFragment {
             public void click(boolean isChecked) {
                 SharedPreferences sharedPreferences = getActivity().getSharedPreferences("setting", Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
+                MyApplication.noImg = isChecked;
                 editor.putBoolean("noImg", isChecked);
                 editor.commit();
             }
@@ -239,7 +241,7 @@ public class Setting_PageFragment extends BaseFragment {
         super.onActivityResult(requestCode, resultCode, data);
 
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("user", Context.MODE_PRIVATE);
-        if (!sharedPreferences.getString("userimg", "").equals("")){
+        if (!sharedPreferences.getString("userimg", "").equals("")) {
             userName.setText(sharedPreferences.getString("username", ""));
             set_bt.setVisibility(View.VISIBLE);
             LoadImg.LoadCircleImageView(sharedPreferences.getString("userimg", ""), userIcon, getContext());

@@ -64,7 +64,7 @@
         android:layout_marginRight="15dp"
         android:gravity="center_vertical"
         android:textColor="#000000"
-        android:textSize="15sp"
+        android:textSize="17sp"
         />
 
     <View

@@ -35,19 +35,17 @@ public class photoviewactivity extends AppCompatActivity {
     private List<String> urllist;
     private ViewPager viewPager;
     private List<Fragment> fragmentList;
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photoview);
         tv= (TextView) findViewById(R.id.tv);
         Intent intent = getIntent();
-        // imageView = (PinchImageView) findViewById(R.id.pinchimageView);
+
         list = intent.getStringExtra("url");
         position = intent.getIntExtra("position", 0);
         urllist = intent.getStringArrayListExtra("list");
         viewPager = (ViewPager) findViewById(R.id.viewPager);
-        Log.d("---", urllist.toString() + "list");
         fragmentList = new ArrayList<>();
         for (int i = 0; i < urllist.size(); i++) {
             PhotoViewFragment fragment = new PhotoViewFragment();
